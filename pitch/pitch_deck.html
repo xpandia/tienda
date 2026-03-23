@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TIENDA — Pitch Deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #faf8f5;
+  --orange: #ff6b35;
+  --brown: #2d1810;
+  --orange-light: #ff8f61;
+  --orange-dark: #e55a2b;
+  --brown-light: #4a3228;
+  --cream-dark: #f0ece6;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--brown);
+  color: var(--brown);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* PROGRESS BAR */
+#progress {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, var(--orange), var(--orange-light));
+  z-index: 1000; transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* SLIDE CONTAINER */
+#deck {
+  width: 100%; height: 100%;
+  position: relative;
+}
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 60px 80px;
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+  background: var(--cream);
+  overflow: hidden;
+}
+
+.slide.active {
+  opacity: 1; transform: translateX(0);
+  pointer-events: auto;
+}
+
+.slide.prev {
+  opacity: 0; transform: translateX(-60px);
+}
+
+/* TYPOGRAPHY */
+.slide h1 {
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  color: var(--brown);
+  text-align: center;
+  max-width: 900px;
+}
+
+.slide h2 {
+  font-size: clamp(1.6rem, 3.5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--brown);
+  text-align: center;
+  max-width: 850px;
+}
+
+.slide h3 {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 600;
+  color: var(--brown);
+  text-align: center;
+}
+
+.slide p, .slide li {
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--brown-light);
+  max-width: 750px;
+  text-align: center;
+}
+
+.slide .tagline {
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  font-weight: 500;
+  color: var(--orange);
+  letter-spacing: 0.02em;
+  margin-top: 12px;
+}
+
+.slide .quote {
+  font-size: clamp(1.3rem, 2.8vw, 2.2rem);
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--brown);
+  text-align: center;
+  max-width: 800px;
+  position: relative;
+}
+
+.slide .quote::before {
+  content: '\201C';
+  font-size: 4em;
+  color: var(--orange);
+  opacity: 0.3;
+  position: absolute;
+  top: -0.35em; left: -0.3em;
+  font-style: normal;
+  line-height: 1;
+}
+
+.slide .big-number {
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 900;
+  color: var(--orange);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.slide .label {
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--brown);
+  opacity: 0.6;
+}
+
+.slide .accent { color: var(--orange); }
+.slide .bold { font-weight: 700; color: var(--brown); }
+
+/* DARK SLIDE */
+.slide.dark {
+  background: var(--brown);
+  color: var(--cream);
+}
+.slide.dark h1, .slide.dark h2, .slide.dark h3 { color: var(--cream); }
+.slide.dark p, .slide.dark li, .slide.dark .bold { color: rgba(250,248,245,0.85); }
+.slide.dark .label { color: rgba(250,248,245,0.5); }
+
+/* ORANGE SLIDE */
+.slide.orange-bg {
+  background: var(--orange);
+  color: var(--cream);
+}
+.slide.orange-bg h1, .slide.orange-bg h2 { color: #fff; }
+.slide.orange-bg p { color: rgba(255,255,255,0.9); }
+.slide.orange-bg .big-number { color: #fff; }
+.slide.orange-bg .label { color: rgba(255,255,255,0.6); }
+
+/* GRID LAYOUTS */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 32px;
+  max-width: 850px;
+  width: 100%;
+  margin-top: 32px;
+}
+
+.stat-card {
+  text-align: center;
+  padding: 24px 16px;
+  border-radius: 16px;
+  background: rgba(45,24,16,0.04);
+}
+
+.dark .stat-card { background: rgba(250,248,245,0.08); }
+
+.three-col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 900px;
+  width: 100%;
+  margin-top: 28px;
+}
+
+.step-card {
+  text-align: center;
+  padding: 28px 20px;
+  border-radius: 20px;
+  background: rgba(45,24,16,0.03);
+  border: 1px solid rgba(45,24,16,0.06);
+}
+
+.step-card .step-num {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 14px;
+}
+
+.step-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+}
+
+.step-card p {
+  font-size: 0.9rem;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* COMPARISON TABLE */
+.compare-table {
+  max-width: 820px;
+  width: 100%;
+  margin-top: 24px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  font-size: clamp(0.8rem, 1.1vw, 0.95rem);
+}
+
+.compare-table th {
+  background: var(--brown);
+  color: var(--cream);
+  padding: 14px 16px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.compare-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(45,24,16,0.08);
+  color: var(--brown-light);
+}
+
+.compare-table tr:nth-child(even) td { background: rgba(45,24,16,0.02); }
+.compare-table .highlight-row td { background: rgba(255,107,53,0.08); font-weight: 600; color: var(--brown); }
+
+/* TAM/SAM/SOM CIRCLES */
+.tam-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.tam-circle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  position: relative;
+}
+
+.tam-circle .big-number { line-height: 1; }
+.tam-circle .label { margin-top: 4px; }
+
+.tam-outer {
+  width: clamp(200px, 22vw, 280px);
+  height: clamp(200px, 22vw, 280px);
+  background: rgba(255,107,53,0.08);
+  border: 3px solid rgba(255,107,53,0.2);
+}
+
+.tam-mid {
+  width: clamp(160px, 18vw, 220px);
+  height: clamp(160px, 18vw, 220px);
+  background: rgba(255,107,53,0.15);
+  border: 3px solid rgba(255,107,53,0.35);
+}
+
+.tam-inner {
+  width: clamp(130px, 14vw, 170px);
+  height: clamp(130px, 14vw, 170px);
+  background: rgba(255,107,53,0.25);
+  border: 3px solid var(--orange);
+}
+
+.tam-outer .big-number { font-size: clamp(1.8rem, 4vw, 3rem); }
+.tam-mid .big-number { font-size: clamp(1.5rem, 3.5vw, 2.5rem); }
+.tam-inner .big-number { font-size: clamp(1.3rem, 3vw, 2rem); }
+
+/* PRICING TABLE */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 780px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.price-card {
+  text-align: center;
+  padding: 24px 16px;
+  border-radius: 16px;
+  border: 2px solid rgba(45,24,16,0.08);
+  background: #fff;
+}
+
+.price-card.featured {
+  border-color: var(--orange);
+  background: rgba(255,107,53,0.04);
+  transform: scale(1.04);
+}
+
+.price-card .price {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--orange);
+  margin: 8px 0;
+}
+
+.price-card .price-label {
+  font-size: 0.8rem;
+  color: var(--brown-light);
+  opacity: 0.7;
+}
+
+.price-card ul {
+  list-style: none;
+  margin-top: 12px;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.price-card li {
+  padding: 4px 0;
+  text-align: left;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.price-card li::before {
+  content: '\2713';
+  color: var(--orange);
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+/* ROADMAP */
+.timeline {
+  max-width: 800px;
+  width: 100%;
+  margin-top: 20px;
+  position: relative;
+  padding-left: 32px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--orange), var(--orange-light));
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  padding: 0 0 24px 24px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -28px; top: 6px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--orange);
+  border: 3px solid var(--cream);
+}
+
+.timeline-item .tl-date {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.timeline-item .tl-text {
+  font-size: 1rem;
+  color: var(--brown-light);
+  text-align: left;
+  margin-top: 2px;
+}
+
+/* ARCHITECTURE BLOCK */
+.arch-box {
+  max-width: 800px;
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid rgba(45,24,16,0.1);
+}
+
+.arch-header {
+  background: var(--brown);
+  color: var(--cream);
+  text-align: center;
+  padding: 16px;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.arch-modules {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+
+.arch-module {
+  padding: 20px 16px;
+  text-align: center;
+  border-right: 1px solid rgba(45,24,16,0.08);
+  border-bottom: 1px solid rgba(45,24,16,0.08);
+}
+
+.arch-module:last-child { border-right: none; }
+
+.arch-module h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+
+.arch-module p {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--brown-light);
+}
+
+.arch-footer {
+  background: rgba(45,24,16,0.04);
+  text-align: center;
+  padding: 14px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--brown);
+  letter-spacing: 0.03em;
+}
+
+/* INITIA GRID */
+.initia-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 820px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.initia-card {
+  padding: 20px;
+  border-radius: 14px;
+  background: rgba(250,248,245,0.08);
+  border: 1px solid rgba(250,248,245,0.12);
+}
+
+.initia-card h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--orange-light);
+  margin-bottom: 6px;
+}
+
+.initia-card p {
+  font-size: 0.85rem;
+  color: rgba(250,248,245,0.75);
+  text-align: left;
+  line-height: 1.45;
+}
+
+.initia-card.full-width {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+.initia-card.full-width p { text-align: center; }
+
+/* SPACERS & UTILITIES */
+.spacer-sm { height: 12px; }
+.spacer { height: 20px; }
+.spacer-lg { height: 32px; }
+.flex-col { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.flex-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.w-full { width: 100%; max-width: 850px; }
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+
+/* LOGO */
+.logo {
+  font-size: clamp(3.5rem, 8vw, 6rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--brown);
+}
+
+.dark .logo { color: var(--cream); }
+
+.logo-accent {
+  display: inline-block;
+  width: 0.18em; height: 0.18em;
+  background: var(--orange);
+  border-radius: 50%;
+  margin-left: 0.02em;
+  vertical-align: super;
+  position: relative;
+  top: -0.1em;
+}
+
+/* NAV CONTROLS */
+.nav-hint {
+  position: fixed;
+  bottom: 24px; right: 32px;
+  font-size: 0.75rem;
+  color: rgba(45,24,16,0.35);
+  z-index: 500;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.slide-counter {
+  position: fixed;
+  bottom: 24px; left: 32px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(45,24,16,0.4);
+  z-index: 500;
+}
+
+/* SPEAKER NOTES OVERLAY */
+#notes-overlay {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(45,24,16,0.95);
+  color: var(--cream);
+  padding: 20px 40px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  z-index: 900;
+  backdrop-filter: blur(10px);
+  max-height: 30vh;
+  overflow-y: auto;
+}
+
+#notes-overlay .notes-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.slide.active .anim-1 { animation: fadeUp 0.6s 0.15s both; }
+.slide.active .anim-2 { animation: fadeUp 0.6s 0.3s both; }
+.slide.active .anim-3 { animation: fadeUp 0.6s 0.45s both; }
+.slide.active .anim-4 { animation: fadeUp 0.6s 0.6s both; }
+.slide.active .anim-5 { animation: fadeUp 0.6s 0.75s both; }
+.slide.active .anim-count { animation: countUp 0.8s 0.3s both; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .slide { padding: 40px 28px; }
+  .three-col, .pricing-grid, .arch-modules { grid-template-columns: 1fr; }
+  .initia-grid { grid-template-columns: 1fr; }
+  .tam-visual { flex-direction: column; gap: 20px; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .price-card.featured { transform: none; }
+  .compare-table { font-size: 0.75rem; }
+  .compare-table th, .compare-table td { padding: 8px 10px; }
+  .nav-hint, .slide-counter { display: none; }
+}
+
+/* FULLSCREEN */
+:-webkit-full-screen { background: var(--cream); }
+:-moz-full-screen { background: var(--cream); }
+:fullscreen { background: var(--cream); }
+
+/* SUBTLE BG PATTERN */
+.slide::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(255,107,53,0.03) 0%, transparent 50%),
+              radial-gradient(circle at 20% 80%, rgba(45,24,16,0.02) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.slide > * { position: relative; z-index: 1; }
+
+/* ONE MORE THING GLOW */
+.glow-text {
+  text-shadow: 0 0 40px rgba(255,107,53,0.3), 0 0 80px rgba(255,107,53,0.15);
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div class="slide-counter" id="slideCounter">1 / 12</div>
+<div class="nav-hint">Arrow keys or click to navigate &middot; F fullscreen &middot; N notes</div>
+
+<div id="notes-overlay">
+  <div class="notes-label">Speaker Notes</div>
+  <div id="notes-text"></div>
+</div>
+
+<div id="deck">
+
+  <!-- SLIDE 1: THE OPENING -->
+  <div class="slide dark active" data-notes="Open with silence. Let the number land. 300 million people shopping on their phones -- zero on blockchain. This is the gap. Pause. Then reveal TIENDA.">
+    <div class="anim-1">
+      <p class="quote" style="font-size: clamp(1.2rem,2.5vw,2rem);">300 million people are shopping on their phones right now across Latin America.<br><br>And not a single one of them is using a blockchain.</p>
+    </div>
+    <div class="spacer-lg"></div>
+    <div class="anim-2">
+      <div class="logo">TIENDA<span class="logo-accent"></span></div>
+    </div>
+    <div class="anim-3">
+      <p class="tagline" style="color: var(--orange-light);">Commerce, unchained.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: THE WORLD HAS CHANGED -->
+  <div class="slide" data-notes="Set the stage. LATAM is the fastest-growing e-commerce region. Mobile-first. 87% on phones. The behavior exists. The infrastructure is extractive. Tools are stuck in 2015.">
+    <h2 class="anim-1">The world has changed.</h2>
+    <p class="anim-2 mt-2" style="color:var(--orange);font-weight:600;">The largest consumer revolution in history is happening in Latin America.</p>
+    <div class="stat-grid anim-3">
+      <div class="stat-card">
+        <div class="big-number" data-count="300" data-suffix="M+">0</div>
+        <div class="label">connected consumers</div>
+      </div>
+      <div class="stat-card">
+        <div class="big-number" data-count="120" data-prefix="$" data-suffix="B">0</div>
+        <div class="label">e-commerce market</div>
+      </div>
+      <div class="stat-card">
+        <div class="big-number" data-count="87" data-suffix="%">0</div>
+        <div class="label">on mobile</div>
+      </div>
+      <div class="stat-card">
+        <div class="big-number" data-count="25" data-suffix="%" style="font-size:clamp(2rem,5vw,4rem);">0</div>
+        <div class="label">YoY growth</div>
+      </div>
+    </div>
+    <div class="spacer-sm"></div>
+    <p class="anim-4" style="font-weight:600;color:var(--brown);">The people are ready. The tools are stuck in 2015.</p>
+  </div>
+
+  <!-- SLIDE 3: THE PROBLEM -->
+  <div class="slide orange-bg" data-notes="Hit hard. Show the extraction. MercadoLibre 16-30%. Rappi 20-35%. A merchant keeps 65 cents of every dollar. Then the kicker: Web3 asks them to understand rollups and gas fees. That is not a solution. That is an insult.">
+    <h2 class="anim-1" style="color:#fff;">Web2 platforms are taxing<br>LATAM merchants into poverty.</h2>
+    <div class="spacer"></div>
+    <table class="compare-table anim-2" style="color:var(--brown);">
+      <tr><th>Platform</th><th>Take Rate</th><th>Settlement</th><th>Control</th></tr>
+      <tr><td>MercadoLibre</td><td style="font-weight:700;">16-30%</td><td>14-21 days</td><td>Their rules</td></tr>
+      <tr><td>Rappi</td><td style="font-weight:700;">20-35%</td><td>7-14 days</td><td>Their algorithm</td></tr>
+      <tr><td>Instagram Shops</td><td style="font-weight:700;">5% + ads</td><td>3-5 days</td><td>Their reach</td></tr>
+    </table>
+    <div class="spacer"></div>
+    <p class="anim-3" style="font-size:clamp(1.2rem,2vw,1.7rem);font-weight:600;color:#fff;">A merchant in Bogota keeps as little as<br><span style="font-size:1.4em;font-weight:900;">65 cents</span> of every dollar.</p>
+    <div class="spacer-sm"></div>
+    <p class="anim-4" style="font-weight:700;color:rgba(255,255,255,0.95);font-size:clamp(1rem,1.6vw,1.3rem);">And Web3 asks them to understand rollups, seed phrases, and gas fees.<br>That is not a solution. That is an insult.</p>
+  </div>
+
+  <!-- SLIDE 4: THE INSIGHT -->
+  <div class="slide" data-notes="This is the key insight. Merchants don't want blockchain. They want to be in business. They want to get paid, own their customers, and stop giving 30%. Simple question: what if a merchant had their own chain and never knew it?">
+    <div class="anim-1">
+      <p class="label">The Insight</p>
+    </div>
+    <div class="spacer-sm"></div>
+    <div class="anim-2">
+      <p class="quote">Merchants don't want to be on the blockchain.<br>They want to be in business.</p>
+    </div>
+    <div class="spacer-lg"></div>
+    <div class="anim-3 flex-col" style="gap:14px;">
+      <p style="font-size:clamp(1rem,1.5vw,1.2rem);">They care about <span class="bold">getting paid</span>.</p>
+      <p style="font-size:clamp(1rem,1.5vw,1.2rem);">They care about <span class="bold">owning their customers</span>.</p>
+      <p style="font-size:clamp(1rem,1.5vw,1.2rem);">They care about <span class="bold">not giving 30%</span> to a platform.</p>
+    </div>
+    <div class="spacer-lg"></div>
+    <h2 class="anim-4" style="font-size:clamp(1.3rem,2.5vw,2rem);">What if a merchant could have their own chain<br>&mdash; and never know it?</h2>
+  </div>
+
+  <!-- SLIDE 5: THE SOLUTION -->
+  <div class="slide dark" data-notes="Reveal: TIENDA. The Shopify of Web3 for Latin America. App-specific commerce chain on Initia. No wallets, no gas, no bridges. Three steps. Under 5 minutes to first sale.">
+    <div class="anim-1">
+      <div class="logo" style="font-size:clamp(2.5rem,6vw,4.5rem);">TIENDA<span class="logo-accent"></span></div>
+    </div>
+    <p class="anim-2 tagline" style="color:var(--orange-light);font-size:clamp(1.2rem,2.2vw,1.8rem);">The Shopify of Web3 for Latin America.</p>
+    <div class="spacer"></div>
+    <div class="three-col anim-3">
+      <div class="step-card" style="background:rgba(250,248,245,0.06);border-color:rgba(250,248,245,0.1);">
+        <div class="step-num">1</div>
+        <h3 style="color:var(--cream);">Abre tu tienda</h3>
+        <p style="color:rgba(250,248,245,0.7);">Sign up with your phone number. Name your store. Done.</p>
+      </div>
+      <div class="step-card" style="background:rgba(250,248,245,0.06);border-color:rgba(250,248,245,0.1);">
+        <div class="step-num">2</div>
+        <h3 style="color:var(--cream);">Agrega productos</h3>
+        <p style="color:rgba(250,248,245,0.7);">Take a photo. Set a price. Tap publish.</p>
+      </div>
+      <div class="step-card" style="background:rgba(250,248,245,0.06);border-color:rgba(250,248,245,0.1);">
+        <div class="step-num">3</div>
+        <h3 style="color:var(--cream);">Vende y cobra</h3>
+        <p style="color:rgba(250,248,245,0.7);">Share your link. Buyers pay. You get paid instantly.</p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="anim-4 flex-col">
+      <p style="color:rgba(250,248,245,0.6);font-size:0.95rem;">No wallets. No gas fees. No bridges.</p>
+      <p style="color:var(--orange-light);font-weight:700;font-size:clamp(1.1rem,1.8vw,1.4rem);">Download to first sale: under 5 minutes.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: ARCHITECTURE -->
+  <div class="slide" data-notes="Show the architecture. Move for financial precision: inventory, pricing, loyalty. CosmWasm for flexible storefront logic: orders, reviews. Enshrined liquidity for instant settlement. All on one chain. No bridges. No fragmentation.">
+    <h2 class="anim-1" style="font-size:clamp(1.4rem,2.5vw,2.2rem);">Built different. Built on Initia.</h2>
+    <div class="arch-box anim-2">
+      <div class="arch-header">TIENDA ROLLUP &mdash; Initia App-Specific Chain</div>
+      <div class="arch-modules">
+        <div class="arch-module">
+          <h4>Move Modules</h4>
+          <p>Inventory management<br>Dynamic pricing<br>Loyalty tokens</p>
+        </div>
+        <div class="arch-module">
+          <h4>CosmWasm Contracts</h4>
+          <p>Storefront deployment<br>Order lifecycle<br>On-chain reviews</p>
+        </div>
+        <div class="arch-module" style="border-right:none;">
+          <h4>Enshrined Liquidity</h4>
+          <p>IBC settlement<br>Multi-token payouts<br>Cross-chain commerce</p>
+        </div>
+      </div>
+      <div class="arch-footer">INITIA L1 &mdash; Settlement Layer</div>
+    </div>
+    <div class="spacer-sm"></div>
+    <p class="anim-3" style="font-weight:600;font-size:clamp(0.95rem,1.3vw,1.1rem);">Financial precision <span class="accent">&</span> flexible logic <span class="accent">&</span> instant settlement &mdash; one chain.</p>
+  </div>
+
+  <!-- SLIDE 7: WHY INITIA -->
+  <div class="slide dark" data-notes="Initia is not our infra choice. It's our unfair advantage. App-specific rollup, enshrined liquidity, multi-VM, native IBC, sub-second finality. This product is impossible without Initia.">
+    <h2 class="anim-1" style="color:var(--cream);">Why Initia</h2>
+    <p class="anim-1 mt-1" style="color:var(--orange-light);font-weight:600;">This product is impossible without Initia.</p>
+    <div class="initia-grid anim-2">
+      <div class="initia-card">
+        <h4>App-Specific Rollup</h4>
+        <p>A chain purpose-built for commerce &mdash; not shared with DEXes or memecoins.</p>
+      </div>
+      <div class="initia-card">
+        <h4>Enshrined Liquidity</h4>
+        <p>No bootstrapping pools. Instant multi-currency settlement from day one.</p>
+      </div>
+      <div class="initia-card">
+        <h4>Multi-VM (Move + CosmWasm)</h4>
+        <p>Financial-grade precision AND flexible contract logic on the same chain.</p>
+      </div>
+      <div class="initia-card">
+        <h4>Native IBC</h4>
+        <p>Any buyer on any Initia rollup can buy from any Tienda merchant. Zero bridges.</p>
+      </div>
+      <div class="initia-card full-width">
+        <h4>Sub-Second Finality</h4>
+        <p>No merchant waits 12 seconds to confirm a $3 sale.</p>
+      </div>
+    </div>
+    <div class="spacer-sm"></div>
+    <p class="anim-3" style="color:var(--cream);font-weight:700;font-size:clamp(1.1rem,1.8vw,1.4rem);">Initia is not our infrastructure choice.<br><span style="color:var(--orange-light);">Initia is our unfair advantage.</span></p>
+  </div>
+
+  <!-- SLIDE 8: THE MARKET -->
+  <div class="slide" data-notes="TAM $120B LATAM e-commerce, growing 25% per year. SAM $18B underserved SMBs. SOM $180M first 10K merchants in Colombia, Mexico, Argentina within 24 months. These merchants aren't on Shopify. They're on WhatsApp with screenshots.">
+    <h2 class="anim-1" style="font-size:clamp(1.4rem,2.5vw,2.2rem);">The Market</h2>
+    <div class="tam-visual anim-2">
+      <div class="tam-circle tam-outer">
+        <div class="big-number" data-count="120" data-prefix="$" data-suffix="B">0</div>
+        <div class="label">TAM</div>
+        <p style="font-size:0.75rem;margin-top:4px;">LATAM e-commerce</p>
+      </div>
+      <div class="tam-circle tam-mid">
+        <div class="big-number" data-count="18" data-prefix="$" data-suffix="B">0</div>
+        <div class="label">SAM</div>
+        <p style="font-size:0.75rem;margin-top:4px;">Underserved SMBs</p>
+      </div>
+      <div class="tam-circle tam-inner">
+        <div class="big-number" data-count="180" data-prefix="$" data-suffix="M">0</div>
+        <div class="label">SOM</div>
+        <p style="font-size:0.72rem;margin-top:4px;">10K merchants, 24 mo</p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <p class="anim-3" style="font-weight:500;max-width:700px;">The merchants we target are <strong>not on Shopify</strong>.<br>They are on WhatsApp and Instagram, doing commerce with screenshots and bank transfers.</p>
+  </div>
+
+  <!-- SLIDE 9: BUSINESS MODEL -->
+  <div class="slide" data-notes="Two revenue streams that grow with the merchant. SaaS tiers: Free, $9, $29. Transaction fees: 1.5% vs 16-30%. At 10K merchants, $9M ARR from tx fees alone. Year 2 target: $12M ARR. Network effects compound.">
+    <h2 class="anim-1" style="font-size:clamp(1.3rem,2.2vw,1.9rem);">Business Model</h2>
+    <p class="anim-1 mt-1" style="color:var(--orange);font-weight:600;">Two streams. Both grow with the merchant.</p>
+    <div class="pricing-grid anim-2">
+      <div class="price-card">
+        <h3>Gratis</h3>
+        <div class="price">$0</div>
+        <div class="price-label">per month</div>
+        <ul>
+          <li>50 products</li>
+          <li>Basic storefront</li>
+          <li>Instant settlement</li>
+        </ul>
+      </div>
+      <div class="price-card featured">
+        <h3>Crece</h3>
+        <div class="price">$9</div>
+        <div class="price-label">per month</div>
+        <ul>
+          <li>Unlimited products</li>
+          <li>Analytics dashboard</li>
+          <li>Custom domain</li>
+        </ul>
+      </div>
+      <div class="price-card">
+        <h3>Escala</h3>
+        <div class="price">$29</div>
+        <div class="price-label">per month</div>
+        <ul>
+          <li>Multi-store</li>
+          <li>API access</li>
+          <li>Loyalty programs</li>
+        </ul>
+      </div>
+    </div>
+    <div class="spacer-sm"></div>
+    <div class="anim-3 flex-col" style="gap:6px;">
+      <p style="font-weight:700;color:var(--brown);font-size:clamp(1rem,1.5vw,1.2rem);"><span class="accent">1.5%</span> per transaction &mdash; vs. 16-30% on Web2</p>
+      <p style="font-size:0.95rem;">Year 2 target: <strong class="accent">$12M ARR</strong></p>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: TRACTION & ROADMAP -->
+  <div class="slide" data-notes="Built during the hackathon: Tienda rollup on Initia testnet, Move modules, CosmWasm contracts, React Native app, landing page, account abstraction. Roadmap: Q2 beta 100 merchants, Q3 public launch Colombia, Q4 Mexico + Argentina, Q1 2027 10K merchants and seed raise.">
+    <h2 class="anim-1" style="font-size:clamp(1.3rem,2.2vw,1.9rem);">Traction & Roadmap</h2>
+    <div class="anim-2 flex-row mt-2" style="gap:12px;flex-wrap:wrap;justify-content:center;">
+      <span style="background:rgba(255,107,53,0.1);color:var(--orange);font-weight:600;padding:6px 14px;border-radius:8px;font-size:0.85rem;">Rollup on testnet</span>
+      <span style="background:rgba(255,107,53,0.1);color:var(--orange);font-weight:600;padding:6px 14px;border-radius:8px;font-size:0.85rem;">Move modules live</span>
+      <span style="background:rgba(255,107,53,0.1);color:var(--orange);font-weight:600;padding:6px 14px;border-radius:8px;font-size:0.85rem;">CosmWasm contracts</span>
+      <span style="background:rgba(255,107,53,0.1);color:var(--orange);font-weight:600;padding:6px 14px;border-radius:8px;font-size:0.85rem;">React Native app</span>
+      <span style="background:rgba(255,107,53,0.1);color:var(--orange);font-weight:600;padding:6px 14px;border-radius:8px;font-size:0.85rem;">Account abstraction</span>
+    </div>
+    <div class="spacer"></div>
+    <div class="timeline anim-3">
+      <div class="timeline-item">
+        <div class="tl-date">Q2 2026</div>
+        <div class="tl-text">Closed beta &mdash; 100 merchants in Bogota</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-date">Q3 2026</div>
+        <div class="tl-text">Public launch Colombia. Fiat on/off ramp integration</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-date">Q4 2026</div>
+        <div class="tl-text">Expand to Mexico City & Buenos Aires</div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-date">Q1 2027</div>
+        <div class="tl-text">10,000 merchants. Series Seed raise</div>
+      </div>
+      <div class="timeline-item" style="padding-bottom:0;">
+        <div class="tl-date">2027+</div>
+        <div class="tl-text">Marketplace discovery layer. Cross-rollup commerce protocol</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: THE ASK -->
+  <div class="slide dark" data-notes="Seed round: $4M at $16-24M post-money. 40% engineering, 25% GTM, 12.5% product, 10% fiat ramps. Tranche 1: $2M for 500 merchants beta. Tranche 2: $2M for Colombia+Mexico launch, 5K merchants, $50M GMV run rate.">
+    <h2 class="anim-1" style="color:var(--cream);">The Ask</h2>
+    <div class="spacer-sm"></div>
+    <div class="anim-2 flex-col">
+      <div class="big-number" style="font-size:clamp(3rem,7vw,5.5rem);" data-count="4" data-prefix="$" data-suffix="M">0</div>
+      <p class="label" style="color:rgba(250,248,245,0.5);">Seed Round</p>
+      <p style="color:rgba(250,248,245,0.6);font-size:0.9rem;margin-top:4px;">$16-24M post-money valuation</p>
+    </div>
+    <div class="spacer"></div>
+    <div class="stat-grid anim-3" style="max-width:700px;">
+      <div class="stat-card" style="background:rgba(250,248,245,0.06);">
+        <div style="font-size:1.8rem;font-weight:800;color:var(--orange-light);">40%</div>
+        <div class="label" style="font-size:0.75rem;">Engineering</div>
+      </div>
+      <div class="stat-card" style="background:rgba(250,248,245,0.06);">
+        <div style="font-size:1.8rem;font-weight:800;color:var(--orange-light);">25%</div>
+        <div class="label" style="font-size:0.75rem;">LATAM GTM</div>
+      </div>
+      <div class="stat-card" style="background:rgba(250,248,245,0.06);">
+        <div style="font-size:1.8rem;font-weight:800;color:var(--orange-light);">12.5%</div>
+        <div class="label" style="font-size:0.75rem;">Product + Design</div>
+      </div>
+      <div class="stat-card" style="background:rgba(250,248,245,0.06);">
+        <div style="font-size:1.8rem;font-weight:800;color:var(--orange-light);">10%</div>
+        <div class="label" style="font-size:0.75rem;">Fiat Ramps</div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="anim-4 flex-col" style="gap:4px;">
+      <p style="color:rgba(250,248,245,0.8);font-size:0.95rem;"><strong style="color:var(--orange-light);">LTV:CAC 16-62x</strong> &nbsp;&middot;&nbsp; <strong style="color:var(--orange-light);">78% gross margin</strong> &nbsp;&middot;&nbsp; <strong style="color:var(--orange-light);">Cash flow positive Q2 2027</strong></p>
+    </div>
+  </div>
+
+  <!-- SLIDE 12: THE CLOSE -->
+  <div class="slide" data-notes="Close with conviction. Every few decades, a technology changes commerce. The app-chain gives us a store no one can take away. Tienda is that store. Built on Initia. Built for Latin America. Built for 300 million people who deserve better. One more thing: every merchant will OWN their store. That is not a feature. That is a revolution.">
+    <div class="anim-1 flex-col" style="gap:6px;">
+      <p style="font-size:clamp(0.9rem,1.2vw,1rem);color:var(--brown-light);opacity:0.6;">The printing press gave us catalogs. The internet gave us e-commerce. The smartphone gave us mobile payments.</p>
+    </div>
+    <div class="spacer"></div>
+    <h1 class="anim-2" style="font-size:clamp(1.5rem,3.2vw,2.6rem);max-width:800px;">The app-chain gives us something we have never had before:<br><span class="accent">a store that no one can take away from you.</span></h1>
+    <div class="spacer-lg"></div>
+    <div class="anim-3">
+      <div class="logo" style="font-size:clamp(2.5rem,6vw,4.5rem);">TIENDA<span class="logo-accent"></span></div>
+    </div>
+    <p class="anim-3 tagline">Tu tienda. Tu cadena. Tu futuro.</p>
+    <div class="spacer"></div>
+    <div class="anim-4 flex-col" style="gap:4px;">
+      <p style="font-size:clamp(0.85rem,1.1vw,1rem);font-weight:500;color:var(--brown-light);">Built on Initia. Built for Latin America.</p>
+      <p style="font-size:clamp(0.85rem,1.1vw,1rem);font-weight:700;color:var(--brown);">Built for the 300 million people who deserve better.</p>
+    </div>
+    <div class="spacer-lg"></div>
+    <p class="anim-5" style="font-size:0.85rem;color:var(--brown-light);opacity:0.5;">INITIATE: The Initia Hackathon Season 1</p>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  let notesVisible = false;
+
+  const progressBar = document.getElementById('progress');
+  const counter = document.getElementById('slideCounter');
+  const notesOverlay = document.getElementById('notes-overlay');
+  const notesText = document.getElementById('notes-text');
+
+  function updateProgress() {
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+    // Adjust counter color for dark/orange slides
+    const s = slides[current];
+    if (s.classList.contains('dark') || s.classList.contains('orange-bg')) {
+      counter.style.color = 'rgba(250,248,245,0.4)';
+    } else {
+      counter.style.color = 'rgba(45,24,16,0.4)';
+    }
+  }
+
+  function goTo(n) {
+    if (n < 0 || n >= total || n === current) return;
+    const dir = n > current ? 1 : -1;
+    slides[current].classList.remove('active');
+    slides[current].classList.add(dir > 0 ? 'prev' : '');
+    slides[current].style.transform = dir > 0 ? 'translateX(-60px)' : 'translateX(60px)';
+    slides[current].style.opacity = '0';
+
+    current = n;
+    slides[current].classList.remove('prev');
+    slides[current].classList.add('active');
+    slides[current].style.transform = 'translateX(0)';
+    slides[current].style.opacity = '1';
+
+    updateProgress();
+    animateCounters();
+    updateNotes();
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  function updateNotes() {
+    const note = slides[current].getAttribute('data-notes') || '';
+    notesText.textContent = note;
+  }
+
+  function toggleNotes() {
+    notesVisible = !notesVisible;
+    notesOverlay.style.display = notesVisible ? 'block' : 'none';
+    updateNotes();
+  }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen();
+    }
+  }
+
+  // ANIMATED COUNTERS
+  function animateCounters() {
+    const activeSlide = slides[current];
+    const counters = activeSlide.querySelectorAll('[data-count]');
+    counters.forEach(el => {
+      const target = parseFloat(el.getAttribute('data-count'));
+      const prefix = el.getAttribute('data-prefix') || '';
+      const suffix = el.getAttribute('data-suffix') || '';
+      const duration = 1200;
+      const start = performance.now();
+      el.textContent = prefix + '0' + suffix;
+
+      function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const val = Math.round(target * eased);
+        el.textContent = prefix + val + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  // KEY EVENTS
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
+    else if (e.key === 'n' || e.key === 'N') { toggleNotes(); }
+    else if (e.key === 'Escape' && notesVisible) { toggleNotes(); }
+  });
+
+  // CLICK NAV
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('#notes-overlay') || e.target.closest('a') || e.target.closest('button')) return;
+    const x = e.clientX;
+    if (x > window.innerWidth * 0.5) next();
+    else prev();
+  });
+
+  // TOUCH SWIPE
+  let touchStartX = 0;
+  document.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', function(e) {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { diff > 0 ? next() : prev(); }
+  });
+
+  // INIT
+  updateProgress();
+  animateCounters();
+  updateNotes();
+})();
+</script>
+</body>
+</html>
