@@ -107,7 +107,7 @@ const db = {
   loyaltyAccounts: new Map(), // walletAddress -> LoyaltyAccount
   reviews: new Map(),         // reviewId -> Review
   categories: new Set([
-    'electronics', 'clothing', 'food', 'home', 'beauty',
+    'electronics', 'clothing', 'food', 'beverages', 'home', 'beauty',
     'sports', 'toys', 'automotive', 'books', 'services',
   ]),
   analytics: new Map(),       // merchantId -> AnalyticsData

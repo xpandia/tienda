@@ -29,13 +29,19 @@
     "rollup_runtime": "MoveVM",
     "interchain": "IBC via Initia + InterwovenKit",
     "backend": "Node.js + Express.js + @initia/initia.js",
-    "frontend": "HTML/CSS/JS",
+    "frontend": "React + @initia/interwovenkit-react",
     "smart_contracts": "Move (marketplace.move)"
   },
   "initia_integration": {
     "rollup_type": "app-specific",
     "vm": "MoveVM",
     "interwovenkit": true,
+    "interwovenkit_features": [
+      "wallet-connect",
+      "auto-signing-sessions",
+      "interwoven-bridge",
+      "initia-usernames"
+    ],
     "ibc_enabled": true,
     "enshrined_liquidity": true,
     "sdk": "@initia/initia.js"
@@ -48,6 +54,9 @@
     "Reputation system with 1-5 star reviews",
     "1.5% platform fee (configurable via basis points)",
     "Cross-rollup payments via InterwovenKit",
+    "Auto-signing sessions for frictionless shopping UX",
+    "Initia Usernames (.init) for merchant identity",
+    "Interwoven Bridge for cross-chain asset transfers",
     "REST API with @initia/initia.js SDK integration"
   ],
   "links": {
