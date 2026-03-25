@@ -188,6 +188,86 @@ textarea.form-input{resize:vertical;min-height:80px}
 /* ANIMATIONS */
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .fade-in{animation:fadeIn .3s ease}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+@keyframes glow{0%,100%{box-shadow:0 0 4px rgba(255,107,53,.3)}50%{box-shadow:0 0 14px rgba(255,107,53,.6)}}
+@keyframes bounce{0%{transform:scale(1)}30%{transform:scale(1.35)}60%{transform:scale(.9)}100%{transform:scale(1)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes coinFlow{0%{opacity:1;transform:translateY(0) scale(1)}50%{opacity:.8;transform:translateY(-30px) scale(1.1)}100%{opacity:0;transform:translateY(-60px) scale(.6)}}
+@keyframes blockChain{0%{width:0}100%{width:100%}}
+@keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(255,107,53,.4)}50%{box-shadow:0 0 0 8px rgba(255,107,53,0)}}
+@keyframes checkmark{0%{transform:scale(0) rotate(-45deg);opacity:0}50%{transform:scale(1.2) rotate(-45deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes revCountUp{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* NOTIFICATION BADGE */
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700;animation:pulse .8s ease infinite}
+.cart-badge{margin-left:auto;background:var(--orange);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700}
+.cart-badge.bounce{animation:bounce .4s ease}
+
+/* PRODUCT CARD ENHANCEMENTS */
+.product-card{position:relative}
+.product-card .product-img{transition:transform .3s ease;overflow:hidden}
+.product-card:hover .product-img{transform:scale(1.03)}
+.product-rating{display:flex;align-items:center;gap:4px;margin-top:4px}
+.product-rating .stars{font-size:12px}
+.product-rating .review-count{font-size:10px;color:var(--brown-muted)}
+.stock-green{color:#2ecc71}.stock-yellow{color:#f39c12}.stock-red{color:#e74c3c}
+.added-check{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(46,204,113,.92);color:#fff;padding:10px 22px;border-radius:var(--radius);font-size:14px;font-weight:700;pointer-events:none;animation:fadeIn .25s ease;z-index:5}
+
+/* PURCHASE FLOW MODAL */
+.purchase-steps{display:flex;gap:0;margin-bottom:24px}
+.purchase-step{flex:1;text-align:center;padding:10px 0;font-size:12px;font-weight:600;color:var(--brown-muted);border-bottom:3px solid var(--gray-light);transition:.3s}
+.purchase-step.active{color:var(--orange);border-bottom-color:var(--orange)}
+.purchase-step.done{color:var(--green);border-bottom-color:var(--green)}
+.step-content{display:none;animation:fadeIn .3s ease}
+.step-content.active{display:block}
+
+/* PROCESSING ANIMATION */
+.processing-wrap{text-align:center;padding:40px 20px}
+.chain-blocks{display:flex;justify-content:center;gap:6px;margin:20px 0}
+.chain-block{width:40px;height:40px;border-radius:8px;background:var(--gray-light);display:flex;align-items:center;justify-content:center;font-size:16px;transition:.4s;position:relative}
+.chain-block.filled{background:var(--orange);color:#fff}
+.chain-block.filled::after{content:'';position:absolute;right:-6px;top:50%;width:6px;height:2px;background:var(--orange)}
+.chain-block:last-child.filled::after{display:none}
+.processing-text{font-size:14px;color:var(--brown-muted);margin-top:12px}
+
+/* SUCCESS STATE */
+.success-wrap{text-align:center;padding:30px 20px}
+.success-icon{font-size:64px;animation:checkmark .5s ease}
+.order-number{font-family:monospace;background:var(--cream);padding:8px 16px;border-radius:var(--radius-sm);display:inline-block;margin:12px 0;font-size:14px;font-weight:600}
+.escrow-badge-success{display:inline-flex;align-items:center;gap:6px;background:var(--green-bg);color:#1a8a4a;padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;margin-top:8px}
+
+/* ORDER TRACKING PIPELINE */
+.flow-step.current .flow-circle{animation:pulseDot 1.5s ease infinite}
+.flow-timestamp{font-size:9px;color:var(--brown-muted);margin-top:2px}
+
+/* MERCHANT NEW ORDER GLOW */
+.new-order-row{animation:slideInRight .4s ease;background:rgba(255,107,53,.04)}
+.new-order-row td:first-child::before{content:'NEW';background:var(--orange);color:#fff;font-size:9px;padding:2px 6px;border-radius:8px;font-weight:700;margin-right:6px;animation:glow 1.5s ease infinite}
+
+/* COIN FLOW ANIMATION */
+.coin-particle{position:fixed;font-size:20px;pointer-events:none;z-index:3000;animation:coinFlow 1s ease forwards}
+
+/* REVENUE COUNTER */
+.rev-counter-anim{display:inline-block;animation:revCountUp .4s ease}
+
+/* DEMO BUTTON */
+.demo-btn{position:fixed;bottom:24px;left:24px;background:linear-gradient(135deg,var(--orange),var(--orange-dark));color:#fff;border:none;padding:12px 22px;border-radius:30px;font-size:13px;font-weight:700;cursor:pointer;z-index:900;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:8px;transition:.2s}
+.demo-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-xl)}
+.demo-btn.running{pointer-events:none;opacity:.7}
+
+/* QTY SELECTOR IN MODAL */
+.qty-selector{display:flex;align-items:center;gap:12px;margin:16px 0}
+.qty-selector button{width:36px;height:36px;border-radius:50%;border:2px solid var(--gray-light);background:var(--white);font-size:18px;font-weight:700;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center}
+.qty-selector button:hover{border-color:var(--orange);color:var(--orange)}
+.qty-selector .qty-val{font-size:20px;font-weight:800;min-width:30px;text-align:center}
+
+/* ESCROW EXPLAINER */
+.escrow-explainer{background:linear-gradient(135deg,#1a2332,#243447);border-radius:var(--radius);padding:24px;color:#fff;margin:16px 0}
+.escrow-explainer h4{font-size:15px;margin-bottom:10px}
+.escrow-explainer .escrow-steps{display:flex;gap:16px;margin-top:12px}
+.escrow-explainer .escrow-step{flex:1;text-align:center;font-size:11px;line-height:1.4}
+.escrow-explainer .escrow-step .es-icon{font-size:28px;margin-bottom:6px}
+.escrow-explainer .escrow-step .es-label{color:rgba(255,255,255,.7)}
 
 /* Store settings */
 .store-header{display:flex;align-items:center;gap:20px;margin-bottom:28px}
@@ -265,6 +345,9 @@ textarea.form-input{resize:vertical;min-height:80px}
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<!-- DEMO BUTTON -->
+<button class="demo-btn" id="demoBtn" onclick="runDemo()">&#9654; Run Demo</button>
+
 <script>
 const API = 'http://localhost:3000/api/v1';
 const MERCHANT_KEY = 'init1cafemaria000000000000000000000000seed';
@@ -279,6 +362,11 @@ let allOrders = [];
 let allReviews = [];
 let merchantData = null;
 let merchantId = 'seed-merchant-001';
+let newMerchantOrders = 0;
+let newBuyerOrders = 0;
+let cartBounce = false;
+let previousOrderCount = 0;
+let demoRunning = false;
 
 // ============ i18n ============
 let appLang = localStorage.getItem('tienda-app-lang') || 'en';
@@ -447,7 +535,9 @@ function renderSidebar() {
       ${tabs.map(tb => `
         <div class="nav-item ${currentTab===tb.id?'active':''}" onclick="navigate('${tb.id}')">
           <span class="icon">${tb.icon}</span>${t(tb.key)}
-          ${tb.id==='cart'&&cart.length?`<span style="margin-left:auto;background:var(--orange);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700">${cart.reduce((s,c)=>s+c.qty,0)}</span>`:''}
+          ${tb.id==='cart'&&cart.length?`<span class="cart-badge${cartBounce?' bounce':''}">${cart.reduce((s,c)=>s+c.qty,0)}</span>`:''}
+          ${tb.id==='orders'&&currentMode==='merchant'&&newMerchantOrders>0?`<span class="nav-badge">${newMerchantOrders}</span>`:''}
+          ${tb.id==='myorders'&&currentMode==='buyer'&&newBuyerOrders>0?`<span class="nav-badge">${newBuyerOrders}</span>`:''}
         </div>
       `).join('')}
     </div>
@@ -518,7 +608,7 @@ function renderMerchantDashboard() {
       <div class="stats-grid">
         <div class="stat-card"><span class="stat-icon">&#128176;</span><div class="stat-label">Ventas Hoy</div><div class="stat-value">$${todayOrders.reduce((s,o)=>s+(o.totalPrice||0),0).toFixed(2)}</div><div class="stat-sub">${todayOrders.length} orden(es)</div></div>
         <div class="stat-card"><span class="stat-icon">&#128230;</span><div class="stat-label">Pedidos Pendientes</div><div class="stat-value">${pendingOrders.length}</div><div class="stat-sub">Requieren atencion</div></div>
-        <div class="stat-card"><span class="stat-icon">&#128200;</span><div class="stat-label">Ingresos Totales</div><div class="stat-value">$${totalRev.toFixed(2)}</div><div class="stat-sub">+12% vs mes anterior</div></div>
+        <div class="stat-card"><span class="stat-icon">&#128200;</span><div class="stat-label">Ingresos Totales</div><div class="stat-value rev-counter-anim" id="revCounter">$${totalRev.toFixed(2)}</div><div class="stat-sub">+12% vs mes anterior</div></div>
         <div class="stat-card"><span class="stat-icon">&#11088;</span><div class="stat-label">Puntos Distribuidos</div><div class="stat-value">${loyaltyPts.toLocaleString()}</div><div class="stat-sub">Programa de lealtad</div></div>
       </div>
       <div class="two-col">
@@ -600,8 +690,10 @@ function renderMerchantOrders() {
           <table>
             <thead><tr><th>ID</th><th>Producto</th><th>Cant.</th><th>Total</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead>
             <tbody>
-              ${mOrders.map(o=>`
-                <tr>
+              ${mOrders.map((o,idx)=>{
+                const isNew = o.status==='paid' && (Date.now()-new Date(o.createdAt).getTime() < 300000);
+                return `
+                <tr class="${isNew?'new-order-row':''}">
                   <td style="font-family:monospace;font-size:11px">${o.orderId.slice(0,12)}...</td>
                   <td><strong>${o.productName}</strong></td>
                   <td>${o.quantity}</td>
@@ -609,11 +701,11 @@ function renderMerchantOrders() {
                   <td><span class="badge badge-${o.status}">${statusLabel(o.status)}</span></td>
                   <td style="font-size:12px;color:var(--brown-muted)">${formatDate(o.createdAt)}</td>
                   <td>
-                    <button class="btn-icon" onclick="event.stopPropagation();openOrderDetail('${o.orderId}')" title="Ver detalle">&#128065;</button>
-                    ${o.status==='paid'?`<button class="btn btn-sm btn-success" onclick="event.stopPropagation();shipOrder('${o.orderId}')" style="margin-left:6px">Enviar</button>`:''}
+                    <button class="btn-icon" onclick="event.stopPropagation();openOrderDetail('${o.orderId}')" title="View detail">&#128065;</button>
+                    ${o.status==='paid'?`<button class="btn btn-sm btn-success" onclick="event.stopPropagation();shipOrder('${o.orderId}')" style="margin-left:6px">&#128230; Ship</button>`:''}
                   </td>
                 </tr>
-              `).join('')}
+              `}).join('')}
             </tbody>
           </table>
         </div>
@@ -919,18 +1011,25 @@ function renderFavorites() {
 // ============ COMPONENTS ============
 function productCard(p) {
   const isFav = favorites.has(p.productId);
+  const pReviews = allReviews.filter(r=>r.productId===p.productId);
+  const avgR = pReviews.length ? (pReviews.reduce((s,r)=>s+r.rating,0)/pReviews.length) : 0;
+  const stockClass = p.stock<=0?'stock-red':p.stock<=5?'stock-yellow':'stock-green';
+  const stockText = p.stock<=0?'Out of Stock':p.stock<=5?'Low Stock ('+p.stock+')':p.stock+' In Stock';
+  const catGradients = {food:'linear-gradient(135deg,#ffecd2,#fcb69f)',clothing:'linear-gradient(135deg,#a1c4fd,#c2e9fb)',electronics:'linear-gradient(135deg,#d4fc79,#96e6a1)',home:'linear-gradient(135deg,#fbc2eb,#a6c1ee)',beauty:'linear-gradient(135deg,#ffecd2,#fcb69f)',beverages:'linear-gradient(135deg,#667eea,#764ba2)'};
+  const grad = catGradients[p.category]||'linear-gradient(135deg,var(--cream-dark),var(--cream))';
   return `
-    <div class="product-card" onclick="openProductDetail('${p.productId}')">
-      <div class="product-img">
+    <div class="product-card" id="pcard-${p.productId}" onclick="openBuyFlow('${p.productId}')">
+      <div class="product-img" style="background:${grad}">
         ${categoryIcons[p.category]||'&#128230;'}
         <button class="fav-btn ${isFav?'favorited':''}" onclick="event.stopPropagation();toggleFav('${p.productId}')">${isFav?'&#10084;':'&#9825;'}</button>
       </div>
       <div class="product-info">
         <div class="product-name">${p.name}</div>
         <div class="product-merchant">${p.merchantName||'Tienda'}</div>
+        ${pReviews.length?`<div class="product-rating"><span class="stars">${'&#9733;'.repeat(Math.round(avgR))}${'&#9734;'.repeat(5-Math.round(avgR))}</span><span class="review-count">(${pReviews.length})</span></div>`:''}
         <div class="product-price">$${p.price.toFixed(2)}</div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
-          <span class="product-stock">${p.stock>0?`${p.stock} disponibles`:'Agotado'}</span>
+          <span class="product-stock ${stockClass}">${stockText}</span>
           <span class="product-category-badge">${getCategoryMap()[p.category]||p.category}</span>
         </div>
       </div>
@@ -962,42 +1061,65 @@ function closeModal() {
   document.getElementById('modalOverlay').classList.remove('show');
 }
 
-function openProductDetail(productId) {
+let buyFlowQty = 1;
+let buyFlowStep = 1;
+let buyFlowProduct = null;
+
+function openBuyFlow(productId) {
   const p = allProducts.find(x=>x.productId===productId);
   if(!p) return;
-  const pReviews = allReviews.filter(r=>r.productId===productId);
+  buyFlowProduct = p;
+  buyFlowQty = 1;
+  buyFlowStep = 1;
+  showBuyStep();
+}
+// Alias for old calls
+function openProductDetail(productId) { openBuyFlow(productId); }
+
+function showBuyStep() {
+  const p = buyFlowProduct;
+  if(!p) return;
+  const pReviews = allReviews.filter(r=>r.productId===p.productId);
   const avgRating = pReviews.length ? (pReviews.reduce((s,r)=>s+r.rating,0)/pReviews.length).toFixed(1) : null;
-  openModal(`
-    <div class="modal-head">
-      <h2>${p.name}</h2>
-      <button class="modal-close" onclick="closeModal()">&times;</button>
-    </div>
-    <div class="modal-body">
+  const total = (p.price * buyFlowQty).toFixed(2);
+  const fee = (p.price * buyFlowQty * 0.015).toFixed(2);
+
+  const stepLabels = ['Product','Escrow','Confirm','Complete'];
+  const stepsHTML = `<div class="purchase-steps">${stepLabels.map((l,i)=>`<div class="purchase-step ${i+1<buyFlowStep?'done':''} ${i+1===buyFlowStep?'active':''}">${i+1}. ${l}</div>`).join('')}</div>`;
+
+  let body = '';
+  if(buyFlowStep===1) {
+    body = `
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
         <div style="background:var(--cream);border-radius:var(--radius);height:240px;display:flex;align-items:center;justify-content:center;font-size:72px">${categoryIcons[p.category]||'&#128230;'}</div>
         <div>
-          <div style="font-size:11px;color:var(--brown-muted);font-weight:600;margin-bottom:4px">${getCategoryMap()[p.category]||p.category} &bull; ${p.merchantName}</div>
-          ${avgRating?`<div class="stars" style="margin-bottom:8px">${'&#9733;'.repeat(Math.round(avgRating))}${'&#9734;'.repeat(5-Math.round(avgRating))} <span style="color:var(--brown-muted);font-size:12px">${avgRating} (${pReviews.length})</span></div>`:''}
-          <div style="font-size:32px;font-weight:800;color:var(--orange);margin-bottom:12px">$${p.price.toFixed(2)}</div>
-          <div style="font-size:13px;color:var(--brown-light);line-height:1.6;margin-bottom:16px">${p.description}</div>
+          <div style="font-size:11px;color:var(--brown-muted);font-weight:600;margin-bottom:4px">${getCategoryMap()[p.category]||p.category} &bull; ${p.merchantName||'Tienda'}</div>
+          ${avgRating?`<div class="stars" style="margin-bottom:8px">${'&#9733;'.repeat(Math.round(avgRating))}${'&#9734;'.repeat(5-Math.round(avgRating))} <span style="color:var(--brown-muted);font-size:12px">${avgRating} (${pReviews.length} reviews)</span></div>`:''}
+          <div style="font-size:32px;font-weight:800;color:var(--orange);margin-bottom:8px">$${p.price.toFixed(2)}</div>
+          <div style="font-size:13px;color:var(--brown-light);line-height:1.6;margin-bottom:12px">${p.description||''}</div>
           <div style="font-size:12px;margin-bottom:12px">
-            <span class="badge ${p.stock>0?'badge-completed':'badge-cancelled'}">${p.stock>0?p.stock+' disponibles':'Agotado'}</span>
-            ${p.shippingInfo?.freeShipping?'<span class="badge badge-delivered" style="margin-left:6px">Envio gratis</span>':''}
+            <span class="badge ${p.stock>0?'badge-completed':'badge-cancelled'}">${p.stock>0?p.stock+' available':'Sold out'}</span>
+            ${p.shippingInfo?.freeShipping?'<span class="badge badge-delivered" style="margin-left:6px">Free shipping</span>':''}
           </div>
-          ${p.tags?.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:16px">${p.tags.map(t=>`<span style="background:var(--cream);padding:3px 10px;border-radius:12px;font-size:11px;color:var(--brown-muted)">#${t}</span>`).join('')}</div>`:''}
-          ${p.stock>0?`<button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px" onclick="addToCart('${p.productId}')">&#128722; Agregar al Carrito</button>`:'<button class="btn btn-secondary" style="width:100%;justify-content:center;padding:14px" disabled>Agotado</button>'}
+          ${p.tags?.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px">${p.tags.map(t=>`<span style="background:var(--cream);padding:3px 10px;border-radius:12px;font-size:11px;color:var(--brown-muted)">#${t}</span>`).join('')}</div>`:''}
+          <div class="qty-selector">
+            <button onclick="changeBuyQty(-1)">-</button>
+            <span class="qty-val" id="buyQtyVal">${buyFlowQty}</span>
+            <button onclick="changeBuyQty(1)">+</button>
+            <span style="font-size:13px;color:var(--brown-muted);margin-left:8px">Total: <strong style="color:var(--orange)">$${total}</strong></span>
+          </div>
         </div>
       </div>
       ${pReviews.length?`
-        <div style="margin-top:24px;border-top:1px solid var(--gray-light);padding-top:16px">
-          <h3 style="font-size:15px;font-weight:700;margin-bottom:12px">&#11088; Resenas (${pReviews.length})</h3>
-          ${pReviews.map(r=>`
+        <div style="margin-top:20px;border-top:1px solid var(--gray-light);padding-top:14px">
+          <h3 style="font-size:14px;font-weight:700;margin-bottom:10px">Reviews (${pReviews.length})</h3>
+          ${pReviews.slice(0,3).map(r=>`
             <div class="review-card">
               <div class="review-header">
-                <div class="review-avatar">${r.reviewerAddress?.slice(-2).toUpperCase()}</div>
+                <div class="review-avatar">${r.reviewerAddress?.slice(-2).toUpperCase()||'?'}</div>
                 <div class="review-meta">
-                  <div class="name">${r.reviewerAddress?.slice(0,14)}...</div>
-                  <div class="date"><span class="stars">${'&#9733;'.repeat(r.rating)}${'&#9734;'.repeat(5-r.rating)}</span> &bull; ${formatDate(r.createdAt)}</div>
+                  <div class="name">${r.reviewerAddress?.slice(0,14)||'Anon'}...</div>
+                  <div class="date"><span class="stars">${'&#9733;'.repeat(r.rating)}${'&#9734;'.repeat(5-r.rating)}</span></div>
                 </div>
               </div>
               <div class="review-text">${r.comment}</div>
@@ -1005,8 +1127,132 @@ function openProductDetail(productId) {
           `).join('')}
         </div>
       `:''}
+    `;
+  } else if(buyFlowStep===2) {
+    body = `
+      <div class="escrow-explainer">
+        <h4>&#128274; Your funds are secured on-chain until delivery</h4>
+        <p style="font-size:13px;opacity:.8;margin-bottom:8px">Initia smart contract holds your payment in escrow. The seller only receives funds after you confirm delivery.</p>
+        <div class="escrow-steps">
+          <div class="escrow-step"><div class="es-icon">&#128176;</div><div><strong>Pay</strong></div><div class="es-label">Funds locked in escrow contract</div></div>
+          <div class="escrow-step"><div class="es-icon">&#128230;</div><div><strong>Ship</strong></div><div class="es-label">Seller ships your order</div></div>
+          <div class="escrow-step"><div class="es-icon">&#128666;</div><div><strong>Deliver</strong></div><div class="es-label">You confirm receipt</div></div>
+          <div class="escrow-step"><div class="es-icon">&#9989;</div><div><strong>Release</strong></div><div class="es-label">Funds released to seller</div></div>
+        </div>
+      </div>
+      <div style="background:var(--cream);border-radius:var(--radius);padding:16px;margin-top:16px">
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0"><span>Product</span><strong>${p.name} x${buyFlowQty}</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0"><span>Subtotal</span><span>$${total}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0"><span>Platform fee (1.5%)</span><span>$${fee}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:800;padding:8px 0;border-top:2px solid var(--brown);margin-top:6px"><span>Escrow Total</span><span style="color:var(--orange)">$${(parseFloat(total)+parseFloat(fee)).toFixed(2)}</span></div>
+      </div>
+    `;
+  } else if(buyFlowStep===3) {
+    body = `<div class="processing-wrap" id="processingWrap">
+      <div style="font-size:48px;margin-bottom:12px">&#9939;</div>
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:8px">Processing on Initia Chain</h3>
+      <div class="chain-blocks" id="chainBlocks">
+        <div class="chain-block" id="cb0">&#128230;</div>
+        <div class="chain-block" id="cb1">&#128274;</div>
+        <div class="chain-block" id="cb2">&#128176;</div>
+        <div class="chain-block" id="cb3">&#9745;</div>
+      </div>
+      <div class="processing-text" id="procText">Creating order on-chain...</div>
+      <div style="background:var(--gray-light);border-radius:4px;height:6px;margin-top:16px;overflow:hidden"><div id="procBar" style="height:100%;width:0;background:var(--orange);border-radius:4px;transition:width .4s ease"></div></div>
+    </div>`;
+  } else if(buyFlowStep===4) {
+    body = `<div class="success-wrap">
+      <div class="success-icon">&#9989;</div>
+      <h3 style="font-size:20px;font-weight:700;margin:12px 0 6px">Order Confirmed!</h3>
+      <div class="order-number" id="successOrderNum">ORD-${Date.now().toString(36).toUpperCase()}</div>
+      <div class="escrow-badge-success">&#128274; Funds secured in escrow</div>
+      <div style="margin-top:16px">
+        <div class="order-flow" style="justify-content:center;max-width:400px;margin:0 auto">
+          <div class="flow-step current"><div class="flow-circle">1</div><div class="flow-label">Ordered</div></div>
+          <div class="flow-line"></div>
+          <div class="flow-step"><div class="flow-circle">2</div><div class="flow-label">Shipped</div></div>
+          <div class="flow-line"></div>
+          <div class="flow-step"><div class="flow-circle">3</div><div class="flow-label">Delivered</div></div>
+          <div class="flow-line"></div>
+          <div class="flow-step"><div class="flow-circle">4</div><div class="flow-label">Completed</div></div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:var(--brown-muted);margin-top:16px">Track your order in "My Orders"</p>
+    </div>`;
+  }
+
+  const footerBtns = buyFlowStep===1 ? `
+    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    <button class="btn btn-secondary" onclick="addToCart('${p.productId}')">&#128722; Add to Cart</button>
+    ${p.stock>0?`<button class="btn btn-primary" onclick="buyFlowNext()">Buy Now &#8594;</button>`:''}
+  ` : buyFlowStep===2 ? `
+    <button class="btn btn-secondary" onclick="buyFlowBack()">&#8592; Back</button>
+    <button class="btn btn-primary" onclick="buyFlowNext()">Confirm Purchase &#128274;</button>
+  ` : buyFlowStep===4 ? `
+    <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+    <button class="btn btn-primary" onclick="closeModal();navigate('myorders')">View My Orders</button>
+  ` : '';
+
+  openModal(`
+    <div class="modal-head">
+      <h2>${buyFlowStep===4?'Order Confirmed':buyFlowStep===3?'Processing...':p.name}</h2>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
     </div>
+    <div class="modal-body">
+      ${stepsHTML}
+      ${body}
+    </div>
+    ${footerBtns?`<div class="modal-footer">${footerBtns}</div>`:''}
   `, true);
+
+  if(buyFlowStep===3) runProcessingAnimation();
+}
+
+function changeBuyQty(delta) {
+  buyFlowQty = Math.max(1, Math.min(buyFlowQty+delta, buyFlowProduct?.stock||99));
+  const el = document.getElementById('buyQtyVal');
+  if(el) el.textContent = buyFlowQty;
+  showBuyStep();
+}
+
+function buyFlowBack() { buyFlowStep = Math.max(1, buyFlowStep-1); showBuyStep(); }
+function buyFlowNext() {
+  if(buyFlowStep<3) { buyFlowStep++; showBuyStep(); return; }
+  if(buyFlowStep===3) executeBuyFlowPurchase();
+}
+
+async function runProcessingAnimation() {
+  const msgs = ['Creating order on-chain...','Locking funds in escrow...','Confirming transaction...','Finalizing...'];
+  for(let i=0;i<4;i++){
+    await new Promise(r=>setTimeout(r,600));
+    const block=document.getElementById('cb'+i);
+    if(block) block.classList.add('filled');
+    const bar=document.getElementById('procBar');
+    if(bar) bar.style.width=((i+1)*25)+'%';
+    const txt=document.getElementById('procText');
+    if(txt) txt.textContent=msgs[Math.min(i,msgs.length-1)];
+  }
+}
+
+async function executeBuyFlowPurchase() {
+  buyFlowStep=3; showBuyStep();
+  const p = buyFlowProduct;
+  try {
+    await fetch(`${API}/orders`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ buyerAddress:BUYER_ADDR, productId:p.productId, quantity:buyFlowQty, shippingRef:'Calle 10 #43-12, Medellin, CO', paymentMethod:'native' })
+    });
+  } catch(e) { console.error('Order error',e); }
+  await new Promise(r=>setTimeout(r,2800));
+  newBuyerOrders++;
+  newMerchantOrders++;
+  buyFlowStep=4;
+  showBuyStep();
+  await fetchData();
+  renderSidebar();
+  // Show added animation on card if visible
+  const card = document.getElementById('pcard-'+p.productId);
+  if(card) { const ck=document.createElement('div'); ck.className='added-check'; ck.textContent='Purchased!'; card.appendChild(ck); setTimeout(()=>ck.remove(),1500); }
 }
 
 function openProductModal(productId) {
@@ -1042,9 +1288,11 @@ function openOrderDetail(orderId) {
   const o = allOrders.find(x=>x.orderId===orderId);
   if(!o) return;
   const flow = statusFlow(o.status);
+  const flowIcons = ['&#128722;','&#128230;','&#128666;','&#9989;'];
+  const flowTimestamps = [o.createdAt, o.shippedAt||null, o.deliveredAt||null, o.completedAt||null];
   openModal(`
     <div class="modal-head">
-      <h2>Pedido #${o.orderId.slice(0,8)}</h2>
+      <h2>Order #${o.orderId.slice(0,8)}</h2>
       <button class="modal-close" onclick="closeModal()">&times;</button>
     </div>
     <div class="modal-body">
@@ -1052,30 +1300,31 @@ function openOrderDetail(orderId) {
         ${flow.map((f,i) => `
           ${i>0?`<div class="flow-line ${f.cls==='done'||f.cls==='current'?'done':''}"></div>`:''}
           <div class="flow-step ${f.cls}">
-            <div class="flow-circle">${i+1}</div>
+            <div class="flow-circle">${flowIcons[i]}</div>
             <div class="flow-label">${f.label}</div>
+            <div class="flow-timestamp">${flowTimestamps[i]?formatDate(flowTimestamps[i]):''}</div>
           </div>
         `).join('')}
       </div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px">
         <div>
-          <h4 style="font-size:13px;font-weight:700;margin-bottom:10px">Detalles del Pedido</h4>
+          <h4 style="font-size:13px;font-weight:700;margin-bottom:10px">Order Details</h4>
           <div style="font-size:13px;line-height:2;color:var(--brown-light)">
-            <div><strong>Producto:</strong> ${o.productName}</div>
-            <div><strong>Cantidad:</strong> ${o.quantity}</div>
-            <div><strong>Precio unitario:</strong> $${(o.unitPrice||0).toFixed(2)}</div>
+            <div><strong>Product:</strong> ${o.productName}</div>
+            <div><strong>Quantity:</strong> ${o.quantity}</div>
+            <div><strong>Unit price:</strong> $${(o.unitPrice||0).toFixed(2)}</div>
             <div><strong>Total:</strong> <span style="color:var(--orange);font-weight:700">$${(o.totalPrice||0).toFixed(2)}</span></div>
-            <div><strong>Metodo de pago:</strong> ${o.paymentMethod||'native'}</div>
+            <div><strong>Payment:</strong> ${o.paymentMethod||'native'}</div>
             ${o.trackingNumber?`<div><strong>Tracking:</strong> <code>${o.trackingNumber}</code></div>`:''}
           </div>
         </div>
         <div>
-          <h4 style="font-size:13px;font-weight:700;margin-bottom:10px">Informacion del Comprador</h4>
+          <h4 style="font-size:13px;font-weight:700;margin-bottom:10px">Buyer Info</h4>
           <div style="font-size:13px;line-height:2;color:var(--brown-light)">
             <div><strong>Wallet:</strong> <code style="font-size:11px">${o.buyerAddress?.slice(0,20)}...</code></div>
-            <div><strong>Direccion:</strong> ${o.shippingRef||'N/A'}</div>
-            <div><strong>Fecha:</strong> ${formatDate(o.createdAt)}</div>
+            <div><strong>Address:</strong> ${o.shippingRef||'N/A'}</div>
+            <div><strong>Date:</strong> ${formatDate(o.createdAt)}</div>
           </div>
         </div>
       </div>
@@ -1084,19 +1333,19 @@ function openOrderDetail(orderId) {
         <span class="escrow-dot"></span>
         <div style="flex:1">
           <strong>Escrow:</strong> $${(o.escrow?.amount||0).toFixed(2)}
-          &bull; Comision: $${(o.escrow?.platformFee||0).toFixed(2)}
-          &bull; Estado: <strong>${o.escrow?.isReleased?'Liberado':'Retenido en escrow'}</strong>
+          &bull; Fee: $${(o.escrow?.platformFee||0).toFixed(2)}
+          &bull; Status: <strong>${o.escrow?.isReleased?'Released':'Held in escrow'}</strong>
         </div>
       </div>
 
       ${currentMode==='merchant'&&o.status==='paid'?`
         <div style="margin-top:16px">
-          <div class="form-group"><label class="form-label">Numero de Tracking</label><input class="form-input" id="trackingInput" placeholder="Ej: COL-2024-12345"></div>
-          <button class="btn btn-success" onclick="shipOrder('${o.orderId}')">Marcar como Enviado</button>
+          <div class="form-group"><label class="form-label">Tracking Number</label><input class="form-input" id="trackingInput" placeholder="e.g. COL-2024-12345"></div>
+          <button class="btn btn-success" onclick="shipOrder('${o.orderId}')">&#128230; Mark as Shipped</button>
         </div>
       `:''}
-      ${currentMode==='buyer'&&o.status==='shipped'?`<button class="btn btn-success" style="margin-top:16px" onclick="confirmDelivery('${o.orderId}')">Confirmar Entrega</button>`:''}
-      ${currentMode==='buyer'&&o.status==='delivered'?`<button class="btn btn-primary" style="margin-top:16px" onclick="completeOrder('${o.orderId}')">Completar y Liberar Escrow</button>`:''}
+      ${currentMode==='buyer'&&o.status==='shipped'?`<button class="btn btn-success" style="margin-top:16px;width:100%;justify-content:center;padding:14px" onclick="confirmDelivery('${o.orderId}')">&#128666; Confirm Delivery</button>`:''}
+      ${currentMode==='buyer'&&o.status==='delivered'?`<button class="btn btn-primary" style="margin-top:16px;width:100%;justify-content:center;padding:14px" onclick="completeOrder('${o.orderId}')">&#9989; Complete & Release Escrow</button>`:''}
     </div>
   `, true);
 }
@@ -1114,7 +1363,13 @@ function addToCart(productId) {
   const existing = cart.find(c=>c.productId===productId);
   if(existing) { existing.qty++; } else { cart.push({productId,name:p.name,price:p.price,category:p.category,qty:1,merchantId:p.merchantId}); }
   closeModal();
+  // Bounce the cart badge
+  cartBounce = true;
   renderSidebar();
+  setTimeout(()=>{ cartBounce=false; }, 400);
+  // Show "Added" overlay on card
+  const card = document.getElementById('pcard-'+productId);
+  if(card) { const ck=document.createElement('div'); ck.className='added-check'; ck.innerHTML='Added &#10003;'; card.appendChild(ck); setTimeout(()=>ck.remove(),1200); }
   showToast(t('addedToCart'));
 }
 
@@ -1215,10 +1470,26 @@ async function completeOrder(orderId) {
       headers:{'Content-Type':'application/json','X-Buyer-Address':BUYER_ADDR}
     });
     closeModal();
+    // Coin flow animation
+    spawnCoinParticles();
     showToast(t('orderCompleted'));
     await fetchData();
     renderPage();
   } catch(e) { showToast('Error'); }
+}
+
+function spawnCoinParticles() {
+  for(let i=0;i<8;i++){
+    setTimeout(()=>{
+      const coin = document.createElement('div');
+      coin.className='coin-particle';
+      coin.textContent='&#128176;';
+      coin.style.left = (window.innerWidth/2 - 40 + Math.random()*80)+'px';
+      coin.style.top = (window.innerHeight/2 + Math.random()*40)+'px';
+      document.body.appendChild(coin);
+      setTimeout(()=>coin.remove(), 1000);
+    }, i*120);
+  }
 }
 
 async function updateStore() {
@@ -1293,6 +1564,105 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 3000);
 }
+
+// ============ DEMO FLOW ============
+async function runDemo() {
+  if(demoRunning) return;
+  demoRunning = true;
+  const btn = document.getElementById('demoBtn');
+  if(btn) { btn.classList.add('running'); btn.innerHTML='&#9654; Running Demo...'; }
+
+  // Step 1: Switch to buyer mode, pick first product
+  setMode('buyer');
+  showToast('Demo: Switching to Buyer Mode...');
+  await sleep(1200);
+
+  navigate('explore');
+  await sleep(800);
+
+  // Pick first available product
+  const product = allProducts.find(p=>p.stock>0);
+  if(!product) { showToast('No products available for demo'); demoRunning=false; return; }
+
+  // Step 2: Create order as buyer
+  showToast('Demo: Purchasing "'+product.name+'"...');
+  buyFlowProduct = product;
+  buyFlowQty = 1;
+  buyFlowStep = 1;
+  showBuyStep();
+  await sleep(1500);
+  buyFlowStep = 2; showBuyStep();
+  await sleep(2000);
+  await executeBuyFlowPurchase();
+  await sleep(2000);
+  closeModal();
+
+  // Step 3: Switch to merchant view
+  showToast('Demo: Switching to Seller Mode...');
+  await sleep(1000);
+  setMode('merchant');
+  await sleep(800);
+
+  // Navigate to orders - show notification
+  showToast('Demo: New order received!');
+  navigate('orders');
+  await sleep(2000);
+
+  // Step 4: Ship the newest order
+  const newestOrder = allOrders.find(o=>o.status==='paid'&&o.buyerAddress===BUYER_ADDR);
+  if(newestOrder) {
+    showToast('Demo: Shipping order...');
+    try {
+      await fetch(`${API}/orders/${newestOrder.orderId}/ship`, {
+        method:'PATCH',
+        headers:{'Content-Type':'application/json','X-Merchant-Key':MERCHANT_KEY},
+        body:JSON.stringify({trackingNumber:'COL-DEMO-'+Date.now().toString().slice(-6)})
+      });
+    } catch(e){}
+    await fetchData();
+    renderPage();
+    await sleep(2000);
+
+    // Step 5: Switch to buyer, confirm delivery
+    showToast('Demo: Switching to Buyer Mode...');
+    setMode('buyer');
+    navigate('myorders');
+    await sleep(1500);
+
+    showToast('Demo: Confirming delivery...');
+    try {
+      await fetch(`${API}/orders/${newestOrder.orderId}/deliver`, {
+        method:'PATCH',
+        headers:{'Content-Type':'application/json','X-Buyer-Address':BUYER_ADDR}
+      });
+    } catch(e){}
+    await fetchData();
+    renderPage();
+    await sleep(1500);
+
+    // Step 6: Complete and release escrow
+    showToast('Demo: Completing order & releasing escrow...');
+    try {
+      await fetch(`${API}/orders/${newestOrder.orderId}/complete`, {
+        method:'PATCH',
+        headers:{'Content-Type':'application/json','X-Buyer-Address':BUYER_ADDR}
+      });
+    } catch(e){}
+    spawnCoinParticles();
+    await fetchData();
+    renderPage();
+    await sleep(1500);
+
+    // Open the completed order detail
+    openOrderDetail(newestOrder.orderId);
+    showToast('Demo: Complete! Escrow released to seller.');
+  }
+
+  demoRunning = false;
+  if(btn) { btn.classList.remove('running'); btn.innerHTML='&#9654; Run Demo'; }
+}
+
+function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
 
 // ============ INIT ============
 if(appLang !== 'en') {
