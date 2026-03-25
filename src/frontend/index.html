@@ -1,2098 +1,1106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda — Your store. Your chain. Your future.</title>
-    <meta name="description" content="The Shopify of Web3 for Latin America. An app-specific commerce chain built on Initia.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --cream: #faf8f5;
-            --cream-dark: #f0ece5;
-            --orange: #ff6b35;
-            --orange-light: #ff8a5c;
-            --orange-glow: rgba(255, 107, 53, 0.15);
-            --brown: #2d1810;
-            --brown-light: #5a3a2e;
-            --brown-muted: #8b6f5e;
-            --white: #ffffff;
-            --shadow-sm: 0 1px 3px rgba(45, 24, 16, 0.06);
-            --shadow-md: 0 4px 20px rgba(45, 24, 16, 0.08);
-            --shadow-lg: 0 12px 40px rgba(45, 24, 16, 0.12);
-            --shadow-xl: 0 20px 60px rgba(45, 24, 16, 0.15);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --radius-lg: 24px;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            font-size: 16px;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--cream);
-            color: var(--brown);
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* ---- ANIMATIONS ---- */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.3); }
-            50% { box-shadow: 0 0 0 20px rgba(255, 107, 53, 0); }
-        }
-
-        @keyframes slide-up {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fade-in {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes storefront-door {
-            0%, 100% { transform: scaleX(1); }
-            50% { transform: scaleX(0.92); }
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
-        }
-
-        @keyframes bounce-subtle {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
-        .reveal-delay-3 { transition-delay: 0.3s; }
-        .reveal-delay-4 { transition-delay: 0.4s; }
-
-        /* ---- NAVIGATION ---- */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 0 24px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        nav.scrolled {
-            background: rgba(250, 248, 245, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(45, 24, 16, 0.06);
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 72px;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--brown);
-            text-decoration: none;
-            letter-spacing: -0.03em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--orange);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
-            font-weight: 700;
-            box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--brown-muted);
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s;
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: var(--brown);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--orange);
-            border-radius: 1px;
-            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-cta {
-            background: var(--brown) !important;
-            color: var(--cream) !important;
-            padding: 10px 24px;
-            border-radius: 100px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-        }
-
-        .nav-cta::after {
-            display: none !important;
-        }
-
-        .nav-cta:hover {
-            background: var(--orange) !important;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 32px;
-            height: 32px;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--brown);
-            border-radius: 2px;
-            transition: all 0.3s;
-        }
-
-        /* ---- HERO ---- */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 120px 24px 80px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-bg-pattern {
-            position: absolute;
-            inset: 0;
-            opacity: 0.03;
-            background-image: radial-gradient(circle at 1px 1px, var(--brown) 1px, transparent 0);
-            background-size: 40px 40px;
-        }
-
-        .hero-glow {
-            position: absolute;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--orange-glow), transparent 70%);
-            top: 10%;
-            right: -10%;
-            pointer-events: none;
-        }
-
-        .hero-glow-2 {
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 138, 92, 0.08), transparent 70%);
-            bottom: 10%;
-            left: -5%;
-            pointer-events: none;
-        }
-
-        .hero-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-text {
-            animation: slide-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--white);
-            border: 1px solid rgba(45, 24, 16, 0.08);
-            padding: 8px 16px;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--brown-light);
-            margin-bottom: 28px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .hero-badge-dot {
-            width: 8px;
-            height: 8px;
-            background: #34c759;
-            border-radius: 50%;
-            animation: pulse-glow 2s infinite;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.8rem, 5.5vw, 4.2rem);
-            font-weight: 900;
-            line-height: 1.08;
-            letter-spacing: -0.04em;
-            color: var(--brown);
-            margin-bottom: 24px;
-        }
-
-        .hero h1 .highlight {
-            color: var(--orange);
-            position: relative;
-        }
-
-        .hero h1 .highlight::after {
-            content: '';
-            position: absolute;
-            bottom: 2px;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--orange);
-            opacity: 0.25;
-            border-radius: 2px;
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            line-height: 1.7;
-            color: var(--brown-muted);
-            max-width: 480px;
-            margin-bottom: 40px;
-            font-weight: 400;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--orange);
-            color: white;
-            padding: 16px 36px;
-            border-radius: 100px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 4px 16px rgba(255, 107, 53, 0.3);
-            font-family: inherit;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(255, 107, 53, 0.4);
-            background: var(--orange-light);
-        }
-
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: transparent;
-            color: var(--brown);
-            padding: 16px 32px;
-            border-radius: 100px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            border: 2px solid rgba(45, 24, 16, 0.12);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            font-family: inherit;
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--brown);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        /* ---- STOREFRONT ANIMATION ---- */
-        .hero-visual {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: fade-in 1.2s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-        }
-
-        .storefront {
-            width: 380px;
-            height: 420px;
-            position: relative;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .storefront-building {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            height: 320px;
-            background: var(--white);
-            border-radius: 20px 20px 12px 12px;
-            box-shadow: var(--shadow-xl);
-            overflow: hidden;
-        }
-
-        .storefront-awning {
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -20px;
-            height: 60px;
-            background: var(--orange);
-            border-radius: 16px 16px 0 0;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .awning-stripe {
-            width: 100%;
-            height: 20px;
-            display: flex;
-        }
-
-        .awning-stripe div {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .awning-stripe div:nth-child(even) {
-            background: transparent;
-        }
-
-        .storefront-sign {
-            text-align: center;
-            padding: 24px 20px 16px;
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--brown);
-            letter-spacing: -0.02em;
-        }
-
-        .storefront-window {
-            margin: 0 20px;
-            height: 120px;
-            background: linear-gradient(135deg, #e8f0fe, #f0e8fe);
-            border-radius: 12px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            padding: 12px;
-        }
-
-        .product-card {
-            background: var(--white);
-            border-radius: 8px;
-            padding: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            box-shadow: var(--shadow-sm);
-            transition: transform 0.3s;
-        }
-
-        .product-card:hover {
-            transform: scale(1.05);
-        }
-
-        .product-emoji {
-            font-size: 1.5rem;
-        }
-
-        .product-price {
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: var(--orange);
-        }
-
-        .storefront-door {
-            margin: 16px auto 0;
-            width: 80px;
-            height: 90px;
-            background: var(--brown);
-            border-radius: 12px 12px 0 0;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: storefront-door 4s ease-in-out infinite;
-        }
-
-        .door-handle {
-            width: 8px;
-            height: 8px;
-            background: #d4a853;
-            border-radius: 50%;
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            box-shadow: 0 0 6px rgba(212, 168, 83, 0.5);
-        }
-
-        .storefront-chain {
-            position: absolute;
-            bottom: -16px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 2px;
-        }
-
-        .chain-link {
-            width: 16px;
-            height: 10px;
-            border: 2px solid var(--orange);
-            border-radius: 5px;
-            opacity: 0.6;
-        }
-
-        .chain-link:nth-child(2) { opacity: 0.8; }
-        .chain-link:nth-child(3) { opacity: 1; }
-        .chain-link:nth-child(4) { opacity: 0.8; }
-        .chain-link:nth-child(5) { opacity: 0.6; }
-
-        /* Floating elements */
-        .float-element {
-            position: absolute;
-            border-radius: 12px;
-            background: var(--white);
-            box-shadow: var(--shadow-lg);
-            padding: 10px 16px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            animation: bounce-subtle 3s ease-in-out infinite;
-        }
-
-        .float-sale {
-            top: 40px;
-            right: 10px;
-            color: #34c759;
-            animation-delay: 0s;
-        }
-
-        .float-rating {
-            bottom: 60px;
-            left: 0;
-            color: #ff9500;
-            animation-delay: 1s;
-        }
-
-        .float-chain-badge {
-            top: 80px;
-            left: -10px;
-            color: var(--orange);
-            animation-delay: 2s;
-        }
-
-        /* ---- SECTIONS ---- */
-        section {
-            padding: 120px 24px;
-        }
-
-        .section-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .section-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--orange);
-            margin-bottom: 16px;
-        }
-
-        .section-label::before {
-            content: '';
-            width: 20px;
-            height: 2px;
-            background: var(--orange);
-            border-radius: 1px;
-        }
-
-        .section-title {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 800;
-            line-height: 1.15;
-            letter-spacing: -0.03em;
-            color: var(--brown);
-            margin-bottom: 20px;
-            max-width: 700px;
-        }
-
-        .section-subtitle {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: var(--brown-muted);
-            max-width: 560px;
-            margin-bottom: 56px;
-        }
-
-        /* ---- PROBLEM ---- */
-        .problem-section {
-            background: var(--brown);
-            color: var(--cream);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .problem-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 50%;
-            height: 100%;
-            background: radial-gradient(circle at 80% 30%, rgba(255, 107, 53, 0.08), transparent 60%);
-            pointer-events: none;
-        }
-
-        .problem-section .section-title {
-            color: var(--cream);
-        }
-
-        .problem-section .section-subtitle {
-            color: rgba(250, 248, 245, 0.65);
-        }
-
-        .problem-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 24px;
-        }
-
-        .problem-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: var(--radius);
-            padding: 32px 28px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .problem-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-4px);
-            border-color: rgba(255, 107, 53, 0.3);
-        }
-
-        .problem-icon {
-            font-size: 2rem;
-            margin-bottom: 16px;
-            display: block;
-        }
-
-        .problem-card h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--cream);
-        }
-
-        .problem-card p {
-            font-size: 0.9rem;
-            line-height: 1.65;
-            color: rgba(250, 248, 245, 0.55);
-        }
-
-        .problem-stat {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--orange);
-            display: block;
-            margin-bottom: 8px;
-            letter-spacing: -0.03em;
-        }
-
-        /* ---- SOLUTION ---- */
-        .solution-section {
-            background: var(--cream);
-            position: relative;
-        }
-
-        .solution-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 32px;
-        }
-
-        .solution-card {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: 40px 32px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(45, 24, 16, 0.04);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .solution-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--orange);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .solution-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .solution-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .solution-number {
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: var(--orange);
-            opacity: 0.15;
-            line-height: 1;
-            margin-bottom: 16px;
-            letter-spacing: -0.05em;
-        }
-
-        .solution-card h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--brown);
-        }
-
-        .solution-card p {
-            font-size: 0.95rem;
-            line-height: 1.7;
-            color: var(--brown-muted);
-        }
-
-        /* ---- HOW IT WORKS ---- */
-        .how-section {
-            background: var(--cream-dark);
-        }
-
-        .steps {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .steps::before {
-            content: '';
-            position: absolute;
-            left: 31px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, var(--orange), rgba(255, 107, 53, 0.1));
-        }
-
-        .step {
-            display: flex;
-            gap: 32px;
-            padding: 40px 0;
-            position: relative;
-        }
-
-        .step-marker {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: var(--orange);
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
-            z-index: 1;
-        }
-
-        .step-content {
-            padding-top: 10px;
-        }
-
-        .step-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--brown);
-        }
-
-        .step-desc {
-            font-size: 1rem;
-            line-height: 1.7;
-            color: var(--brown-muted);
-            max-width: 500px;
-        }
-
-        .step-tech {
-            margin-top: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--white);
-            padding: 6px 14px;
-            border-radius: 100px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--brown-light);
-            border: 1px solid rgba(45, 24, 16, 0.06);
-        }
-
-        /* ---- MERCHANTS ---- */
-        .merchants-section {
-            background: var(--cream);
-        }
-
-        .merchants-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 48px;
-            align-items: center;
-        }
-
-        .merchant-features {
-            display: flex;
-            flex-direction: column;
-            gap: 28px;
-        }
-
-        .merchant-feature {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-            border-radius: var(--radius);
-            transition: all 0.3s;
-        }
-
-        .merchant-feature:hover {
-            background: var(--white);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: var(--orange-glow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            flex-shrink: 0;
-        }
-
-        .feature-text h4 {
-            font-size: 1.05rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: var(--brown);
-        }
-
-        .feature-text p {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: var(--brown-muted);
-        }
-
-        .merchant-mockup {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-xl);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .mockup-header {
-            background: var(--brown);
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .mockup-dots {
-            display: flex;
-            gap: 6px;
-        }
-
-        .mockup-dots span {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .mockup-dots span:nth-child(1) { background: #ff5f57; }
-        .mockup-dots span:nth-child(2) { background: #ffbd2e; }
-        .mockup-dots span:nth-child(3) { background: #28c840; }
-
-        .mockup-url {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            padding: 6px 12px;
-            font-size: 0.75rem;
-            color: rgba(250, 248, 245, 0.5);
-            font-family: 'Inter', monospace;
-        }
-
-        .mockup-body {
-            padding: 24px;
-        }
-
-        .mockup-store-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid rgba(45, 24, 16, 0.06);
-        }
-
-        .mockup-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: var(--orange-glow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .mockup-store-name {
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--brown);
-        }
-
-        .mockup-store-loc {
-            font-size: 0.75rem;
-            color: var(--brown-muted);
-        }
-
-        .mockup-products {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .mockup-product {
-            background: var(--cream);
-            border-radius: 12px;
-            padding: 16px;
-            text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .mockup-product:hover {
-            transform: scale(1.03);
-        }
-
-        .mockup-product-img {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-
-        .mockup-product-name {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--brown);
-            margin-bottom: 4px;
-        }
-
-        .mockup-product-price {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--orange);
-        }
-
-        /* ---- BUYERS ---- */
-        .buyers-section {
-            background: var(--white);
-        }
-
-        .buyers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 24px;
-        }
-
-        .buyer-card {
-            text-align: center;
-            padding: 40px 28px;
-            border-radius: var(--radius-lg);
-            background: var(--cream);
-            border: 1px solid rgba(45, 24, 16, 0.04);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .buyer-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
-            border-color: rgba(255, 107, 53, 0.15);
-        }
-
-        .buyer-icon {
-            width: 72px;
-            height: 72px;
-            border-radius: 20px;
-            background: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 20px;
-            box-shadow: var(--shadow-md);
-        }
-
-        .buyer-card h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--brown);
-        }
-
-        .buyer-card p {
-            font-size: 0.9rem;
-            line-height: 1.65;
-            color: var(--brown-muted);
-        }
-
-        /* ---- TECH ---- */
-        .tech-section {
-            background: var(--cream-dark);
-        }
-
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .tech-card {
-            background: var(--white);
-            border-radius: var(--radius);
-            padding: 28px 24px;
-            text-align: center;
-            border: 1px solid rgba(45, 24, 16, 0.04);
-            transition: all 0.3s;
-        }
-
-        .tech-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .tech-name {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--brown);
-            margin-bottom: 4px;
-        }
-
-        .tech-role {
-            font-size: 0.8rem;
-            color: var(--brown-muted);
-        }
-
-        .tech-logo {
-            font-size: 2rem;
-            margin-bottom: 12px;
-            display: block;
-        }
-
-        /* ---- CTA ---- */
-        .cta-section {
-            background: var(--brown);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 50% 0%, rgba(255, 107, 53, 0.15), transparent 60%);
-            pointer-events: none;
-        }
-
-        .cta-inner {
-            position: relative;
-            z-index: 1;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .cta-section .section-title {
-            color: var(--cream);
-            margin-bottom: 20px;
-            max-width: none;
-        }
-
-        .cta-section .section-subtitle {
-            color: rgba(250, 248, 245, 0.6);
-            max-width: none;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: 40px;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .cta-section .btn-secondary {
-            color: var(--cream);
-            border-color: rgba(250, 248, 245, 0.2);
-        }
-
-        .cta-section .btn-secondary:hover {
-            border-color: var(--cream);
-            background: rgba(250, 248, 245, 0.05);
-        }
-
-        /* ---- FOOTER ---- */
-        footer {
-            background: var(--brown);
-            border-top: 1px solid rgba(250, 248, 245, 0.06);
-            padding: 40px 24px;
-        }
-
-        .footer-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-brand .logo-icon {
-            width: 28px;
-            height: 28px;
-            font-size: 14px;
-        }
-
-        .footer-brand span {
-            font-weight: 700;
-            color: var(--cream);
-            font-size: 1rem;
-        }
-
-        .footer-text {
-            font-size: 0.8rem;
-            color: rgba(250, 248, 245, 0.35);
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-links a {
-            color: rgba(250, 248, 245, 0.45);
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: var(--orange);
-        }
-
-        /* ---- RESPONSIVE ---- */
-        @media (max-width: 900px) {
-            .hero-content {
-                grid-template-columns: 1fr;
-                gap: 60px;
-                text-align: center;
-            }
-
-            .hero-subtitle {
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .hero-actions {
-                justify-content: center;
-            }
-
-            .merchants-grid {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .merchant-mockup {
-                order: -1;
-                max-width: 400px;
-                margin: 0 auto;
-            }
-
-            .section-title {
-                max-width: none;
-            }
-        }
-
-        @media (max-width: 640px) {
-            section {
-                padding: 80px 20px;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: flex;
-            }
-
-            .storefront {
-                width: 280px;
-                height: 340px;
-            }
-
-            .storefront-building {
-                width: 220px;
-                height: 260px;
-            }
-
-            .float-element {
-                display: none;
-            }
-
-            .hero-actions {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .btn-primary, .btn-secondary {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .steps::before {
-                left: 23px;
-            }
-
-            .step-marker {
-                width: 48px;
-                height: 48px;
-                font-size: 1.1rem;
-            }
-
-            .step {
-                gap: 20px;
-            }
-
-            .problem-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Mobile menu overlay */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(250, 248, 245, 0.98);
-            backdrop-filter: blur(20px);
-            z-index: 999;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 32px;
-        }
-
-        .mobile-menu.active {
-            display: flex;
-        }
-
-        .mobile-menu a {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--brown);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .mobile-menu a:hover {
-            color: var(--orange);
-        }
-
-        .mobile-menu-close {
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            background: none;
-            border: none;
-            font-size: 2rem;
-            color: var(--brown);
-            cursor: pointer;
-        }
-        /* ---- i18n LANGUAGE SELECTOR ---- */
-        .lang-selector { position: relative; margin-left: 8px; }
-        .lang-btn { background: none; border: 1px solid rgba(45,24,16,.12); border-radius: 100px; padding: 6px 14px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; color: var(--brown-muted); font-weight: 500; font-family: inherit; transition: all 0.2s; }
-        .lang-btn:hover { border-color: var(--orange); color: var(--brown); }
-        .lang-dropdown { position: absolute; top: calc(100% + 8px); right: 0; background: var(--white); border: 1px solid rgba(45,24,16,.08); border-radius: 12px; box-shadow: var(--shadow-lg); overflow: hidden; display: none; z-index: 1001; min-width: 180px; }
-        .lang-dropdown.open { display: block; }
-        .lang-option { display: flex; align-items: center; gap: 10px; padding: 10px 16px; cursor: pointer; font-size: 0.85rem; font-weight: 500; color: var(--brown); transition: background 0.15s; }
-        .lang-option:hover { background: var(--cream-dark); }
-        .lang-option.active { background: rgba(255,107,53,.08); color: var(--orange); font-weight: 600; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tienda — Your Store. Your Chain. Your Future.</title>
+<meta name="description" content="Tienda: Own your commerce chain on Initia. 1.5% fees, escrow, loyalty, reviews, multi-currency. Built for LATAM merchants.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cream:#faf8f5;--cream2:#f5f0ea;--cream3:#ede5da;
+  --orange:#ff6b35;--orange-light:#ff8c5a;--orange-dark:#e55a2b;
+  --brown:#2d1810;--brown2:#4a2c1a;--brown3:#6b3f24;
+  --surface:rgba(45,24,16,.04);--surface2:rgba(45,24,16,.07);
+  --text1:#2d1810;--text2:#6b3f24;--text3:#9c7a62;--white:#ffffff;
+  --head:'Space Grotesk',sans-serif;
+  --body:'Inter',sans-serif;
+  --spring:cubic-bezier(0.34,1.56,0.64,1);
+  --smooth:cubic-bezier(0.22,1,0.36,1);
+  --ease-out:cubic-bezier(0.16,1,0.3,1);
+}
+html{font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--cream);color:var(--text1);overflow-x:hidden;line-height:1.6;cursor:none}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--body);cursor:none;border:none;background:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* TYPOGRAPHY */
+.display{font-family:var(--head);font-size:clamp(3rem,8vw,6rem);font-weight:700;letter-spacing:-0.04em;line-height:0.95;color:var(--brown)}
+.h2-title{font-family:var(--head);font-size:clamp(2rem,4vw,3.5rem);font-weight:600;letter-spacing:-0.03em;line-height:1.1;color:var(--brown)}
+.h3-title{font-family:var(--head);font-size:clamp(1.2rem,2vw,1.5rem);font-weight:600;color:var(--brown)}
+.body-text{font-size:1.05rem;font-weight:400;line-height:1.7;color:var(--text2)}
+.caption{font-size:0.75rem;font-weight:500;text-transform:uppercase;letter-spacing:0.15em;color:var(--text3)}
+.gradient-text{background:linear-gradient(135deg,var(--orange),var(--orange-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.gradient-text-warm{background:linear-gradient(135deg,var(--orange),var(--brown3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.005)}}
+.breathe{animation:breathe 4s ease-in-out infinite}
+
+/* CURSOR */
+.cursor-dot{position:fixed;top:0;left:0;width:8px;height:8px;background:var(--orange);border-radius:50%;pointer-events:none;z-index:9999;mix-blend-mode:multiply;transition:width .25s var(--spring),height .25s var(--spring),background .25s}
+.cursor-ring{position:fixed;top:0;left:0;width:36px;height:36px;border:1.5px solid rgba(255,107,53,.45);border-radius:50%;pointer-events:none;z-index:9998;transition:width .35s var(--spring),height .35s var(--spring),border-color .3s}
+.cursor-dot.active{width:48px;height:48px;background:rgba(255,107,53,.18)}
+.cursor-ring.active{width:56px;height:56px;border-color:var(--brown)}
+@media(pointer:coarse){.cursor-dot,.cursor-ring{display:none}body{cursor:auto}}
+
+/* SCROLL PROGRESS */
+.scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--orange),var(--brown),var(--orange-light));z-index:10001;width:0;transform-origin:left;will-change:width}
+
+/* NOISE */
+.noise{position:fixed;top:-50%;left:-50%;width:200%;height:200%;pointer-events:none;z-index:9000;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* BRAND PATTERN */
+.brand-pattern{position:absolute;inset:0;pointer-events:none;opacity:.015;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10 L10 25 L18 25' fill='none' stroke='%23ff6b35' stroke-width='1.5'/%3E%3Cpath d='M40 35 L40 50 L48 50' fill='none' stroke='%23ff6b35' stroke-width='1.5'/%3E%3C/svg%3E");background-size:60px 60px}
+
+/* MESH BG */
+.mesh-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.mesh-orb{position:absolute;border-radius:50%;filter:blur(120px);will-change:transform}
+.mesh-orb.a{width:55vw;height:55vw;top:-15%;left:-10%;background:radial-gradient(circle,rgba(255,107,53,.1),transparent 70%)}
+.mesh-orb.b{width:45vw;height:45vw;bottom:-10%;right:-10%;background:radial-gradient(circle,rgba(45,24,16,.06),transparent 70%)}
+.mesh-orb.c{width:35vw;height:35vw;top:40%;left:50%;background:radial-gradient(circle,rgba(255,140,90,.06),transparent 70%)}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:20px 0;transition:all .4s var(--smooth)}
+.nav.shrink{padding:12px 0;background:rgba(250,248,245,.92);backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid rgba(255,107,53,.08);box-shadow:0 1px 20px rgba(45,24,16,.05)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 clamp(20px,3vw,48px);display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:var(--head);font-weight:700;font-size:1.6rem;letter-spacing:-.03em;display:flex;align-items:center;gap:0}
+.nav-logo svg{height:32px;width:auto}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{font-size:.85rem;font-weight:500;color:var(--text2);transition:color .3s;position:relative}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1.5px;background:var(--orange);transition:width .3s var(--spring)}
+.nav-links a:hover{color:var(--brown)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{font-size:.85rem;font-weight:600;padding:10px 24px;border-radius:80px;background:var(--orange);color:var(--white);transition:all .3s var(--spring);position:relative;overflow:hidden}
+.nav-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:translateX(-100%);transition:none}
+.nav-cta:hover::before{transform:translateX(100%);transition:transform .6s}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(255,107,53,.35)}
+.nav-mobile-btn{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer}
+.nav-mobile-btn span{width:22px;height:2px;background:var(--brown);border-radius:2px;transition:all .3s}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-mobile-btn{display:flex}
+  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:rgba(250,248,245,.97);backdrop-filter:blur(24px);padding:24px;gap:20px;border-bottom:1px solid rgba(255,107,53,.1)}
+}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;z-index:1;overflow:hidden;padding:120px 0 80px;background:var(--cream)}
+.hero .brand-pattern{z-index:0}
+.hero-inner{max-width:1280px;margin:0 auto;padding:0 clamp(20px,3vw,48px);display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(32px,4vw,60px);align-items:center;position:relative;z-index:2}
+.hero-content{position:relative;z-index:2}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 16px 6px 8px;border-radius:80px;border:1px solid rgba(255,107,53,.25);background:rgba(255,107,53,.06);font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);width:fit-content;margin-bottom:24px;opacity:0;transform:translateY(20px)}
+.hero-tag .pulse{width:8px;height:8px;background:var(--orange);border-radius:50%;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+.hero-headline{margin-bottom:24px}
+.hero-headline .char{display:inline-block;opacity:0;transform:translateY(60px) rotate(8deg);will-change:transform,opacity}
+.hero-headline .word{display:inline-block;white-space:pre}
+.hero-sub{font-size:clamp(1rem,1.6vw,1.15rem);color:var(--text2);max-width:480px;line-height:1.7;margin-bottom:40px;opacity:0;transform:translateY(30px)}
+.hero-ctas{display:flex;gap:16px;flex-wrap:wrap;opacity:0;transform:translateY(30px)}
+.btn-primary{position:relative;display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border-radius:80px;background:var(--orange);color:var(--white);font-weight:600;font-size:1rem;overflow:hidden;transition:all .35s var(--spring)}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:translateX(-100%)}
+.btn-primary:hover::before{transform:translateX(100%);transition:transform .7s}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(255,107,53,.35)}
+.btn-primary .arrow{transition:transform .3s}.btn-primary:hover .arrow{transform:translateX(4px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:16px 32px;border-radius:80px;border:1px solid rgba(45,24,16,.15);color:var(--brown);font-weight:500;font-size:1rem;transition:all .3s var(--spring);backdrop-filter:blur(8px)}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px);box-shadow:0 8px 20px rgba(255,107,53,.15)}
+
+/* PHONE MOCKUP */
+.hero-phone-wrap{position:relative;display:flex;justify-content:center;align-items:center}
+.phone-glow{position:absolute;width:80%;height:80%;border-radius:50%;background:radial-gradient(circle,rgba(255,107,53,.15),rgba(45,24,16,.05),transparent 70%);filter:blur(60px);z-index:0}
+.phone-mockup{position:relative;z-index:1;width:280px;border-radius:36px;background:var(--white);border:2px solid rgba(45,24,16,.08);box-shadow:0 40px 80px rgba(45,24,16,.15),0 0 0 1px rgba(45,24,16,.03) inset;overflow:hidden;will-change:transform}
+.phone-notch{height:28px;background:var(--white);display:flex;align-items:center;justify-content:center;gap:6px;position:relative}
+.phone-notch::after{content:'9:41';position:absolute;right:16px;font-size:.6rem;color:var(--text3);font-weight:500}
+.phone-notch-pill{width:60px;height:6px;background:var(--cream2);border-radius:4px}
+.phone-screen{background:var(--cream);padding:0}
+.phone-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid rgba(45,24,16,.05)}
+.phone-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--brown));display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff}
+.phone-user-info{flex:1;margin-left:10px}
+.phone-user-name{font-size:.72rem;font-weight:600;color:var(--brown);font-family:var(--head)}
+.phone-user-level{font-size:.58rem;color:var(--orange);font-weight:500}
+.phone-stats{padding:10px 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.phone-stat-card{padding:8px;border-radius:10px;background:rgba(255,107,53,.04);border:1px solid rgba(255,107,53,.08)}
+.phone-stat-num{font-family:var(--head);font-size:.8rem;font-weight:700;color:var(--brown)}
+.phone-stat-label{font-size:.5rem;color:var(--text3)}
+.phone-order{margin:8px 16px;border-radius:14px;background:rgba(255,107,53,.04);border:1px solid rgba(255,107,53,.1);padding:10px}
+.phone-order-header{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.phone-order-status{font-size:.5rem;color:var(--white);font-weight:600;background:var(--orange);padding:2px 6px;border-radius:8px}
+.phone-order-title{font-size:.65rem;font-weight:600;color:var(--brown);font-family:var(--head)}
+.phone-order-detail{font-size:.55rem;color:var(--text3);margin-bottom:6px}
+.phone-order-row{display:flex;justify-content:space-between;align-items:center;font-size:.55rem}
+.phone-order-amount{font-family:var(--head);font-weight:700;color:var(--orange)}
+.phone-tab-bar{display:flex;justify-content:space-around;padding:10px 0 14px;border-top:1px solid rgba(45,24,16,.05);background:var(--white);margin-top:8px}
+.phone-tab{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.45rem;color:var(--text3);font-weight:500}
+.phone-tab.active{color:var(--orange)}
+.phone-tab svg{width:16px;height:16px}
+
+@media(max-width:768px){
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .hero-sub{margin-left:auto;margin-right:auto}
+  .hero-ctas{justify-content:center}
+  .hero-phone-wrap{order:-1;margin-bottom:20px}
+  .phone-mockup{width:220px}
+}
+
+/* MARQUEE */
+.marquee-section{position:relative;z-index:1;padding:24px 0;border-top:1px solid rgba(255,107,53,.08);border-bottom:1px solid rgba(255,107,53,.08);overflow:hidden;background:rgba(245,240,234,.6)}
+.marquee-track{display:flex;gap:48px;animation:marquee 35s linear infinite;width:max-content}
+.marquee-item{white-space:nowrap;font-size:.85rem;color:var(--text2);display:flex;align-items:center;gap:12px;font-weight:500}
+.marquee-item .sep{width:6px;height:6px;background:var(--orange);border-radius:50%;opacity:.5}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* REVEAL ANIMATIONS */
+.reveal{opacity:0;transform:translateY(48px) scale(.97);transition:all .9s var(--spring)}.reveal.visible{opacity:1;transform:translateY(-4px) scale(1.003);animation:settleBack .4s .9s var(--smooth) forwards}
+@keyframes settleBack{to{transform:translateY(0) scale(1)}}
+.reveal-left{opacity:0;transform:translateX(-60px) rotate(-3deg);transition:all .9s var(--spring)}.reveal-left.visible{opacity:1;transform:translateX(0) rotate(0)}
+.reveal-right{opacity:0;transform:translateX(60px) rotate(3deg);transition:all .9s var(--spring)}.reveal-right.visible{opacity:1;transform:translateX(0) rotate(0)}
+.stagger-child{opacity:0;transform:translateY(40px) scale(.96);transition:all .8s var(--spring)}.stagger-child.visible{opacity:1;transform:none}
+
+/* PROBLEM */
+.problem{position:relative;z-index:1;padding:clamp(80px,12vw,160px) 0;background:var(--cream2);overflow:hidden}
+.problem .brand-pattern{z-index:0}
+.problem-inner{max-width:1280px;margin:0 auto;padding:0 clamp(20px,3vw,48px);position:relative}
+.problem-big-number{font-family:var(--head);font-size:clamp(12rem,20vw,22rem);font-weight:700;letter-spacing:-.06em;line-height:.85;color:rgba(45,24,16,.03);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;user-select:none;white-space:nowrap}
+.problem-content{position:relative;z-index:1}
+.problem-label{font-size:clamp(1.2rem,2.2vw,1.6rem);color:var(--text2);margin-bottom:clamp(48px,6vw,80px);max-width:600px;line-height:1.6}
+.problem-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.problem-card{background:var(--white);border:1px solid rgba(255,107,53,.06);border-left:3px solid var(--orange);border-radius:20px;padding:clamp(28px,3vw,40px);position:relative;overflow:hidden;transition:all .45s var(--spring)}
+.problem-card:nth-child(2){border-left-color:var(--brown3);margin-top:32px}
+.problem-card:nth-child(3){border-left-color:var(--brown);margin-top:64px}
+.problem-card:hover{border-color:rgba(255,107,53,.15);transform:translateY(-4px);box-shadow:0 20px 40px rgba(45,24,16,.08)}
+.problem-card .num{font-family:var(--head);font-size:clamp(2.5rem,4vw,3.5rem);font-weight:700;letter-spacing:-.03em;margin-bottom:12px}
+.problem-card .num.orange{color:var(--orange)}
+.problem-card .num.brown{color:var(--brown3)}
+.problem-card .num.dark{color:var(--brown)}
+.problem-card h3{font-family:var(--head);font-size:1.15rem;font-weight:600;margin-bottom:10px;color:var(--brown)}
+.problem-card p{font-size:.9rem;color:var(--text2);line-height:1.65}
+@media(max-width:768px){.problem-cards{grid-template-columns:1fr}.problem-card:nth-child(2),.problem-card:nth-child(3){margin-top:0}}
+
+/* SOLUTION */
+.solution{position:relative;z-index:1;padding:clamp(80px,12vw,160px) 0;background:var(--cream);overflow:hidden}
+.solution-inner{max-width:1100px;margin:0 auto;padding:0 clamp(20px,3vw,48px)}
+.solution-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:center;margin-top:clamp(32px,5vw,56px)}
+.solution-visual{position:relative}
+.solution-chain{display:flex;flex-direction:column;gap:12px}
+.chain-node{display:flex;align-items:center;gap:12px;padding:16px 20px;border-radius:16px;background:var(--white);border:1px solid rgba(255,107,53,.08);transition:all .4s var(--spring)}
+.chain-node:hover{transform:translateX(8px);border-color:rgba(255,107,53,.2);box-shadow:0 8px 24px rgba(255,107,53,.1)}
+.chain-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.chain-node:nth-child(odd):not(.chain-connector) .chain-icon{background:rgba(255,107,53,.1)}
+.chain-node:nth-child(even):not(.chain-connector) .chain-icon{background:rgba(45,24,16,.06)}
+.chain-label{font-family:var(--head);font-size:.85rem;font-weight:600;color:var(--brown)}
+.chain-desc{font-size:.7rem;color:var(--text3)}
+.chain-connector{width:2px;height:20px;background:linear-gradient(180deg,var(--orange),rgba(255,107,53,.2));margin-left:36px;padding:0;border:none}
+@media(max-width:768px){.solution-grid{grid-template-columns:1fr}}
+
+/* BENTO FEATURES */
+.bento{position:relative;z-index:1;padding:clamp(80px,12vw,160px) 0;background:var(--cream2)}
+.bento-inner{max-width:1280px;margin:0 auto;padding:0 clamp(20px,3vw,48px)}
+.bento-header{margin-bottom:clamp(40px,6vw,72px)}
+.bento-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(280px,auto);gap:20px}
+.bento-grid .card:nth-child(1){grid-column:span 2}
+.bento-grid .card:nth-child(4){grid-column:span 2}
+.bento-card{background:var(--white);border:1px solid rgba(255,107,53,.06);border-radius:20px;padding:clamp(24px,3vw,32px);position:relative;overflow:hidden;transition:all .45s var(--spring);display:flex;flex-direction:column}
+.bento-card::before{content:'';position:absolute;inset:-1px;border-radius:21px;padding:1px;background:linear-gradient(135deg,transparent,rgba(255,107,53,.2),transparent,rgba(45,24,16,.1),transparent);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s}
+.bento-card:hover::before{opacity:1}
+.bento-card:hover{transform:translateY(-4px);box-shadow:0 24px 48px rgba(45,24,16,.08)}
+.bento-card .card-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;flex-shrink:0}
+.bento-card h3{font-family:var(--head);font-size:1.1rem;font-weight:600;color:var(--brown);margin-bottom:8px;letter-spacing:-.01em}
+.bento-card p{font-size:.85rem;color:var(--text2);line-height:1.65;margin-bottom:12px}
+.ic-orange{background:rgba(255,107,53,.1);color:var(--orange)}
+.ic-brown{background:rgba(45,24,16,.06);color:var(--brown)}
+.ic-warm{background:rgba(107,63,36,.08);color:var(--brown3)}
+.ic-green{background:rgba(34,150,79,.08);color:#22964f}
+
+.mini-preview{margin-top:auto;border-radius:12px;padding:12px;background:rgba(45,24,16,.02);border:1px solid rgba(45,24,16,.04);overflow:hidden}
+.mini-escrow{display:flex;flex-direction:column;gap:6px}
+.mini-escrow-row{display:flex;align-items:center;gap:8px;font-size:.6rem;color:var(--text2)}
+.mini-escrow-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.mini-escrow-line{flex:1;height:2px;border-radius:2px}
+.mini-escrow-arrow{color:var(--text3);font-size:.5rem}
+.mini-loyalty{display:flex;align-items:center;gap:8px;justify-content:center;padding:4px 0}
+.mini-loyalty-star{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--orange),var(--orange-dark));box-shadow:0 4px 12px rgba(255,107,53,.3);animation:coinFloat 3s ease-in-out infinite}
+@keyframes coinFloat{0%,100%{transform:translateY(0)}25%{transform:translateY(-4px)}75%{transform:translateY(2px)}}
+.mini-loyalty-info{text-align:left}
+.mini-loyalty-info .amount{font-family:var(--head);font-size:1rem;font-weight:700;color:var(--brown)}
+.mini-loyalty-info .change{font-size:.55rem;color:#22964f;font-weight:500}
+.mini-review{display:flex;flex-direction:column;gap:4px}
+.mini-review-row{display:flex;align-items:center;gap:6px;font-size:.55rem}
+.mini-review-stars{color:var(--orange);letter-spacing:1px}
+.mini-review-name{color:var(--text3)}
+.mini-review-text{color:var(--text2);font-style:italic}
+.mini-currency{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.mini-currency-tag{padding:3px 8px;border-radius:6px;font-size:.5rem;font-weight:600;border:1px solid rgba(45,24,16,.06);color:var(--brown);background:rgba(255,107,53,.03)}
+.mini-analytics{display:flex;align-items:flex-end;gap:3px;justify-content:center;padding:4px 0}
+.mini-analytics-bar{width:12px;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--orange),rgba(255,107,53,.3))}
+
+@media(max-width:768px){.bento-grid{grid-template-columns:1fr;grid-auto-rows:auto}.bento-grid .card:nth-child(1),.bento-grid .card:nth-child(4){grid-column:span 1}}
+
+/* PROPERTIES DEMO */
+.properties{position:relative;z-index:1;padding:clamp(80px,12vw,160px) 0;background:var(--cream);overflow:hidden}
+.properties-inner{max-width:1100px;margin:0 auto;padding:0 clamp(20px,3vw,48px)}
+.property-demo{margin-top:clamp(40px,6vw,72px);display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.demo-storefront{background:var(--white);border-radius:24px;padding:clamp(24px,3vw,36px);border:1px solid rgba(255,107,53,.08);box-shadow:0 20px 60px rgba(45,24,16,.06)}
+.demo-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(45,24,16,.05)}
+.demo-logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--orange),var(--brown));display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.demo-name{font-family:var(--head);font-size:1.1rem;font-weight:600;color:var(--brown)}
+.demo-tag{font-size:.6rem;color:var(--orange);font-weight:500}
+.demo-products{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.demo-product{border-radius:12px;overflow:hidden;border:1px solid rgba(45,24,16,.04);transition:all .3s var(--spring)}
+.demo-product:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(45,24,16,.06)}
+.demo-product-img{height:80px;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.demo-product-info{padding:8px}
+.demo-product-name{font-size:.65rem;font-weight:600;color:var(--brown);font-family:var(--head)}
+.demo-product-price{font-size:.6rem;color:var(--orange);font-weight:700}
+.demo-cta-btn{width:100%;padding:10px;border-radius:10px;background:var(--orange);color:var(--white);font-weight:600;font-size:.75rem;text-align:center;cursor:pointer;transition:all .3s;border:none}
+.demo-cta-btn:hover{box-shadow:0 4px 16px rgba(255,107,53,.3)}
+.demo-details{display:flex;flex-direction:column;gap:16px}
+.demo-detail{display:flex;gap:12px;align-items:flex-start}
+.demo-detail-icon{width:32px;height:32px;border-radius:8px;background:rgba(255,107,53,.08);display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.demo-detail h4{font-family:var(--head);font-size:.9rem;font-weight:600;color:var(--brown)}
+.demo-detail p{font-size:.78rem;color:var(--text3);line-height:1.5}
+@media(max-width:768px){.property-demo{grid-template-columns:1fr}}
+
+/* STATS */
+.stats{position:relative;z-index:1;padding:clamp(80px,12vw,140px) 0;background:var(--brown);border-top:1px solid rgba(255,107,53,.15);border-bottom:1px solid rgba(255,107,53,.15)}
+.stats-inner{max-width:1280px;margin:0 auto;padding:0 clamp(20px,3vw,48px);display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+.stat-item .stat-num{font-family:var(--head);font-size:clamp(2.5rem,7vw,4.5rem);font-weight:700;letter-spacing:-.04em;color:var(--white);margin-bottom:8px;line-height:1}
+.stat-item .stat-label{font-size:.75rem;color:rgba(255,255,255,.5);font-weight:500;text-transform:uppercase;letter-spacing:.1em}
+@media(max-width:768px){.stats-inner{grid-template-columns:repeat(2,1fr);gap:32px}}
+
+/* CTA */
+.cta-section{position:relative;z-index:1;padding:clamp(80px,12vw,140px) 0;overflow:hidden;background:var(--cream)}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(255,107,53,.06),transparent 70%)}
+.cta-inner{max-width:680px;margin:0 auto;padding:0 clamp(20px,3vw,48px);text-align:center;position:relative;z-index:1}
+.cta-inner h2{font-family:var(--head);font-size:clamp(1.8rem,4vw,3rem);font-weight:700;letter-spacing:-.03em;color:var(--brown);margin-bottom:16px;line-height:1.15}
+.cta-inner p{font-size:1.05rem;color:var(--text2);margin-bottom:36px;line-height:1.7}
+.cta-buttons{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+
+/* FOOTER */
+.footer{position:relative;z-index:1;padding:48px 0;border-top:1px solid rgba(255,107,53,.06);background:var(--cream2)}
+.footer-inner{max-width:1280px;margin:0 auto;padding:0 clamp(20px,3vw,48px);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.footer-left{display:flex;align-items:center;gap:24px}
+.footer-logo{font-family:var(--head);font-weight:700;font-size:1.2rem;display:flex;align-items:center;gap:0}
+.footer-logo svg{height:22px;width:auto}
+.footer-links{display:flex;gap:20px;font-size:.82rem;color:var(--text3)}
+.footer-links a:hover{color:var(--brown)}
+.footer-badge{display:flex;align-items:center;gap:8px;font-size:.75rem;color:var(--text3);padding:6px 14px;border-radius:80px;border:1px solid rgba(255,107,53,.1);background:rgba(255,107,53,.04);font-weight:500;letter-spacing:.03em}
+.footer-badge .chain-dot{width:6px;height:6px;background:var(--orange);border-radius:50%;animation:pulse 2s ease infinite}
+@media(max-width:600px){.footer-inner{flex-direction:column;text-align:center}.footer-left{flex-direction:column}}
+
+/* LANGUAGE SELECTOR */
+.lang-selector{position:fixed;top:20px;right:clamp(20px,3vw,48px);z-index:10001}
+.lang-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:80px;background:rgba(250,248,245,.85);border:1px solid rgba(255,107,53,.15);font-size:.8rem;color:var(--text2);cursor:none;transition:all .2s;backdrop-filter:blur(12px);font-family:var(--body)}
+.lang-btn:hover{border-color:var(--orange);color:var(--brown)}
+.lang-dropdown{display:none;position:absolute;top:calc(100% + 6px);right:0;background:rgba(250,248,245,.97);border:1px solid rgba(255,107,53,.12);border-radius:12px;overflow:hidden;min-width:160px;box-shadow:0 12px 40px rgba(45,24,16,.12);backdrop-filter:blur(20px)}
+.lang-dropdown.open{display:block}
+.lang-option{display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:.8rem;color:var(--text2);cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left;font-family:var(--body)}
+.lang-option:hover{background:rgba(255,107,53,.06);color:var(--brown)}
+.lang-option.active{color:var(--orange);font-weight:600}
+@media(pointer:coarse){.lang-btn,.lang-option{cursor:auto}}
+.nav.shrink ~ .lang-selector{top:14px}
+
+/* FLOATING ELEMENTS */
+.float-el{position:absolute;pointer-events:none;z-index:0;opacity:.15}
+</style>
 </head>
 <body>
+<!-- Language Selector -->
+<div class="lang-selector" id="lang-selector">
+  <button class="lang-btn" onclick="toggleLangDropdown()">&#127760; <span id="lang-current">English</span> &#9662;</button>
+  <div class="lang-dropdown" id="lang-dropdown">
+    <button class="lang-option active" data-lang="en" onclick="setLang('en')">&#127468;&#127463; English</button>
+    <button class="lang-option" data-lang="es" onclick="setLang('es')">&#127466;&#127480; Espa&ntilde;ol</button>
+    <button class="lang-option" data-lang="zh" onclick="setLang('zh')">&#127464;&#127475; &#20013;&#25991;</button>
+  </div>
+</div>
 
-    <!-- Navigation -->
-    <nav id="navbar">
-        <div class="nav-inner">
-            <a href="#" class="logo">
-                <div class="logo-icon">T</div>
-                Tienda
-            </a>
-            <ul class="nav-links">
-                <li><a href="#problem" data-i18n="nav_problem">Problem</a></li>
-                <li><a href="#solution" data-i18n="nav_solution">Solution</a></li>
-                <li><a href="#how" data-i18n="nav_how">How It Works</a></li>
-                <li><a href="#merchants" data-i18n="nav_merchants">Merchants</a></li>
-                <li><a href="#cta" class="nav-cta" data-i18n="nav_cta">Get Started</a></li>
-                <li>
-                    <div class="lang-selector">
-                        <button class="lang-btn" onclick="toggleLangDropdown(event)">&#127760; <span id="currentLangLabel">English</span></button>
-                        <div class="lang-dropdown" id="langDropdown">
-                            <div class="lang-option active" onclick="setLanguage('en')">&#127468;&#127463; English</div>
-                            <div class="lang-option" onclick="setLanguage('es')">&#127466;&#127480; Espa&#241;ol</div>
-                            <div class="lang-option" onclick="setLanguage('zh')">&#127464;&#127475; &#20013;&#25991;</div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
+<div class="noise"></div>
+<div class="mesh-bg"><div class="mesh-orb a"></div><div class="mesh-orb b"></div><div class="mesh-orb c"></div></div>
+<div class="cursor-dot"></div><div class="cursor-ring"></div>
+<div class="scroll-progress"></div>
 
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <button class="mobile-menu-close" onclick="toggleMobileMenu()">&times;</button>
-        <a href="#problem" onclick="toggleMobileMenu()" data-i18n="nav_problem">Problem</a>
-        <a href="#solution" onclick="toggleMobileMenu()" data-i18n="nav_solution">Solution</a>
-        <a href="#how" onclick="toggleMobileMenu()" data-i18n="nav_how">How It Works</a>
-        <a href="#merchants" onclick="toggleMobileMenu()" data-i18n="nav_merchants">Merchants</a>
-        <a href="#cta" onclick="toggleMobileMenu()" data-i18n="nav_cta">Get Started</a>
-        <div class="lang-selector" style="margin-top:16px;">
-            <button class="lang-btn" onclick="toggleLangDropdown(event)" style="color:#fff;border-color:rgba(255,255,255,.3);">&#127760; <span class="currentLangLabelMobile">English</span></button>
-            <div class="lang-dropdown" id="langDropdownMobile">
-                <div class="lang-option active" onclick="setLanguage('en')">&#127468;&#127463; English</div>
-                <div class="lang-option" onclick="setLanguage('es')">&#127466;&#127480; Espa&#241;ol</div>
-                <div class="lang-option" onclick="setLanguage('zh')">&#127464;&#127475; &#20013;&#25991;</div>
-            </div>
-        </div>
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg viewBox="0 0 150 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- T as storefront awning -->
+        <path d="M2 8 L22 8" stroke="#ff6b35" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M5 8 Q5 5 8 5 L10 5 Q12 5 12 8" fill="none" stroke="#ff6b35" stroke-width="1.5"/>
+        <path d="M12 8 Q12 5 15 5 L17 5 Q19 5 19 8" fill="none" stroke="#ff6b35" stroke-width="1.5"/>
+        <rect x="10" y="8" width="4" height="18" rx="1" fill="#2d1810"/>
+        <rect x="10.5" y="20" width="3" height="5" rx=".5" fill="none" stroke="#ff6b35" stroke-width=".8" opacity=".5"/>
+        <text x="28" y="23" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="22" fill="#2d1810" letter-spacing="-1">IENDA</text>
+      </svg>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#problema" data-i18n="nav_problem">Problem</a>
+      <a href="#solucion" data-i18n="nav_solution">Solution</a>
+      <a href="#features" data-i18n="nav_features">Features</a>
+      <a href="#demo" data-i18n="nav_demo">Demo</a>
+      <a href="#stats" data-i18n="nav_stats">Stats</a>
     </div>
+    <a href="app.html" class="nav-cta magnetic" data-i18n="launch_store">Launch Store</a>
+    <button class="nav-mobile-btn" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
 
-    <!-- Hero -->
-    <section class="hero" id="hero">
-        <div class="hero-bg-pattern"></div>
-        <div class="hero-glow"></div>
-        <div class="hero-glow-2"></div>
-
-        <div class="hero-content">
-            <div class="hero-text">
-                <div class="hero-badge">
-                    <span class="hero-badge-dot"></span>
-                    Built on Initia
-                </div>
-                <h1>
-                    <span data-i18n="hero_line1">Your store.</span><br>
-                    <span data-i18n="hero_line2_pre">Your </span><span class="highlight" data-i18n="hero_line2_hl">chain</span>.<br>
-                    <span data-i18n="hero_line3">Your future.</span>
-                </h1>
-                <p class="hero-subtitle" data-i18n="hero_subtitle">
-                    The first Web3 commerce platform designed for Latin America.
-                    No wallets. No gas. Just your business, on your own blockchain.
-                </p>
-                <div class="hero-actions">
-                    <a href="#cta" class="btn-primary">
-                        <span data-i18n="hero_cta">Open your store</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </a>
-                    <a href="#how" class="btn-secondary" data-i18n="hero_secondary">
-                        How it works
-                    </a>
-                </div>
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="brand-pattern"></div>
+  <div class="float-el" style="top:15%;right:8%;width:60px;height:60px;animation:coinFloat 4s ease-in-out infinite">
+    <svg viewBox="0 0 60 60" fill="none"><rect x="5" y="5" width="50" height="50" rx="12" stroke="#ff6b35" stroke-width="1.5" opacity=".4"/><text x="30" y="36" text-anchor="middle" fill="#ff6b35" font-family="Space Grotesk" font-size="18" font-weight="700" opacity=".3">$</text></svg>
+  </div>
+  <div class="float-el" style="bottom:20%;left:5%;width:40px;height:40px;animation:coinFloat 5s ease-in-out infinite .5s">
+    <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" stroke="#2d1810" stroke-width="1" opacity=".3"/></svg>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-tag"><span class="pulse"></span><span data-i18n="hero_tag">Commerce on Initia</span></div>
+      <h1 class="hero-headline display" id="heroHeadline">
+        <span class="word" data-i18n-word="hero_w1">Your Store. </span><br>
+        <span class="word gradient-text" data-i18n-word="hero_w2">Your Chain. </span><br>
+        <span class="word" data-i18n-word="hero_w3">Your </span><span class="word gradient-text-warm" data-i18n-word="hero_w4">Future.</span>
+      </h1>
+      <p class="hero-sub body-text" id="heroSub" data-i18n="hero_sub">The first decentralized commerce platform where every merchant owns their chain. 1.5% fees, built-in escrow, loyalty programs, and zero platform lock-in.</p>
+      <div class="hero-ctas" id="heroCtas">
+        <a href="app.html" class="btn-primary magnetic" data-i18n="launch_store_now">Launch Your Store <span class="arrow">&rarr;</span></a>
+        <a href="#demo" class="btn-ghost magnetic" data-i18n="see_demo">See Demo</a>
+      </div>
+    </div>
+    <!-- PHONE MOCKUP -->
+    <div class="hero-phone-wrap" id="heroPhone">
+      <div class="phone-glow"></div>
+      <div class="phone-mockup">
+        <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+        <div class="phone-screen">
+          <div class="phone-header">
+            <div class="phone-avatar">CM</div>
+            <div class="phone-user-info">
+              <div class="phone-user-name" data-i18n="demo_store_name">Cafe Maria</div>
+              <div class="phone-user-level" data-i18n="demo_store_status">&#9679; Store Active</div>
             </div>
-
-            <div class="hero-visual">
-                <div class="storefront">
-                    <div class="storefront-building">
-                        <div class="storefront-awning">
-                            <div class="awning-stripe">
-                                <div></div><div></div><div></div><div></div>
-                                <div></div><div></div><div></div><div></div>
-                            </div>
-                        </div>
-                        <div class="storefront-sign" data-i18n="storefront_sign">My Store</div>
-                        <div class="storefront-window">
-                            <div class="product-card">
-                                <span class="product-emoji">&#9749;</span>
-                                <span class="product-price">$2.50</span>
-                            </div>
-                            <div class="product-card">
-                                <span class="product-emoji">&#127838;</span>
-                                <span class="product-price">$1.80</span>
-                            </div>
-                            <div class="product-card">
-                                <span class="product-emoji">&#127846;</span>
-                                <span class="product-price">$3.20</span>
-                            </div>
-                            <div class="product-card">
-                                <span class="product-emoji">&#127862;</span>
-                                <span class="product-price">$4.00</span>
-                            </div>
-                        </div>
-                        <div class="storefront-door">
-                            <div class="door-handle"></div>
-                        </div>
-                    </div>
-                    <div class="storefront-chain">
-                        <div class="chain-link"></div>
-                        <div class="chain-link"></div>
-                        <div class="chain-link"></div>
-                        <div class="chain-link"></div>
-                        <div class="chain-link"></div>
-                    </div>
-                    <div class="float-element float-sale">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span data-i18n="float_sale">Sale completed</span>
-                    </div>
-                    <div class="float-element float-rating">
-                        &#9733; 4.9 rating
-                    </div>
-                    <div class="float-element float-chain-badge">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                        On-chain
-                    </div>
-                </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9c7a62" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          </div>
+          <div class="phone-stats">
+            <div class="phone-stat-card">
+              <div class="phone-stat-num" data-i18n="demo_revenue">$2,847</div>
+              <div class="phone-stat-label" data-i18n="demo_revenue_label">Today's Revenue</div>
             </div>
+            <div class="phone-stat-card">
+              <div class="phone-stat-num">156</div>
+              <div class="phone-stat-label" data-i18n="demo_orders_label">Orders</div>
+            </div>
+          </div>
+          <div class="phone-order">
+            <div class="phone-order-header">
+              <div class="phone-order-status" data-i18n="demo_escrow">ESCROW</div>
+              <div class="phone-order-title">Order #1847</div>
+            </div>
+            <div class="phone-order-detail" data-i18n="demo_order_detail">2x Cafe Latte, 1x Croissant</div>
+            <div class="phone-order-row">
+              <span data-i18n="demo_buyer">Buyer: 0x7f...3a2</span>
+              <span class="phone-order-amount">$18.50</span>
+            </div>
+          </div>
+          <div class="phone-order" style="border-color:rgba(34,150,79,.12);background:rgba(34,150,79,.03)">
+            <div class="phone-order-header">
+              <div class="phone-order-status" style="background:#22964f" data-i18n="demo_completed">COMPLETED</div>
+              <div class="phone-order-title">Order #1846</div>
+            </div>
+            <div class="phone-order-detail" data-i18n="demo_order_detail2">1x Espresso, 3x Muffin</div>
+            <div class="phone-order-row">
+              <span>&#9733; 5.0 review</span>
+              <span class="phone-order-amount" style="color:#22964f">$24.00</span>
+            </div>
+          </div>
+          <div class="phone-tab-bar">
+            <div class="phone-tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</div>
+            <div class="phone-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>Products</div>
+            <div class="phone-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>Analytics</div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Problem -->
-    <section class="problem-section" id="problem">
-        <div class="section-inner">
-            <div class="section-label reveal" data-i18n="problem_label">The Problem</div>
-            <h2 class="section-title reveal reveal-delay-1" data-i18n="problem_title">
-                300 million consumers.<br>Zero Web3 solutions that work.
-            </h2>
-            <p class="section-subtitle reveal reveal-delay-2" data-i18n="problem_subtitle">
-                Commerce in Latin America is ready for blockchain. But current tools
-                were built for developers, not merchants.
-            </p>
+<!-- MARQUEE -->
+<section class="marquee-section">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-item"><span data-i18n="mq1">300M consumers</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq2">1.5% fees</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq3">Zero platform lock-in</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq4">Built on Initia</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq5">Own your chain</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq6">Built-in escrow</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq7">Loyalty rewards</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq8">Multi-currency</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq1">300M consumers</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq2">1.5% fees</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq3">Zero platform lock-in</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq4">Built on Initia</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq5">Own your chain</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq6">Built-in escrow</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq7">Loyalty rewards</span><span class="sep"></span></span>
+    <span class="marquee-item"><span data-i18n="mq8">Multi-currency</span><span class="sep"></span></span>
+  </div>
+</section>
 
-            <div class="problem-grid">
-                <div class="problem-card reveal reveal-delay-1">
-                    <span class="problem-stat">15-30%</span>
-                    <h3 data-i18n="problem_fees_title">Abusive commissions</h3>
-                    <p data-i18n="problem_fees_desc">Web2 platforms charge fees that devour the margins of small merchants.</p>
-                </div>
-                <div class="problem-card reveal reveal-delay-2">
-                    <span class="problem-icon">&#128274;</span>
-                    <h3 data-i18n="problem_complexity_title">Unnecessary complexity</h3>
-                    <p data-i18n="problem_complexity_desc">Wallets, seed phrases, gas fees. Every step drives a merchant away from blockchain.</p>
-                </div>
-                <div class="problem-card reveal reveal-delay-3">
-                    <span class="problem-icon">&#127760;</span>
-                    <h3 data-i18n="problem_local_title">No local context</h3>
-                    <p data-i18n="problem_local_desc">Existing solutions don't speak the language, don't understand LATAM, and don't solve local problems.</p>
-                </div>
-                <div class="problem-card reveal reveal-delay-4">
-                    <span class="problem-icon">&#9203;</span>
-                    <h3 data-i18n="problem_slow_title">Slow payments</h3>
-                    <p data-i18n="problem_slow_desc">Days to receive payments. Insecure bridges. Wrapped tokens nobody understands.</p>
-                </div>
-            </div>
+<!-- PROBLEM -->
+<section class="problem" id="problema">
+  <div class="brand-pattern"></div>
+  <div class="problem-inner">
+    <div class="problem-big-number">15-30%</div>
+    <div class="problem-content">
+      <div class="reveal">
+        <span class="caption" style="color:var(--orange);display:block;margin-bottom:12px" data-i18n="the_problem">The Problem</span>
+        <h2 class="h2-title" data-i18n="problem_title">Platform fees are<br><span class="gradient-text">killing merchants.</span></h2>
+      </div>
+      <p class="problem-label reveal body-text" data-i18n="problem_desc">Every sale on traditional platforms costs merchants 15-30% in fees, data control, and algorithmic dependency. Small businesses in LATAM lose more than they earn.</p>
+      <div class="problem-cards">
+        <div class="problem-card stagger-child" data-tilt>
+          <div class="num orange" data-i18n="prob_num1">30%</div>
+          <h3 data-i18n="prob_title1">Platform Taxes</h3>
+          <p data-i18n="prob_desc1">Marketplace fees, payment processing, advertising costs. Every sale is a 30% tax on small merchants.</p>
         </div>
-    </section>
-
-    <!-- Solution -->
-    <section class="solution-section" id="solution">
-        <div class="section-inner">
-            <div class="section-label reveal" data-i18n="solution_label">The Solution</div>
-            <h2 class="section-title reveal reveal-delay-1" data-i18n="solution_title">
-                Sovereign commerce.<br>Radical simplicity.
-            </h2>
-            <p class="section-subtitle reveal reveal-delay-2" data-i18n="solution_subtitle">
-                Tienda is a commerce rollup built on Initia.
-                Every store has its own contract. Every transaction is transparent. Every payment is instant.
-            </p>
-
-            <div class="solution-grid">
-                <div class="solution-card reveal reveal-delay-1">
-                    <div class="solution-number">01</div>
-                    <h3 data-i18n="solution_chain_title">Your own chain</h3>
-                    <p data-i18n="solution_chain_desc">A rollup dedicated to LATAM commerce. Optimized for speed, cost, and merchant experience. No sharing resources with DeFi degens.</p>
-                </div>
-                <div class="solution-card reveal reveal-delay-2">
-                    <div class="solution-number">02</div>
-                    <h3 data-i18n="solution_friction_title">Zero friction</h3>
-                    <p data-i18n="solution_friction_desc">Sign up with your phone. Account abstraction creates your wallet silently. Sponsored transactions. The blockchain disappears.</p>
-                </div>
-                <div class="solution-card reveal reveal-delay-3">
-                    <div class="solution-number">03</div>
-                    <h3 data-i18n="solution_liquidity_title">Native liquidity</h3>
-                    <p data-i18n="solution_liquidity_desc">Thanks to Initia's enshrined liquidity and native IBC, payments arrive instantly in your preferred currency. No bridges. No waiting.</p>
-                </div>
-            </div>
+        <div class="problem-card stagger-child" data-tilt>
+          <div class="num brown" data-i18n="prob_num2">Zero</div>
+          <h3 data-i18n="prob_title2">Data Ownership</h3>
+          <p data-i18n="prob_desc2">Platforms own your customers, your reviews, your analytics. Leave the platform? Start from zero.</p>
         </div>
-    </section>
-
-    <!-- How It Works -->
-    <section class="how-section" id="how">
-        <div class="section-inner">
-            <div class="section-label reveal" data-i18n="how_label">How It Works</div>
-            <h2 class="section-title reveal reveal-delay-1" data-i18n="how_title">
-                Three steps. Zero blockchain.
-            </h2>
-            <p class="section-subtitle reveal reveal-delay-2" data-i18n="how_subtitle">
-                If you can post on Instagram, you can open your store on-chain.
-            </p>
-
-            <div class="steps">
-                <div class="step reveal">
-                    <div class="step-marker">1</div>
-                    <div class="step-content">
-                        <h3 class="step-title" data-i18n="step1_title">Open your store</h3>
-                        <p class="step-desc" data-i18n="step1_desc">
-                            Sign up with your phone number. Choose a name for your store.
-                            In 30 seconds you have a deployed smart contract and a unique URL.
-                        </p>
-                        <div class="step-tech">
-                            &#9889; CosmWasm + Account Abstraction
-                        </div>
-                    </div>
-                </div>
-
-                <div class="step reveal reveal-delay-1">
-                    <div class="step-marker">2</div>
-                    <div class="step-content">
-                        <h3 class="step-title" data-i18n="step2_title">Add products</h3>
-                        <p class="step-desc" data-i18n="step2_desc">
-                            Take a photo, set a price, and publish. Products are stored on-chain
-                            with images on IPFS. Atomic inventory via Move.
-                        </p>
-                        <div class="step-tech">
-                            &#128247; Move Modules + IPFS
-                        </div>
-                    </div>
-                </div>
-
-                <div class="step reveal reveal-delay-2">
-                    <div class="step-marker">3</div>
-                    <div class="step-content">
-                        <h3 class="step-title" data-i18n="step3_title">Sell and get paid</h3>
-                        <p class="step-desc" data-i18n="step3_desc">
-                            Share your link. Buyers pay with any token. You receive in your preferred currency.
-                            Instant settlement via Initia.
-                        </p>
-                        <div class="step-tech">
-                            &#128176; Initia Enshrined Liquidity + IBC
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="problem-card stagger-child" data-tilt>
+          <div class="num dark" data-i18n="prob_num3">87%</div>
+          <h3 data-i18n="prob_title3">Fail in 2 Years</h3>
+          <p data-i18n="prob_desc3">Small merchants on centralized platforms have an 87% failure rate within two years. The system is broken.</p>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- For Merchants -->
-    <section class="merchants-section" id="merchants">
-        <div class="section-inner">
-            <div class="merchants-grid">
-                <div>
-                    <div class="section-label reveal" data-i18n="merchants_label">For Merchants</div>
-                    <h2 class="section-title reveal reveal-delay-1" data-i18n="merchants_title">
-                        Your business deserves its own blockchain.
-                    </h2>
-                    <p class="section-subtitle reveal reveal-delay-2" data-i18n="merchants_subtitle">
-                        Every feature in Tienda was designed with a LATAM merchant in mind.
-                    </p>
-
-                    <div class="merchant-features">
-                        <div class="merchant-feature reveal reveal-delay-1">
-                            <div class="feature-icon">&#127979;</div>
-                            <div class="feature-text">
-                                <h4 data-i18n="merchant_f1_title">Sovereign store</h4>
-                                <p data-i18n="merchant_f1_desc">Your own smart contract. Your rules. Your data. No middlemen.</p>
-                            </div>
-                        </div>
-                        <div class="merchant-feature reveal reveal-delay-2">
-                            <div class="feature-icon">&#128184;</div>
-                            <div class="feature-text">
-                                <h4 data-i18n="merchant_f2_title">Multi-currency payments</h4>
-                                <p data-i18n="merchant_f2_desc">Accept any token. Receive in your preferred currency. Automatically.</p>
-                            </div>
-                        </div>
-                        <div class="merchant-feature reveal reveal-delay-3">
-                            <div class="feature-icon">&#127942;</div>
-                            <div class="feature-text">
-                                <h4 data-i18n="merchant_f3_title">On-chain loyalty</h4>
-                                <p data-i18n="merchant_f3_desc">Transparent and composable rewards programs via Move.</p>
-                            </div>
-                        </div>
-                        <div class="merchant-feature reveal reveal-delay-4">
-                            <div class="feature-icon">&#128202;</div>
-                            <div class="feature-text">
-                                <h4 data-i18n="merchant_f4_title">Real-time dashboard</h4>
-                                <p data-i18n="merchant_f4_desc">Sales, inventory, and customers. All visible. All verifiable.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="merchant-mockup reveal">
-                    <div class="mockup-header">
-                        <div class="mockup-dots">
-                            <span></span><span></span><span></span>
-                        </div>
-                        <div class="mockup-url">tienda.initia.xyz/cafe-maria</div>
-                    </div>
-                    <div class="mockup-body">
-                        <div class="mockup-store-header">
-                            <div class="mockup-avatar">&#9749;</div>
-                            <div>
-                                <div class="mockup-store-name">Cafe Maria</div>
-                                <div class="mockup-store-loc">Bogota, Colombia</div>
-                            </div>
-                        </div>
-                        <div class="mockup-products">
-                            <div class="mockup-product">
-                                <div class="mockup-product-img">&#9749;</div>
-                                <div class="mockup-product-name">Cafe Tinto</div>
-                                <div class="mockup-product-price">$1.50</div>
-                            </div>
-                            <div class="mockup-product">
-                                <div class="mockup-product-img">&#127849;</div>
-                                <div class="mockup-product-name">Pan de Bono</div>
-                                <div class="mockup-product-price">$0.80</div>
-                            </div>
-                            <div class="mockup-product">
-                                <div class="mockup-product-img">&#129380;</div>
-                                <div class="mockup-product-name">Empanada</div>
-                                <div class="mockup-product-price">$1.20</div>
-                            </div>
-                            <div class="mockup-product">
-                                <div class="mockup-product-img">&#127856;</div>
-                                <div class="mockup-product-name">Tres Leches</div>
-                                <div class="mockup-product-price">$3.50</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!-- SOLUTION -->
+<section class="solution" id="solucion">
+  <div class="solution-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:20px">
+      <span class="caption" style="color:var(--orange);display:block;margin-bottom:12px" data-i18n="the_solution">The Solution</span>
+      <h2 class="h2-title" data-i18n="solution_title">Own your chain.<br><span class="gradient-text">Own your future.</span></h2>
+      <p class="body-text" style="max-width:600px;margin:20px auto 0" data-i18n="solution_desc">Tienda gives every merchant their own appchain on Initia. Your store, your rules, your data. With built-in commerce tools that rival any platform.</p>
+    </div>
+    <div class="solution-grid">
+      <div class="solution-visual reveal-left">
+        <div class="solution-chain">
+          <div class="chain-node stagger-child">
+            <div class="chain-icon" style="background:rgba(255,107,53,.1)">&#127979;</div>
+            <div><div class="chain-label" data-i18n="chain1_label">Your Storefront</div><div class="chain-desc" data-i18n="chain1_desc">Custom branded store on your chain</div></div>
+          </div>
+          <div class="chain-connector"></div>
+          <div class="chain-node stagger-child">
+            <div class="chain-icon" style="background:rgba(45,24,16,.06)">&#128274;</div>
+            <div><div class="chain-label" data-i18n="chain2_label">Smart Escrow</div><div class="chain-desc" data-i18n="chain2_desc">Trustless payments, automatic release</div></div>
+          </div>
+          <div class="chain-connector"></div>
+          <div class="chain-node stagger-child">
+            <div class="chain-icon" style="background:rgba(107,63,36,.08)">&#11088;</div>
+            <div><div class="chain-label" data-i18n="chain3_label">Loyalty Engine</div><div class="chain-desc" data-i18n="chain3_desc">Token rewards that retain customers</div></div>
+          </div>
+          <div class="chain-connector"></div>
+          <div class="chain-node stagger-child">
+            <div class="chain-icon" style="background:rgba(255,107,53,.1)">&#127760;</div>
+            <div><div class="chain-label" data-i18n="chain4_label">Multi-Currency</div><div class="chain-desc" data-i18n="chain4_desc">Accept any token, settle in your preferred</div></div>
+          </div>
         </div>
-    </section>
-
-    <!-- For Buyers -->
-    <section class="buyers-section" id="buyers">
-        <div class="section-inner">
-            <div class="section-label reveal" data-i18n="buyers_label">For Buyers</div>
-            <h2 class="section-title reveal reveal-delay-1" data-i18n="buyers_title">
-                Buy local. Pay global.
-            </h2>
-            <p class="section-subtitle reveal reveal-delay-2" data-i18n="buyers_subtitle">
-                A shopping experience so simple you'll forget you're using blockchain.
-            </p>
-
-            <div class="buyers-grid">
-                <div class="buyer-card reveal reveal-delay-1">
-                    <div class="buyer-icon">&#128722;</div>
-                    <h3 data-i18n="buyer_f1_title">Browse & Discover</h3>
-                    <p data-i18n="buyer_f1_desc">Explore local stores with on-chain verified products. Real and immutable reviews.</p>
-                </div>
-                <div class="buyer-card reveal reveal-delay-2">
-                    <div class="buyer-icon">&#128179;</div>
-                    <h3 data-i18n="buyer_f2_title">Pay with any token</h3>
-                    <p data-i18n="buyer_f2_desc">USDC, INIT, or any token in the Initia ecosystem. Conversion is automatic.</p>
-                </div>
-                <div class="buyer-card reveal reveal-delay-3">
-                    <div class="buyer-icon">&#128737;</div>
-                    <h3 data-i18n="buyer_f3_title">Full protection</h3>
-                    <p data-i18n="buyer_f3_desc">Transparent transactions. Verifiable history. Disputes resolved on-chain.</p>
-                </div>
-                <div class="buyer-card reveal reveal-delay-4">
-                    <div class="buyer-icon">&#127873;</div>
-                    <h3 data-i18n="buyer_f4_title">Portable rewards</h3>
-                    <p data-i18n="buyer_f4_desc">Loyalty points that work at any store in the ecosystem. Your rewards, your property.</p>
-                </div>
-            </div>
+      </div>
+      <div class="reveal-right">
+        <h3 class="h3-title" style="margin-bottom:16px" data-i18n="how_works">How It Works</h3>
+        <p class="body-text" style="margin-bottom:24px" data-i18n="how_works_desc">In 3 clicks, deploy your own appchain store on Initia. Every transaction is secured by smart escrow. Customers earn loyalty tokens. Reviews live on-chain forever. You keep 98.5% of every sale.</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:28px;height:28px;border-radius:50%;background:var(--orange);color:white;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-weight:700;font-size:.75rem;flex-shrink:0">1</span>
+            <span class="body-text" style="font-size:.9rem" data-i18n="step1">Create your store profile</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:28px;height:28px;border-radius:50%;background:var(--brown3);color:white;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-weight:700;font-size:.75rem;flex-shrink:0">2</span>
+            <span class="body-text" style="font-size:.9rem" data-i18n="step2">Add products and set pricing</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:28px;height:28px;border-radius:50%;background:var(--brown);color:white;display:flex;align-items:center;justify-content:center;font-family:var(--head);font-weight:700;font-size:.75rem;flex-shrink:0">3</span>
+            <span class="body-text" style="font-size:.9rem" data-i18n="step3">Deploy and start selling</span>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Tech -->
-    <section class="tech-section" id="tech">
-        <div class="section-inner">
-            <div class="section-label reveal" data-i18n="tech_label">Technology</div>
-            <h2 class="section-title reveal reveal-delay-1" data-i18n="tech_title">
-                Built on giants.
-            </h2>
-            <p class="section-subtitle reveal reveal-delay-2" data-i18n="tech_subtitle">
-                The most advanced infrastructure, invisible to the end user.
-            </p>
-
-            <div class="tech-grid">
-                <div class="tech-card reveal reveal-delay-1">
-                    <span class="tech-logo">&#9939;</span>
-                    <div class="tech-name">Initia L1</div>
-                    <div class="tech-role">Settlement & Liquidity</div>
-                </div>
-                <div class="tech-card reveal reveal-delay-2">
-                    <span class="tech-logo">&#128640;</span>
-                    <div class="tech-name">Move + CosmWasm</div>
-                    <div class="tech-role">Smart Contracts</div>
-                </div>
-                <div class="tech-card reveal reveal-delay-3">
-                    <span class="tech-logo">&#128241;</span>
-                    <div class="tech-name">React Native</div>
-                    <div class="tech-role">Mobile App</div>
-                </div>
-                <div class="tech-card reveal reveal-delay-1">
-                    <span class="tech-logo">&#9889;</span>
-                    <div class="tech-name">Node.js</div>
-                    <div class="tech-role">Backend & API</div>
-                </div>
-                <div class="tech-card reveal reveal-delay-2">
-                    <span class="tech-logo">&#128279;</span>
-                    <div class="tech-name">IBC Protocol</div>
-                    <div class="tech-role">Cross-Chain Payments</div>
-                </div>
-                <div class="tech-card reveal reveal-delay-3">
-                    <span class="tech-logo">&#128451;</span>
-                    <div class="tech-name">IPFS + Pinata</div>
-                    <div class="tech-role">Decentralized Storage</div>
-                </div>
-            </div>
+<!-- BENTO FEATURES -->
+<section class="bento" id="features">
+  <div class="bento-inner">
+    <div class="bento-header reveal">
+      <span class="caption" style="color:var(--orange);display:block;margin-bottom:12px" data-i18n="features_cap">Features</span>
+      <h2 class="h2-title" data-i18n="features_title">Everything you need to<br><span class="gradient-text">run your business</span></h2>
+    </div>
+    <div class="bento-grid">
+      <!-- 1: Escrow (span 2) -->
+      <div class="bento-card card stagger-child" data-tilt style="border-left:3px solid var(--orange)">
+        <div class="card-icon ic-orange">
+          <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="4" y="12" width="24" height="16" rx="3" stroke="currentColor" stroke-width="2"/><path d="M10 12V8a6 6 0 1112 0v4" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="20" r="2.5" fill="currentColor"/><path d="M16 22v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="cta-section" id="cta">
-        <div class="section-inner">
-            <div class="cta-inner">
-                <div class="section-label reveal" style="color: var(--orange-light);" data-i18n="cta_label">Join Us</div>
-                <h2 class="section-title reveal reveal-delay-1" data-i18n="cta_title">
-                    The future of LATAM commerce starts with you.
-                </h2>
-                <p class="section-subtitle reveal reveal-delay-2" data-i18n="cta_subtitle">
-                    Be among the first merchants to have your own blockchain.
-                    No cost. No complications. Just opportunity.
-                </p>
-                <div class="cta-buttons reveal reveal-delay-3">
-                    <a href="#" class="btn-primary" style="font-size: 1.1rem; padding: 18px 44px;">
-                        <span data-i18n="cta_btn_primary">Open your store for free</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </a>
-                    <a href="#" class="btn-secondary" data-i18n="cta_btn_secondary">
-                        Read documentation
-                    </a>
-                </div>
-            </div>
+        <h3 class="h3-title" data-i18n="escrow_title">Smart Escrow</h3>
+        <p data-i18n="escrow_desc">Trustless payments with automatic release on delivery confirmation. Dispute resolution built into the protocol. Buyers and sellers protected equally.</p>
+        <div class="mini-preview">
+          <div class="mini-escrow">
+            <div class="mini-escrow-row"><div class="mini-escrow-dot" style="background:var(--orange)"></div><span>Buyer pays</span><div class="mini-escrow-line" style="background:linear-gradient(90deg,var(--orange),rgba(255,107,53,.2))"></div><div class="mini-escrow-arrow">&rarr;</div></div>
+            <div class="mini-escrow-row"><div class="mini-escrow-dot" style="background:var(--brown3)"></div><span>Held in escrow</span><div class="mini-escrow-line" style="background:linear-gradient(90deg,var(--brown3),rgba(107,63,36,.2))"></div><div class="mini-escrow-arrow">&#128274;</div></div>
+            <div class="mini-escrow-row"><div class="mini-escrow-dot" style="background:#22964f"></div><span>Confirmed &amp; released</span><div class="mini-escrow-line" style="background:linear-gradient(90deg,#22964f,rgba(34,150,79,.2))"></div><div class="mini-escrow-arrow">&#10003;</div></div>
+          </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-inner">
-            <div class="footer-brand">
-                <div class="logo-icon">T</div>
-                <span>Tienda</span>
-            </div>
-            <div class="footer-links">
-                <a href="#">Docs</a>
-                <a href="#">GitHub</a>
-                <a href="#">Twitter</a>
-                <a href="https://dorahacks.io" target="_blank">DoraHacks</a>
-            </div>
-            <div class="footer-text">
-                Built with conviction at INITIATE: The Initia Hackathon Season 1
-            </div>
+      </div>
+      <!-- 2: Loyalty -->
+      <div class="bento-card card stagger-child" data-tilt style="border-left:3px solid var(--brown3)">
+        <div class="card-icon ic-warm">
+          <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><polygon points="16,2 20,12 30,12 22,18 25,28 16,22 7,28 10,18 2,12 12,12" stroke="currentColor" stroke-width="2" fill="none"/></svg>
         </div>
-    </footer>
+        <h3 class="h3-title" data-i18n="loyalty_title">Loyalty Tokens</h3>
+        <p data-i18n="loyalty_desc">Issue custom loyalty tokens. Customers earn with every purchase. Redeemable across your store network.</p>
+        <div class="mini-preview">
+          <div class="mini-loyalty">
+            <div class="mini-loyalty-star">&#9733;</div>
+            <div class="mini-loyalty-info">
+              <div class="amount" data-i18n="loyalty_pts">2,450 pts</div>
+              <div class="change">&#9650; +180 this week</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 3: Reviews -->
+      <div class="bento-card card stagger-child" data-tilt style="border-left:3px solid var(--brown)">
+        <div class="card-icon ic-brown">
+          <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><path d="M4 6h24v16a2 2 0 01-2 2H10l-6 4v-4z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M10 13h12M10 17h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".5"/></svg>
+        </div>
+        <h3 class="h3-title" data-i18n="reviews_title">On-Chain Reviews</h3>
+        <p data-i18n="reviews_desc">Verified, immutable reviews that follow your store forever. No fake reviews, no platform manipulation.</p>
+        <div class="mini-preview">
+          <div class="mini-review">
+            <div class="mini-review-row"><span class="mini-review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span class="mini-review-name">Ana M.</span></div>
+            <div class="mini-review-row"><span class="mini-review-text" data-i18n="review_text">"Best coffee in the neighborhood!"</span></div>
+            <div class="mini-review-row" style="margin-top:4px"><span class="mini-review-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span><span class="mini-review-name">Carlos R.</span></div>
+            <div class="mini-review-row"><span class="mini-review-text" data-i18n="review_text2">"Fast delivery, great quality."</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- 4: Multi-Currency (span 2) -->
+      <div class="bento-card card stagger-child" data-tilt style="border-left:3px solid #22964f">
+        <div class="card-icon ic-green">
+          <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><circle cx="12" cy="16" r="8" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="16" r="8" stroke="currentColor" stroke-width="2"/><text x="16" y="20" text-anchor="middle" fill="currentColor" font-family="Space Grotesk,sans-serif" font-size="8" font-weight="700">$</text></svg>
+        </div>
+        <h3 class="h3-title" data-i18n="currency_title">Multi-Currency Support</h3>
+        <p data-i18n="currency_desc">Accept USDC, INIT, local stablecoins, or any IBC token. Automatic conversion, instant settlement in your preferred currency.</p>
+        <div class="mini-preview">
+          <div class="mini-currency">
+            <span class="mini-currency-tag">USDC</span><span class="mini-currency-tag">INIT</span><span class="mini-currency-tag">MXN-S</span><span class="mini-currency-tag">COP-S</span><span class="mini-currency-tag">BRL-S</span><span class="mini-currency-tag">ATOM</span><span class="mini-currency-tag">ETH</span><span class="mini-currency-tag">BTC</span>
+          </div>
+        </div>
+      </div>
+      <!-- 5: Analytics -->
+      <div class="bento-card card stagger-child" data-tilt style="border-left:3px solid var(--orange)">
+        <div class="card-icon ic-orange">
+          <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><path d="M4 28V12l8-6 8 4 8-6v24" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="12" cy="6" r="2" fill="currentColor" opacity=".4"/><circle cx="20" cy="10" r="2" fill="currentColor" opacity=".4"/></svg>
+        </div>
+        <h3 class="h3-title" data-i18n="analytics_title">Real-Time Analytics</h3>
+        <p data-i18n="analytics_desc">On-chain analytics you own. Track sales, customer behavior, and revenue in real time.</p>
+        <div class="mini-preview">
+          <div class="mini-analytics">
+            <div class="mini-analytics-bar" style="height:20px"></div>
+            <div class="mini-analytics-bar" style="height:35px"></div>
+            <div class="mini-analytics-bar" style="height:25px"></div>
+            <div class="mini-analytics-bar" style="height:45px"></div>
+            <div class="mini-analytics-bar" style="height:30px"></div>
+            <div class="mini-analytics-bar" style="height:55px"></div>
+            <div class="mini-analytics-bar" style="height:40px"></div>
+            <div class="mini-analytics-bar" style="height:60px"></div>
+            <div class="mini-analytics-bar" style="height:50px"></div>
+            <div class="mini-analytics-bar" style="height:65px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script>
-        // ---- i18n SYSTEM ----
-        const i18n = {
-            en: {
-                nav_problem: 'Problem', nav_solution: 'Solution', nav_how: 'How It Works', nav_merchants: 'Merchants', nav_cta: 'Get Started',
-                hero_line1: 'Your store.', hero_line2_pre: 'Your ', hero_line2_hl: 'chain', hero_line3: 'Your future.',
-                hero_subtitle: 'The first Web3 commerce platform designed for Latin America. No wallets. No gas. Just your business, on your own blockchain.',
-                hero_cta: 'Open your store', hero_secondary: 'How it works',
-                storefront_sign: 'My Store', float_sale: 'Sale completed',
-                problem_label: 'The Problem', problem_title: '300 million consumers.<br>Zero Web3 solutions that work.',
-                problem_subtitle: 'Commerce in Latin America is ready for blockchain. But current tools were built for developers, not merchants.',
-                problem_fees_title: 'Abusive commissions', problem_fees_desc: 'Web2 platforms charge fees that devour the margins of small merchants.',
-                problem_complexity_title: 'Unnecessary complexity', problem_complexity_desc: 'Wallets, seed phrases, gas fees. Every step drives a merchant away from blockchain.',
-                problem_local_title: 'No local context', problem_local_desc: "Existing solutions don't speak the language, don't understand LATAM, and don't solve local problems.",
-                problem_slow_title: 'Slow payments', problem_slow_desc: 'Days to receive payments. Insecure bridges. Wrapped tokens nobody understands.',
-                solution_label: 'The Solution', solution_title: 'Sovereign commerce.<br>Radical simplicity.',
-                solution_subtitle: 'Tienda is a commerce rollup built on Initia. Every store has its own contract. Every transaction is transparent. Every payment is instant.',
-                solution_chain_title: 'Your own chain', solution_chain_desc: 'A rollup dedicated to LATAM commerce. Optimized for speed, cost, and merchant experience. No sharing resources with DeFi degens.',
-                solution_friction_title: 'Zero friction', solution_friction_desc: 'Sign up with your phone. Account abstraction creates your wallet silently. Sponsored transactions. The blockchain disappears.',
-                solution_liquidity_title: 'Native liquidity', solution_liquidity_desc: "Thanks to Initia's enshrined liquidity and native IBC, payments arrive instantly in your preferred currency. No bridges. No waiting.",
-                how_label: 'How It Works', how_title: 'Three steps. Zero blockchain.', how_subtitle: 'If you can post on Instagram, you can open your store on-chain.',
-                step1_title: 'Open your store', step1_desc: 'Sign up with your phone number. Choose a name for your store. In 30 seconds you have a deployed smart contract and a unique URL.',
-                step2_title: 'Add products', step2_desc: 'Take a photo, set a price, and publish. Products are stored on-chain with images on IPFS. Atomic inventory via Move.',
-                step3_title: 'Sell and get paid', step3_desc: 'Share your link. Buyers pay with any token. You receive in your preferred currency. Instant settlement via Initia.',
-                merchants_label: 'For Merchants', merchants_title: 'Your business deserves its own blockchain.', merchants_subtitle: 'Every feature in Tienda was designed with a LATAM merchant in mind.',
-                merchant_f1_title: 'Sovereign store', merchant_f1_desc: 'Your own smart contract. Your rules. Your data. No middlemen.',
-                merchant_f2_title: 'Multi-currency payments', merchant_f2_desc: 'Accept any token. Receive in your preferred currency. Automatically.',
-                merchant_f3_title: 'On-chain loyalty', merchant_f3_desc: 'Transparent and composable rewards programs via Move.',
-                merchant_f4_title: 'Real-time dashboard', merchant_f4_desc: 'Sales, inventory, and customers. All visible. All verifiable.',
-                buyers_label: 'For Buyers', buyers_title: 'Buy local. Pay global.', buyers_subtitle: "A shopping experience so simple you'll forget you're using blockchain.",
-                buyer_f1_title: 'Browse & Discover', buyer_f1_desc: 'Explore local stores with on-chain verified products. Real and immutable reviews.',
-                buyer_f2_title: 'Pay with any token', buyer_f2_desc: 'USDC, INIT, or any token in the Initia ecosystem. Conversion is automatic.',
-                buyer_f3_title: 'Full protection', buyer_f3_desc: 'Transparent transactions. Verifiable history. Disputes resolved on-chain.',
-                buyer_f4_title: 'Portable rewards', buyer_f4_desc: 'Loyalty points that work at any store in the ecosystem. Your rewards, your property.',
-                tech_label: 'Technology', tech_title: 'Built on giants.', tech_subtitle: 'The most advanced infrastructure, invisible to the end user.',
-                cta_label: 'Join Us', cta_title: 'The future of LATAM commerce starts with you.',
-                cta_subtitle: 'Be among the first merchants to have your own blockchain. No cost. No complications. Just opportunity.',
-                cta_btn_primary: 'Open your store for free', cta_btn_secondary: 'Read documentation'
-            },
-            es: {
-                nav_problem: 'Problema', nav_solution: 'Soluci\u00f3n', nav_how: 'C\u00f3mo Funciona', nav_merchants: 'Comerciantes', nav_cta: 'Comenzar',
-                hero_line1: 'Tu tienda.', hero_line2_pre: 'Tu ', hero_line2_hl: 'cadena', hero_line3: 'Tu futuro.',
-                hero_subtitle: 'La primera plataforma de comercio Web3 dise\u00f1ada para Latinoam\u00e9rica. Sin wallets. Sin gas. Solo tu negocio, en tu propia blockchain.',
-                hero_cta: 'Abre tu tienda', hero_secondary: 'C\u00f3mo funciona',
-                storefront_sign: 'Mi Tienda', float_sale: 'Venta completada',
-                problem_label: 'El Problema', problem_title: '300 millones de consumidores.<br>Cero soluciones Web3 que funcionen.',
-                problem_subtitle: 'El comercio en Latinoam\u00e9rica est\u00e1 listo para blockchain. Pero las herramientas actuales fueron construidas para desarrolladores, no para comerciantes.',
-                problem_fees_title: 'Comisiones abusivas', problem_fees_desc: 'Las plataformas Web2 cobran comisiones que devoran los m\u00e1rgenes de los peque\u00f1os comerciantes.',
-                problem_complexity_title: 'Complejidad innecesaria', problem_complexity_desc: 'Wallets, seed phrases, gas fees. Cada paso aleja a un comerciante del blockchain.',
-                problem_local_title: 'Sin contexto local', problem_local_desc: 'Las soluciones existentes no hablan espa\u00f1ol, no entienden LATAM, y no resuelven problemas locales.',
-                problem_slow_title: 'Pagos lentos', problem_slow_desc: 'D\u00edas para recibir pagos. Bridges inseguros. Tokens envueltos que nadie entiende.',
-                solution_label: 'La Soluci\u00f3n', solution_title: 'Comercio soberano.<br>Simplicidad radical.',
-                solution_subtitle: 'Tienda es un rollup de comercio construido en Initia. Cada tienda tiene su propio contrato. Cada transacci\u00f3n es transparente. Cada pago es instant\u00e1neo.',
-                solution_chain_title: 'Tu propia cadena', solution_chain_desc: 'Un rollup dedicado a comercio en LATAM. Optimizado para velocidad, costo y experiencia del comerciante. No compartes recursos con DeFi degens.',
-                solution_friction_title: 'Cero fricci\u00f3n', solution_friction_desc: 'Reg\u00edstrate con tu tel\u00e9fono. Account abstraction crea tu wallet en silencio. Transacciones patrocinadas. El blockchain desaparece.',
-                solution_liquidity_title: 'Liquidez nativa', solution_liquidity_desc: 'Gracias a la liquidez enshrined de Initia y IBC nativo, los pagos llegan al instante en la moneda que prefieras. Sin bridges. Sin esperas.',
-                how_label: 'C\u00f3mo Funciona', how_title: 'Tres pasos. Cero blockchain.', how_subtitle: 'Si puedes publicar en Instagram, puedes abrir tu tienda on-chain.',
-                step1_title: 'Abre tu tienda', step1_desc: 'Reg\u00edstrate con tu n\u00famero de tel\u00e9fono. Elige un nombre para tu tienda. En 30 segundos tienes un contrato inteligente desplegado y una URL \u00fanica.',
-                step2_title: 'Agrega productos', step2_desc: 'Toma una foto, ponle precio, y publica. Los productos se guardan on-chain con im\u00e1genes en IPFS. Inventario at\u00f3mico via Move.',
-                step3_title: 'Vende y cobra', step3_desc: 'Comparte tu link. Los compradores pagan en cualquier token. T\u00fa recibes en la moneda que prefieras. Liquidaci\u00f3n instant\u00e1nea via Initia.',
-                merchants_label: 'Para Comerciantes', merchants_title: 'Tu negocio merece su propia blockchain.', merchants_subtitle: 'Cada funci\u00f3n de Tienda fue dise\u00f1ada con un comerciante de LATAM en mente.',
-                merchant_f1_title: 'Tienda soberana', merchant_f1_desc: 'Tu propio smart contract. Tus reglas. Tus datos. Sin intermediarios.',
-                merchant_f2_title: 'Pagos multi-moneda', merchant_f2_desc: 'Acepta cualquier token. Recibe en tu moneda preferida. Autom\u00e1ticamente.',
-                merchant_f3_title: 'Lealtad on-chain', merchant_f3_desc: 'Programas de recompensas transparentes y componibles via Move.',
-                merchant_f4_title: 'Dashboard en tiempo real', merchant_f4_desc: 'Ventas, inventario y clientes. Todo visible. Todo verificable.',
-                buyers_label: 'Para Compradores', buyers_title: 'Compra local. Paga global.', buyers_subtitle: 'Una experiencia de compra tan simple que olvidar\u00e1s que est\u00e1s usando blockchain.',
-                buyer_f1_title: 'Explora y Descubre', buyer_f1_desc: 'Explora tiendas locales con productos verificados on-chain. Rese\u00f1as reales e inmutables.',
-                buyer_f2_title: 'Paga con cualquier token', buyer_f2_desc: 'USDC, INIT, o cualquier token del ecosistema Initia. La conversi\u00f3n es autom\u00e1tica.',
-                buyer_f3_title: 'Protecci\u00f3n total', buyer_f3_desc: 'Transacciones transparentes. Historial verificable. Disputas resueltas on-chain.',
-                buyer_f4_title: 'Recompensas portables', buyer_f4_desc: 'Puntos de lealtad que funcionan en cualquier tienda del ecosistema. Tus recompensas, tu propiedad.',
-                tech_label: 'Tecnolog\u00eda', tech_title: 'Construido sobre gigantes.', tech_subtitle: 'La infraestructura m\u00e1s avanzada, invisible para el usuario final.',
-                cta_label: '\u00danete', cta_title: 'El futuro del comercio en LATAM empieza contigo.',
-                cta_subtitle: 'S\u00e9 parte de los primeros comerciantes en tener su propia blockchain. Sin costo. Sin complicaciones. Solo oportunidad.',
-                cta_btn_primary: 'Abre tu tienda gratis', cta_btn_secondary: 'Leer documentaci\u00f3n'
-            },
-            zh: {
-                nav_problem: '\u95ee\u9898', nav_solution: '\u89e3\u51b3\u65b9\u6848', nav_how: '\u5982\u4f55\u8fd0\u4f5c', nav_merchants: '\u5546\u5bb6', nav_cta: '\u5f00\u59cb\u4f7f\u7528',
-                hero_line1: '\u4f60\u7684\u5e97\u94fa\u3002', hero_line2_pre: '\u4f60\u7684', hero_line2_hl: '\u94fe', hero_line3: '\u4f60\u7684\u672a\u6765\u3002',
-                hero_subtitle: '\u7b2c\u4e00\u4e2a\u4e13\u4e3a\u62c9\u4e01\u7f8e\u6d32\u8bbe\u8ba1\u7684Web3\u5546\u52a1\u5e73\u53f0\u3002\u65e0\u9700\u94b1\u5305\u3002\u65e0\u9700Gas\u3002\u53ea\u9700\u4f60\u7684\u4e1a\u52a1\uff0c\u5728\u4f60\u81ea\u5df1\u7684\u533a\u5757\u94fe\u4e0a\u3002',
-                hero_cta: '\u5f00\u8bbe\u4f60\u7684\u5e97\u94fa', hero_secondary: '\u4e86\u89e3\u8fd0\u4f5c\u65b9\u5f0f',
-                storefront_sign: '\u6211\u7684\u5e97\u94fa', float_sale: '\u4ea4\u6613\u5b8c\u6210',
-                problem_label: '\u95ee\u9898', problem_title: '3\u4ebf\u6d88\u8d39\u8005\u3002<br>\u96f6\u4e2a\u6709\u6548\u7684Web3\u89e3\u51b3\u65b9\u6848\u3002',
-                problem_subtitle: '\u62c9\u4e01\u7f8e\u6d32\u7684\u5546\u52a1\u5df2\u51c6\u5907\u597d\u8fce\u63a5\u533a\u5757\u94fe\u3002\u4f46\u73b0\u6709\u5de5\u5177\u662f\u4e3a\u5f00\u53d1\u8005\u800c\u975e\u5546\u5bb6\u8bbe\u8ba1\u7684\u3002',
-                problem_fees_title: '\u9ad8\u989d\u4f63\u91d1', problem_fees_desc: 'Web2\u5e73\u53f0\u6536\u53d6\u7684\u8d39\u7528\u541e\u566c\u4e86\u5c0f\u5546\u5bb6\u7684\u5229\u6da6\u3002',
-                problem_complexity_title: '\u4e0d\u5fc5\u8981\u7684\u590d\u6742\u6027', problem_complexity_desc: '\u94b1\u5305\u3001\u52a9\u8bb0\u8bcd\u3001Gas\u8d39\u3002\u6bcf\u4e00\u6b65\u90fd\u5728\u8ba9\u5546\u5bb6\u8fdc\u79bb\u533a\u5757\u94fe\u3002',
-                problem_local_title: '\u7f3a\u4e4f\u672c\u5730\u5316', problem_local_desc: '\u73b0\u6709\u89e3\u51b3\u65b9\u6848\u4e0d\u8bf4\u5f53\u5730\u8bed\u8a00\uff0c\u4e0d\u4e86\u89e3\u62c9\u7f8e\uff0c\u4e5f\u4e0d\u89e3\u51b3\u672c\u5730\u95ee\u9898\u3002',
-                problem_slow_title: '\u652f\u4ed8\u7f13\u6162', problem_slow_desc: '\u6536\u6b3e\u9700\u8981\u6570\u5929\u3002\u4e0d\u5b89\u5168\u7684\u8de8\u94fe\u6865\u3002\u65e0\u4eba\u7406\u89e3\u7684\u5305\u88c5\u4ee3\u5e01\u3002',
-                solution_label: '\u89e3\u51b3\u65b9\u6848', solution_title: '\u4e3b\u6743\u5546\u52a1\u3002<br>\u6781\u81f4\u7b80\u6d01\u3002',
-                solution_subtitle: 'Tienda\u662f\u57fa\u4e8eInitia\u6784\u5efa\u7684\u5546\u52a1Rollup\u3002\u6bcf\u5bb6\u5e97\u94fa\u90fd\u6709\u81ea\u5df1\u7684\u5408\u7ea6\u3002\u6bcf\u7b14\u4ea4\u6613\u90fd\u900f\u660e\u3002\u6bcf\u7b14\u652f\u4ed8\u90fd\u5373\u65f6\u5230\u8d26\u3002',
-                solution_chain_title: '\u4f60\u81ea\u5df1\u7684\u94fe', solution_chain_desc: '\u4e13\u6ce8\u4e8e\u62c9\u7f8e\u5546\u52a1\u7684Rollup\u3002\u4e3a\u901f\u5ea6\u3001\u6210\u672c\u548c\u5546\u5bb6\u4f53\u9a8c\u8fdb\u884c\u4e86\u4f18\u5316\u3002',
-                solution_friction_title: '\u96f6\u6469\u64e6', solution_friction_desc: '\u7528\u624b\u673a\u6ce8\u518c\u3002\u8d26\u6237\u62bd\u8c61\u9759\u9ed8\u521b\u5efa\u4f60\u7684\u94b1\u5305\u3002\u8d5e\u52a9\u4ea4\u6613\u3002\u533a\u5757\u94fe\u4ece\u89c6\u7ebf\u4e2d\u6d88\u5931\u3002',
-                solution_liquidity_title: '\u539f\u751f\u6d41\u52a8\u6027', solution_liquidity_desc: '\u5f97\u76ca\u4e8eInitia\u7684\u5185\u7f6e\u6d41\u52a8\u6027\u548c\u539f\u751fIBC\uff0c\u652f\u4ed8\u4ee5\u4f60\u9996\u9009\u7684\u8d27\u5e01\u5373\u65f6\u5230\u8d26\u3002\u65e0\u8de8\u94fe\u6865\u3002\u65e0\u7b49\u5f85\u3002',
-                how_label: '\u5982\u4f55\u8fd0\u4f5c', how_title: '\u4e09\u4e2a\u6b65\u9aa4\u3002\u96f6\u533a\u5757\u94fe\u3002', how_subtitle: '\u5982\u679c\u4f60\u4f1a\u5728Instagram\u4e0a\u53d1\u5e16\uff0c\u4f60\u5c31\u80fd\u5f00\u4e00\u5bb6\u94fe\u4e0a\u5e97\u94fa\u3002',
-                step1_title: '\u5f00\u8bbe\u4f60\u7684\u5e97\u94fa', step1_desc: '\u7528\u624b\u673a\u53f7\u6ce8\u518c\u3002\u4e3a\u4f60\u7684\u5e97\u94fa\u53d6\u4e2a\u540d\u5b57\u300230\u79d2\u5185\u4f60\u5c31\u62e5\u6709\u4e86\u4e00\u4e2a\u90e8\u7f72\u597d\u7684\u667a\u80fd\u5408\u7ea6\u548c\u4e00\u4e2a\u72ec\u7279\u7684URL\u3002',
-                step2_title: '\u6dfb\u52a0\u4ea7\u54c1', step2_desc: '\u62cd\u7167\u3001\u5b9a\u4ef7\u3001\u53d1\u5e03\u3002\u4ea7\u54c1\u5b58\u50a8\u5728\u94fe\u4e0a\uff0c\u56fe\u7247\u5b58\u50a8\u5728IPFS\u4e0a\u3002\u901a\u8fc7Move\u5b9e\u73b0\u539f\u5b50\u5e93\u5b58\u3002',
-                step3_title: '\u51fa\u552e\u5e76\u6536\u6b3e', step3_desc: '\u5206\u4eab\u4f60\u7684\u94fe\u63a5\u3002\u4e70\u5bb6\u53ef\u7528\u4efb\u4f55\u4ee3\u5e01\u652f\u4ed8\u3002\u4f60\u4ee5\u9996\u9009\u8d27\u5e01\u6536\u6b3e\u3002\u901a\u8fc7Initia\u5373\u65f6\u7ed3\u7b97\u3002',
-                merchants_label: '\u5546\u5bb6\u4e13\u533a', merchants_title: '\u4f60\u7684\u4e1a\u52a1\u503c\u5f97\u62e5\u6709\u81ea\u5df1\u7684\u533a\u5757\u94fe\u3002', merchants_subtitle: 'Tienda\u7684\u6bcf\u4e2a\u529f\u80fd\u90fd\u662f\u4e3a\u62c9\u7f8e\u5546\u5bb6\u8bbe\u8ba1\u7684\u3002',
-                merchant_f1_title: '\u4e3b\u6743\u5e97\u94fa', merchant_f1_desc: '\u4f60\u81ea\u5df1\u7684\u667a\u80fd\u5408\u7ea6\u3002\u4f60\u7684\u89c4\u5219\u3002\u4f60\u7684\u6570\u636e\u3002\u65e0\u4e2d\u95f4\u5546\u3002',
-                merchant_f2_title: '\u591a\u5e01\u79cd\u652f\u4ed8', merchant_f2_desc: '\u63a5\u53d7\u4efb\u4f55\u4ee3\u5e01\u3002\u4ee5\u4f60\u9996\u9009\u7684\u8d27\u5e01\u6536\u6b3e\u3002\u81ea\u52a8\u5b8c\u6210\u3002',
-                merchant_f3_title: '\u94fe\u4e0a\u5fe0\u8bda\u5ea6', merchant_f3_desc: '\u901a\u8fc7Move\u5b9e\u73b0\u900f\u660e\u4e14\u53ef\u7ec4\u5408\u7684\u5956\u52b1\u8ba1\u5212\u3002',
-                merchant_f4_title: '\u5b9e\u65f6\u4eea\u8868\u677f', merchant_f4_desc: '\u9500\u552e\u3001\u5e93\u5b58\u548c\u5ba2\u6237\u3002\u4e00\u5207\u53ef\u89c1\u3002\u4e00\u5207\u53ef\u9a8c\u8bc1\u3002',
-                buyers_label: '\u4e70\u5bb6\u4e13\u533a', buyers_title: '\u672c\u5730\u8d2d\u4e70\u3002\u5168\u7403\u652f\u4ed8\u3002', buyers_subtitle: '\u8d2d\u7269\u4f53\u9a8c\u7b80\u5355\u5230\u4f60\u4f1a\u5fd8\u8bb0\u81ea\u5df1\u5728\u4f7f\u7528\u533a\u5757\u94fe\u3002',
-                buyer_f1_title: '\u6d4f\u89c8\u4e0e\u53d1\u73b0', buyer_f1_desc: '\u63a2\u7d22\u672c\u5730\u5e97\u94fa\uff0c\u4ea7\u54c1\u7ecf\u8fc7\u94fe\u4e0a\u9a8c\u8bc1\u3002\u771f\u5b9e\u4e14\u4e0d\u53ef\u7be1\u6539\u7684\u8bc4\u4ef7\u3002',
-                buyer_f2_title: '\u7528\u4efb\u4f55\u4ee3\u5e01\u652f\u4ed8', buyer_f2_desc: 'USDC\u3001INIT\u6216Initia\u751f\u6001\u7cfb\u7edf\u4e2d\u7684\u4efb\u4f55\u4ee3\u5e01\u3002\u81ea\u52a8\u5151\u6362\u3002',
-                buyer_f3_title: '\u5168\u9762\u4fdd\u62a4', buyer_f3_desc: '\u900f\u660e\u7684\u4ea4\u6613\u3002\u53ef\u9a8c\u8bc1\u7684\u5386\u53f2\u3002\u94fe\u4e0a\u89e3\u51b3\u4e89\u8bae\u3002',
-                buyer_f4_title: '\u53ef\u643a\u5e26\u5956\u52b1', buyer_f4_desc: '\u5fe0\u8bda\u5ea6\u79ef\u5206\u5728\u751f\u6001\u7cfb\u7edf\u4e2d\u7684\u4efb\u4f55\u5e97\u94fa\u90fd\u53ef\u4f7f\u7528\u3002\u4f60\u7684\u5956\u52b1\uff0c\u4f60\u7684\u8d22\u4ea7\u3002',
-                tech_label: '\u6280\u672f', tech_title: '\u7ad9\u5728\u5de8\u4eba\u80a9\u818a\u4e0a\u3002', tech_subtitle: '\u6700\u5148\u8fdb\u7684\u57fa\u7840\u8bbe\u65bd\uff0c\u5bf9\u7ec8\u7aef\u7528\u6237\u4e0d\u53ef\u89c1\u3002',
-                cta_label: '\u52a0\u5165\u6211\u4eec', cta_title: '\u62c9\u7f8e\u5546\u52a1\u7684\u672a\u6765\u4ece\u4f60\u5f00\u59cb\u3002',
-                cta_subtitle: '\u6210\u4e3a\u7b2c\u4e00\u6279\u62e5\u6709\u81ea\u5df1\u533a\u5757\u94fe\u7684\u5546\u5bb6\u3002\u65e0\u8d39\u7528\u3002\u65e0\u590d\u6742\u6027\u3002\u53ea\u6709\u673a\u4f1a\u3002',
-                cta_btn_primary: '\u514d\u8d39\u5f00\u8bbe\u4f60\u7684\u5e97\u94fa', cta_btn_secondary: '\u9605\u8bfb\u6587\u6863'
-            }
-        };
+<!-- PROPERTIES DEMO -->
+<section class="properties" id="demo">
+  <div class="properties-inner">
+    <div class="reveal" style="text-align:center">
+      <span class="caption" style="color:var(--orange);display:block;margin-bottom:12px" data-i18n="live_demo_cap">Live Demo</span>
+      <h2 class="h2-title" data-i18n="demo_title">Meet <span class="gradient-text">Cafe Maria</span></h2>
+      <p class="body-text" style="max-width:600px;margin:16px auto 0" data-i18n="demo_desc">A small coffee shop in Mexico City running entirely on Tienda. See how the platform works in practice.</p>
+    </div>
+    <div class="property-demo">
+      <div class="demo-storefront reveal-left">
+        <div class="demo-header">
+          <div class="demo-logo">&#9749;</div>
+          <div>
+            <div class="demo-name" data-i18n="cafe_name">Cafe Maria</div>
+            <div class="demo-tag" data-i18n="cafe_tag">&#9679; CDMX &bull; Open Now &bull; &#9733; 4.9</div>
+          </div>
+        </div>
+        <div class="demo-products">
+          <div class="demo-product">
+            <div class="demo-product-img" style="background:linear-gradient(135deg,rgba(255,107,53,.08),rgba(255,107,53,.02))">&#9749;</div>
+            <div class="demo-product-info"><div class="demo-product-name" data-i18n="prod1">Cafe Latte</div><div class="demo-product-price">$4.50 USDC</div></div>
+          </div>
+          <div class="demo-product">
+            <div class="demo-product-img" style="background:linear-gradient(135deg,rgba(45,24,16,.06),rgba(45,24,16,.02))">&#127835;</div>
+            <div class="demo-product-info"><div class="demo-product-name" data-i18n="prod2">Croissant</div><div class="demo-product-price">$3.00 USDC</div></div>
+          </div>
+          <div class="demo-product">
+            <div class="demo-product-img" style="background:linear-gradient(135deg,rgba(107,63,36,.06),rgba(107,63,36,.02))">&#127849;</div>
+            <div class="demo-product-info"><div class="demo-product-name" data-i18n="prod3">Muffin</div><div class="demo-product-price">$2.50 USDC</div></div>
+          </div>
+          <div class="demo-product">
+            <div class="demo-product-img" style="background:linear-gradient(135deg,rgba(34,150,79,.06),rgba(34,150,79,.02))">&#127861;</div>
+            <div class="demo-product-info"><div class="demo-product-name" data-i18n="prod4">Matcha Latte</div><div class="demo-product-price">$5.00 USDC</div></div>
+          </div>
+        </div>
+        <button class="demo-cta-btn" data-i18n="order_now">Order Now &#8594;</button>
+      </div>
+      <div class="demo-details reveal-right">
+        <div class="demo-detail">
+          <div class="demo-detail-icon">&#128274;</div>
+          <div><h4 data-i18n="detail1_title">Escrow-Protected Orders</h4><p data-i18n="detail1_desc">Every payment held in smart escrow until delivery is confirmed. Both parties safe.</p></div>
+        </div>
+        <div class="demo-detail">
+          <div class="demo-detail-icon">&#11088;</div>
+          <div><h4 data-i18n="detail2_title">Maria Loyalty Points</h4><p data-i18n="detail2_desc">Customers earn MARIA tokens with each order. 10 tokens = free coffee.</p></div>
+        </div>
+        <div class="demo-detail">
+          <div class="demo-detail-icon">&#128172;</div>
+          <div><h4 data-i18n="detail3_title">Verified Reviews</h4><p data-i18n="detail3_desc">Only verified buyers can leave reviews. 4.9 stars from 847 genuine reviews.</p></div>
+        </div>
+        <div class="demo-detail">
+          <div class="demo-detail-icon">&#127760;</div>
+          <div><h4 data-i18n="detail4_title">Multi-Currency Accepted</h4><p data-i18n="detail4_desc">Pay with USDC, INIT, or MXN stablecoin. Maria receives USDC automatically.</p></div>
+        </div>
+        <div class="demo-detail">
+          <div class="demo-detail-icon">&#128200;</div>
+          <div><h4 data-i18n="detail5_title">Owner Analytics</h4><p data-i18n="detail5_desc">Maria sees real-time sales, peak hours, and customer patterns. Data she owns.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        let currentLang = localStorage.getItem('tienda-lang') || 'en';
+<!-- STATS -->
+<section class="stats" id="stats">
+  <div class="stats-inner">
+    <div class="stat-item reveal">
+      <div class="stat-num" data-target="300" data-suffix="M">0</div>
+      <div class="stat-label" data-i18n="stat1">Consumers in LATAM</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num" data-target="1.5" data-suffix="%" data-decimals="1">0</div>
+      <div class="stat-label" data-i18n="stat2">Transaction Fee</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num" data-target="98" data-suffix=".5%">0</div>
+      <div class="stat-label" data-i18n="stat3">Revenue Kept</div>
+    </div>
+    <div class="stat-item reveal">
+      <div class="stat-num" data-static="true" data-i18n="stat4_num">Zero</div>
+      <div class="stat-label" data-i18n="stat4">Lock-in</div>
+    </div>
+  </div>
+</section>
 
-        function applyLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('tienda-lang', lang);
-            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
-            const strings = i18n[lang];
-            if (!strings) return;
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (strings[key]) el.innerHTML = strings[key];
-            });
-            // Update dropdown active states
-            document.querySelectorAll('.lang-option').forEach(opt => {
-                opt.classList.toggle('active', opt.getAttribute('onclick').includes("'" + lang + "'"));
-            });
-            const labels = {en: 'English', es: 'Espa\u00f1ol', zh: '\u4e2d\u6587'};
-            document.getElementById('currentLangLabel').textContent = labels[lang] || lang;
-            const mobileLabel = document.querySelector('.currentLangLabelMobile');
-            if (mobileLabel) mobileLabel.textContent = labels[lang] || lang;
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-inner reveal">
+    <h2 data-i18n="cta_title">Ready to own your <span class="gradient-text">commerce?</span></h2>
+    <p class="body-text" data-i18n="cta_desc">Join thousands of LATAM merchants building the future of decentralized commerce. Launch your store in minutes.</p>
+    <div class="cta-buttons">
+      <a href="app.html" class="btn-primary magnetic" data-i18n="launch_store_now">Launch Your Store <span class="arrow">&rarr;</span></a>
+      <a href="#demo" class="btn-ghost magnetic" data-i18n="explore_demo">Explore Demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <a href="#" class="footer-logo">
+        <svg viewBox="0 0 150 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 8 L22 8" stroke="#ff6b35" stroke-width="3" stroke-linecap="round"/>
+          <path d="M5 8 Q5 5 8 5 L10 5 Q12 5 12 8" fill="none" stroke="#ff6b35" stroke-width="1.2"/>
+          <path d="M12 8 Q12 5 15 5 L17 5 Q19 5 19 8" fill="none" stroke="#ff6b35" stroke-width="1.2"/>
+          <rect x="10" y="8" width="4" height="18" rx="1" fill="#2d1810"/>
+          <text x="28" y="23" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="20" fill="#2d1810" letter-spacing="-1">IENDA</text>
+        </svg>
+      </a>
+      <div class="footer-links">
+        <a href="#features" data-i18n="nav_features">Features</a>
+        <a href="#demo" data-i18n="nav_demo">Demo</a>
+        <a href="app.html" data-i18n="nav_app">App</a>
+      </div>
+    </div>
+    <div class="footer-badge"><span class="chain-dot"></span> <span data-i18n="built_on">Built on Initia</span></div>
+  </div>
+</footer>
+
+<script>
+/* CURSOR */
+(function(){
+  const dot=document.querySelector('.cursor-dot'),ring=document.querySelector('.cursor-ring');
+  if(!dot||matchMedia('(pointer:coarse)').matches)return;
+  let mx=0,my=0,dx=0,dy=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  const interactives='a,button,[data-tilt],.magnetic,input';
+  document.addEventListener('mouseover',e=>{if(e.target.closest(interactives)){dot.classList.add('active');ring.classList.add('active')}});
+  document.addEventListener('mouseout',e=>{if(e.target.closest(interactives)){dot.classList.remove('active');ring.classList.remove('active')}});
+  (function loop(){
+    dx+=(mx-dx)*.18;dy+=(my-dy)*.18;
+    rx+=(mx-rx)*.08;ry+=(my-ry)*.08;
+    dot.style.transform=`translate(${dx-dot.offsetWidth/2}px,${dy-dot.offsetHeight/2}px)`;
+    ring.style.transform=`translate(${rx-ring.offsetWidth/2}px,${ry-ring.offsetHeight/2}px)`;
+    requestAnimationFrame(loop);
+  })();
+})();
+
+/* SCROLL PROGRESS */
+(function(){
+  const bar=document.querySelector('.scroll-progress');
+  window.addEventListener('scroll',()=>{
+    const h=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=(window.scrollY/h*100)+'%';
+  },{passive:true});
+})();
+
+/* NAV */
+(function(){
+  const nav=document.getElementById('nav'),btn=document.getElementById('menuBtn'),links=document.getElementById('navLinks');
+  window.addEventListener('scroll',()=>{nav.classList.toggle('shrink',window.scrollY>60)},{passive:true});
+  btn.addEventListener('click',()=>links.classList.toggle('open'));
+})();
+
+/* HERO CHAR-BY-CHAR */
+(function(){
+  const headline=document.getElementById('heroHeadline');
+  const words=headline.querySelectorAll('.word');
+  let charIndex=0;
+  words.forEach(word=>{
+    const text=word.textContent;
+    const cls=word.className.replace('word','').trim();
+    word.textContent='';
+    word.setAttribute('aria-label',text);
+    for(let i=0;i<text.length;i++){
+      const span=document.createElement('span');
+      span.className='char';
+      if(cls)cls.split(' ').forEach(c=>c&&span.classList.add(c));
+      span.textContent=text[i]===' '?'\u00A0':text[i];
+      const baseDelay=charIndex*32;
+      const randomOffset=Math.random()*20-10;
+      span.style.transitionDelay=(baseDelay+randomOffset)+'ms';
+      word.appendChild(span);
+      charIndex++;
+    }
+  });
+  requestAnimationFrame(()=>{
+    setTimeout(()=>{
+      headline.querySelectorAll('.char').forEach(c=>{
+        c.style.opacity='1';c.style.transform='translateY(0) rotate(0)';
+        c.style.transition='opacity .6s cubic-bezier(0.22,1,0.36,1), transform .7s cubic-bezier(0.34,1.56,0.64,1)';
+      });
+      setTimeout(()=>{const tag=document.querySelector('.hero-tag');tag.style.transition='all .7s cubic-bezier(0.22,1,0.36,1)';tag.style.opacity='1';tag.style.transform='none'},200);
+      setTimeout(()=>{const sub=document.getElementById('heroSub');sub.style.transition='all .8s cubic-bezier(0.22,1,0.36,1)';sub.style.opacity='1';sub.style.transform='none'},500);
+      setTimeout(()=>{const ctas=document.getElementById('heroCtas');ctas.style.transition='all .8s cubic-bezier(0.22,1,0.36,1)';ctas.style.opacity='1';ctas.style.transform='none'},700);
+    },200);
+  });
+})();
+
+/* SCROLL REVEAL */
+(function(){
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        if(e.target.classList.contains('stagger-child')){
+          const siblings=Array.from(e.target.parentElement.children).filter(c=>c.classList.contains('stagger-child'));
+          siblings.forEach((s,i)=>{setTimeout(()=>s.classList.add('visible'),i*120)});
         }
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.stagger-child').forEach(el=>obs.observe(el));
+})();
 
-        function setLanguage(lang) {
-            applyLanguage(lang);
-            document.querySelectorAll('.lang-dropdown').forEach(d => d.classList.remove('open'));
-        }
+/* PHONE PARALLAX */
+(function(){
+  const phone=document.getElementById('heroPhone');
+  if(!phone)return;
+  let time=0;
+  function animate(){
+    time+=0.015;
+    const floatY=Math.sin(time*1.2)*8;
+    const floatX=Math.sin(time*0.8+1.5)*4;
+    const rotate=Math.sin(time*0.6+0.8)*1.5;
+    phone.querySelector('.phone-mockup').style.transform=`translateY(${floatY}px) translateX(${floatX}px) rotate(${rotate}deg)`;
+    requestAnimationFrame(animate);
+  }
+  animate();
+  window.addEventListener('scroll',()=>{phone.style.transform=`translateY(${window.scrollY*-0.08}px)`},{passive:true});
+})();
 
-        function toggleLangDropdown(e) {
-            e.stopPropagation();
-            const dropdown = e.currentTarget.nextElementSibling;
-            document.querySelectorAll('.lang-dropdown').forEach(d => { if (d !== dropdown) d.classList.remove('open'); });
-            dropdown.classList.toggle('open');
-        }
+/* MESH ORB SINE MOTION */
+(function(){
+  const orbs=document.querySelectorAll('.mesh-orb');
+  let time=0;
+  function animateOrbs(){
+    time+=0.008;
+    orbs.forEach((orb,i)=>{
+      const speed=0.5+i*0.3;const offset=i*2.1;
+      const x=Math.sin(time*speed+offset)*5;
+      const y=Math.sin(time*speed*0.7+offset+1)*4;
+      const s=1+Math.sin(time*speed*0.4+offset)*0.05;
+      orb.style.transform=`translate(${x}vw,${y}vh) scale(${s})`;
+    });
+    requestAnimationFrame(animateOrbs);
+  }
+  animateOrbs();
+})();
 
-        document.addEventListener('click', () => {
-            document.querySelectorAll('.lang-dropdown').forEach(d => d.classList.remove('open'));
-        });
+/* MAGNETIC BUTTONS */
+(function(){
+  document.querySelectorAll('.magnetic').forEach(btn=>{
+    btn.addEventListener('mousemove',e=>{
+      const r=btn.getBoundingClientRect();
+      const x=e.clientX-r.left-r.width/2;
+      const y=e.clientY-r.top-r.height/2;
+      btn.style.transform=`translate(${x*.2}px,${y*.2}px)`;
+    });
+    btn.addEventListener('mouseleave',()=>{
+      btn.style.transform='';btn.style.transition='transform .4s cubic-bezier(0.34,1.56,0.64,1)';
+      setTimeout(()=>btn.style.transition='',400);
+    });
+  });
+})();
 
-        // Apply saved language on load
-        if (currentLang !== 'en') applyLanguage(currentLang);
+/* TILT CARDS */
+(function(){
+  document.querySelectorAll('[data-tilt]').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5;
+      const y=(e.clientY-r.top)/r.height-.5;
+      card.style.transform=`perspective(800px) rotateY(${x*6}deg) rotateX(${-y*6}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.transform='';card.style.transition='transform .5s cubic-bezier(0.34,1.56,0.64,1)';
+      setTimeout(()=>card.style.transition='',500);
+    });
+  });
+})();
 
-        // ---- Scroll Reveal ----
-        const revealElements = document.querySelectorAll('.reveal');
+/* ANIMATED COUNTERS */
+(function(){
+  const fmt=(n)=>{
+    if(n>=1e6)return(n/1e6).toFixed(n%1e6?1:0).replace(/\.0$/,'')+'M';
+    if(n>=1e3)return n.toLocaleString();
+    return n.toString();
+  };
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting)return;
+      const el=e.target;
+      if(el.dataset.static){obs.unobserve(el);return}
+      const target=parseFloat(el.dataset.target);
+      const prefix=el.dataset.prefix||'';
+      const suffix=el.dataset.suffix||'';
+      const decimals=parseInt(el.dataset.decimals)||0;
+      const dur=1800;const t0=performance.now();
+      (function tick(now){
+        const p=Math.min(1,(now-t0)/dur);
+        const ease=1-Math.pow(1-p,4)*(1-Math.sin(p*Math.PI*.5));
+        const val=decimals?+(ease*target).toFixed(decimals):Math.round(ease*target);
+        el.textContent=prefix+(decimals?val.toFixed(decimals):fmt(val))+suffix;
+        if(p<1)requestAnimationFrame(tick);
+        else el.textContent=prefix+(decimals?target.toFixed(decimals):fmt(target))+suffix;
+      })(t0);
+      obs.unobserve(el);
+    });
+  },{threshold:.5});
+  document.querySelectorAll('.stat-num[data-target]').forEach(el=>obs.observe(el));
+})();
 
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -40px 0px'
-        });
+/* SMOOTH SCROLL */
+(function(){
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      e.preventDefault();
+      const target=document.querySelector(a.getAttribute('href'));
+      if(!target)return;
+      target.scrollIntoView({behavior:'smooth',block:'start'});
+      document.getElementById('navLinks').classList.remove('open');
+    });
+  });
+})();
 
-        revealElements.forEach(el => revealObserver.observe(el));
+/* i18n */
+const I18N={
+  en:{
+    nav_problem:'Problem',nav_solution:'Solution',nav_features:'Features',nav_demo:'Demo',nav_stats:'Stats',nav_app:'App',
+    launch_store:'Launch Store',hero_tag:'Commerce on Initia',
+    hero_w1:'Your Store. ',hero_w2:'Your Chain. ',hero_w3:'Your ',hero_w4:'Future.',
+    hero_sub:'The first decentralized commerce platform where every merchant owns their chain. 1.5% fees, built-in escrow, loyalty programs, and zero platform lock-in.',
+    launch_store_now:'Launch Your Store',see_demo:'See Demo',
+    mq1:'300M consumers',mq2:'1.5% fees',mq3:'Zero platform lock-in',mq4:'Built on Initia',mq5:'Own your chain',mq6:'Built-in escrow',mq7:'Loyalty rewards',mq8:'Multi-currency',
+    the_problem:'The Problem',problem_title:'Platform fees are<br><span class="gradient-text">killing merchants.</span>',
+    problem_desc:'Every sale on traditional platforms costs merchants 15-30% in fees, data control, and algorithmic dependency. Small businesses in LATAM lose more than they earn.',
+    prob_num1:'30%',prob_title1:'Platform Taxes',prob_desc1:'Marketplace fees, payment processing, advertising costs. Every sale is a 30% tax on small merchants.',
+    prob_num2:'Zero',prob_title2:'Data Ownership',prob_desc2:'Platforms own your customers, your reviews, your analytics. Leave the platform? Start from zero.',
+    prob_num3:'87%',prob_title3:'Fail in 2 Years',prob_desc3:'Small merchants on centralized platforms have an 87% failure rate within two years. The system is broken.',
+    the_solution:'The Solution',solution_title:'Own your chain.<br><span class="gradient-text">Own your future.</span>',
+    solution_desc:'Tienda gives every merchant their own appchain on Initia. Your store, your rules, your data. With built-in commerce tools that rival any platform.',
+    chain1_label:'Your Storefront',chain1_desc:'Custom branded store on your chain',chain2_label:'Smart Escrow',chain2_desc:'Trustless payments, automatic release',
+    chain3_label:'Loyalty Engine',chain3_desc:'Token rewards that retain customers',chain4_label:'Multi-Currency',chain4_desc:'Accept any token, settle in your preferred',
+    how_works:'How It Works',how_works_desc:'In 3 clicks, deploy your own appchain store on Initia. Every transaction is secured by smart escrow. Customers earn loyalty tokens. Reviews live on-chain forever. You keep 98.5% of every sale.',
+    step1:'Create your store profile',step2:'Add products and set pricing',step3:'Deploy and start selling',
+    features_cap:'Features',features_title:'Everything you need to<br><span class="gradient-text">run your business</span>',
+    escrow_title:'Smart Escrow',escrow_desc:'Trustless payments with automatic release on delivery confirmation. Dispute resolution built into the protocol. Buyers and sellers protected equally.',
+    loyalty_title:'Loyalty Tokens',loyalty_desc:'Issue custom loyalty tokens. Customers earn with every purchase. Redeemable across your store network.',loyalty_pts:'2,450 pts',
+    reviews_title:'On-Chain Reviews',reviews_desc:'Verified, immutable reviews that follow your store forever. No fake reviews, no platform manipulation.',
+    review_text:'"Best coffee in the neighborhood!"',review_text2:'"Fast delivery, great quality."',
+    currency_title:'Multi-Currency Support',currency_desc:'Accept USDC, INIT, local stablecoins, or any IBC token. Automatic conversion, instant settlement in your preferred currency.',
+    analytics_title:'Real-Time Analytics',analytics_desc:'On-chain analytics you own. Track sales, customer behavior, and revenue in real time.',
+    live_demo_cap:'Live Demo',demo_title:'Meet <span class="gradient-text">Cafe Maria</span>',demo_desc:'A small coffee shop in Mexico City running entirely on Tienda. See how the platform works in practice.',
+    cafe_name:'Cafe Maria',cafe_tag:'&#9679; CDMX &bull; Open Now &bull; &#9733; 4.9',
+    prod1:'Cafe Latte',prod2:'Croissant',prod3:'Muffin',prod4:'Matcha Latte',order_now:'Order Now &#8594;',
+    detail1_title:'Escrow-Protected Orders',detail1_desc:'Every payment held in smart escrow until delivery is confirmed. Both parties safe.',
+    detail2_title:'Maria Loyalty Points',detail2_desc:'Customers earn MARIA tokens with each order. 10 tokens = free coffee.',
+    detail3_title:'Verified Reviews',detail3_desc:'Only verified buyers can leave reviews. 4.9 stars from 847 genuine reviews.',
+    detail4_title:'Multi-Currency Accepted',detail4_desc:'Pay with USDC, INIT, or MXN stablecoin. Maria receives USDC automatically.',
+    detail5_title:'Owner Analytics',detail5_desc:'Maria sees real-time sales, peak hours, and customer patterns. Data she owns.',
+    stat1:'Consumers in LATAM',stat2:'Transaction Fee',stat3:'Revenue Kept',stat4:'Lock-in',stat4_num:'Zero',
+    cta_title:'Ready to own your <span class="gradient-text">commerce?</span>',cta_desc:'Join thousands of LATAM merchants building the future of decentralized commerce. Launch your store in minutes.',
+    explore_demo:'Explore Demo',built_on:'Built on Initia',
+    demo_store_name:'Cafe Maria',demo_store_status:'&#9679; Store Active',demo_revenue:'$2,847',demo_revenue_label:"Today's Revenue",demo_orders_label:'Orders',
+    demo_escrow:'ESCROW',demo_order_detail:'2x Cafe Latte, 1x Croissant',demo_buyer:'Buyer: 0x7f...3a2',demo_completed:'COMPLETED',demo_order_detail2:'1x Espresso, 3x Muffin'
+  },
+  es:{
+    nav_problem:'Problema',nav_solution:'Soluci\u00f3n',nav_features:'Funciones',nav_demo:'Demo',nav_stats:'Datos',nav_app:'App',
+    launch_store:'Crear Tienda',hero_tag:'Comercio en Initia',
+    hero_w1:'Tu Tienda. ',hero_w2:'Tu Cadena. ',hero_w3:'Tu ',hero_w4:'Futuro.',
+    hero_sub:'La primera plataforma de comercio descentralizada donde cada comerciante tiene su propia cadena. 1.5% de comisi\u00f3n, escrow integrado, programas de lealtad y cero dependencia.',
+    launch_store_now:'Crea Tu Tienda',see_demo:'Ver Demo',
+    mq1:'300M consumidores',mq2:'1.5% comisi\u00f3n',mq3:'Sin dependencia',mq4:'Construido en Initia',mq5:'Tu propia cadena',mq6:'Escrow integrado',mq7:'Recompensas',mq8:'Multi-moneda',
+    the_problem:'El Problema',problem_title:'Las comisiones est\u00e1n<br><span class="gradient-text">matando comerciantes.</span>',
+    problem_desc:'Cada venta en plataformas tradicionales cuesta 15-30% en comisiones, control de datos y dependencia algor\u00edtmica.',
+    prob_num1:'30%',prob_title1:'Impuestos',prob_desc1:'Comisiones de marketplace, procesamiento de pagos, publicidad. Cada venta es un impuesto del 30%.',
+    prob_num2:'Cero',prob_title2:'Control de Datos',prob_desc2:'Las plataformas son due\u00f1as de tus clientes y rese\u00f1as. \u00bfDejas la plataforma? Empiezas de cero.',
+    prob_num3:'87%',prob_title3:'Fracasan en 2 A\u00f1os',prob_desc3:'Peque\u00f1os comerciantes en plataformas centralizadas tienen 87% de fracaso en dos a\u00f1os.',
+    the_solution:'La Soluci\u00f3n',solution_title:'Tu cadena.<br><span class="gradient-text">Tu futuro.</span>',
+    solution_desc:'Tienda da a cada comerciante su propia appchain en Initia. Tu tienda, tus reglas, tus datos.',
+    chain1_label:'Tu Tienda',chain1_desc:'Tienda personalizada en tu cadena',chain2_label:'Escrow Inteligente',chain2_desc:'Pagos sin confianza, liberaci\u00f3n autom\u00e1tica',
+    chain3_label:'Motor de Lealtad',chain3_desc:'Tokens que retienen clientes',chain4_label:'Multi-Moneda',chain4_desc:'Acepta cualquier token',
+    how_works:'C\u00f3mo Funciona',how_works_desc:'En 3 clics, despliega tu tienda en Initia. Transacciones aseguradas por escrow. Clientes ganan tokens. T\u00fa guardas el 98.5%.',
+    step1:'Crea tu perfil de tienda',step2:'Agrega productos y precios',step3:'Despliega y empieza a vender',
+    features_cap:'Funciones',features_title:'Todo lo que necesitas para<br><span class="gradient-text">tu negocio</span>',
+    escrow_title:'Escrow Inteligente',escrow_desc:'Pagos sin confianza con liberaci\u00f3n autom\u00e1tica al confirmar entrega. Disputas integradas.',
+    loyalty_title:'Tokens de Lealtad',loyalty_desc:'Emite tokens personalizados. Clientes ganan con cada compra.',loyalty_pts:'2,450 pts',
+    reviews_title:'Rese\u00f1as On-Chain',reviews_desc:'Rese\u00f1as verificadas e inmutables. Sin rese\u00f1as falsas.',
+    review_text:'\u201cEl mejor caf\u00e9 del barrio!\u201d',review_text2:'\u201cEntrega r\u00e1pida, gran calidad.\u201d',
+    currency_title:'Multi-Moneda',currency_desc:'Acepta USDC, INIT, stablecoins locales o cualquier token IBC.',
+    analytics_title:'Anal\u00edticas en Tiempo Real',analytics_desc:'Anal\u00edticas on-chain que t\u00fa controlas.',
+    live_demo_cap:'Demo en Vivo',demo_title:'Conoce <span class="gradient-text">Caf\u00e9 Mar\u00eda</span>',demo_desc:'Una cafeter\u00eda en Ciudad de M\u00e9xico funcionando en Tienda.',
+    cafe_name:'Caf\u00e9 Mar\u00eda',cafe_tag:'&#9679; CDMX &bull; Abierto &bull; &#9733; 4.9',
+    prod1:'Caf\u00e9 Latte',prod2:'Croissant',prod3:'Muffin',prod4:'Matcha Latte',order_now:'Ordenar &#8594;',
+    detail1_title:'\u00d3rdenes Protegidas',detail1_desc:'Cada pago en escrow hasta confirmar entrega.',
+    detail2_title:'Puntos Mar\u00eda',detail2_desc:'Clientes ganan tokens MARIA. 10 = caf\u00e9 gratis.',
+    detail3_title:'Rese\u00f1as Verificadas',detail3_desc:'Solo compradores verificados. 4.9 de 847 rese\u00f1as.',
+    detail4_title:'Multi-Moneda',detail4_desc:'Paga con USDC, INIT o MXN stablecoin.',
+    detail5_title:'Anal\u00edticas',detail5_desc:'Ventas en tiempo real, horas pico y patrones.',
+    stat1:'Consumidores LATAM',stat2:'Comisi\u00f3n',stat3:'Ingreso Retenido',stat4:'Dependencia',stat4_num:'Cero',
+    cta_title:'\u00bfListo para tu <span class="gradient-text">comercio?</span>',cta_desc:'\u00danete a miles de comerciantes construyendo comercio descentralizado.',
+    explore_demo:'Explorar Demo',built_on:'Construido en Initia',
+    demo_store_name:'Caf\u00e9 Mar\u00eda',demo_store_status:'&#9679; Tienda Activa',demo_revenue:'$2,847',demo_revenue_label:'Ingreso Hoy',demo_orders_label:'\u00d3rdenes',
+    demo_escrow:'ESCROW',demo_order_detail:'2x Latte, 1x Croissant',demo_buyer:'Comprador: 0x7f...3a2',demo_completed:'COMPLETADO',demo_order_detail2:'1x Espresso, 3x Muffin'
+  },
+  zh:{
+    nav_problem:'\u95ee\u9898',nav_solution:'\u65b9\u6848',nav_features:'\u529f\u80fd',nav_demo:'\u6f14\u793a',nav_stats:'\u6570\u636e',nav_app:'\u5e94\u7528',
+    launch_store:'\u521b\u5efa\u5e97\u94fa',hero_tag:'Initia\u5546\u4e1a',
+    hero_w1:'\u4f60\u7684\u5e97\u94fa\u3002',hero_w2:'\u4f60\u7684\u94fe\u3002',hero_w3:'\u4f60\u7684',hero_w4:'\u672a\u6765\u3002',
+    hero_sub:'\u7b2c\u4e00\u4e2a\u53bb\u4e2d\u5fc3\u5316\u5546\u4e1a\u5e73\u53f0\uff0c\u6bcf\u4e2a\u5546\u5bb6\u62e5\u6709\u81ea\u5df1\u7684\u94fe\u30021.5%\u8d39\u7528\uff0c\u5185\u7f6e\u6258\u7ba1\uff0c\u5fcd\u8bda\u8ba1\u5212\uff0c\u96f6\u9501\u5b9a\u3002',
+    launch_store_now:'\u521b\u5efa\u5e97\u94fa',see_demo:'\u67e5\u770b\u6f14\u793a',
+    mq1:'3\u4ebf\u6d88\u8d39\u8005',mq2:'1.5%\u8d39\u7528',mq3:'\u96f6\u9501\u5b9a',mq4:'\u57fa\u4e8eInitia',mq5:'\u62e5\u6709\u4f60\u7684\u94fe',mq6:'\u5185\u7f6e\u6258\u7ba1',mq7:'\u5fcd\u8bda\u5956\u52b1',mq8:'\u591a\u5e01\u79cd',
+    the_problem:'\u95ee\u9898',problem_title:'\u5e73\u53f0\u8d39\u7528\u6b63\u5728<br><span class="gradient-text">\u6740\u6b7b\u5546\u5bb6\u3002</span>',
+    problem_desc:'\u4f20\u7edf\u5e73\u53f0\u6bcf\u7b14\u9500\u552e15-30%\u7684\u8d39\u7528\u548c\u6570\u636e\u4f9d\u8d56\u3002',
+    prob_num1:'30%',prob_title1:'\u5e73\u53f0\u7a0e',prob_desc1:'\u5e02\u573a\u8d39\u7528\u3001\u652f\u4ed8\u5904\u7406\u3001\u5e7f\u544a\u6210\u672c\u300230%\u7a0e\u3002',
+    prob_num2:'\u96f6',prob_title2:'\u6570\u636e\u6240\u6709\u6743',prob_desc2:'\u5e73\u53f0\u62e5\u6709\u4f60\u7684\u5ba2\u6237\u548c\u8bc4\u8bba\u3002\u79bb\u5f00\u5c31\u4ece\u96f6\u5f00\u59cb\u3002',
+    prob_num3:'87%',prob_title3:'\u4e24\u5e74\u5931\u8d25',prob_desc3:'\u5c0f\u5546\u5bb6\u4e24\u5e74\u5185\u670987%\u5931\u8d25\u7387\u3002',
+    the_solution:'\u65b9\u6848',solution_title:'\u62e5\u6709\u4f60\u7684\u94fe\u3002<br><span class="gradient-text">\u62e5\u6709\u672a\u6765\u3002</span>',
+    solution_desc:'Tienda\u7ed9\u6bcf\u4e2a\u5546\u5bb6\u5728Initia\u4e0a\u7684\u5e94\u7528\u94fe\u3002',
+    chain1_label:'\u5e97\u9762',chain1_desc:'\u81ea\u5b9a\u4e49\u54c1\u724c\u5e97\u94fa',chain2_label:'\u6258\u7ba1',chain2_desc:'\u65e0\u4fe1\u4efb\u652f\u4ed8',
+    chain3_label:'\u5fcd\u8bda\u5f15\u64ce',chain3_desc:'\u4ee3\u5e01\u5956\u52b1',chain4_label:'\u591a\u5e01\u79cd',chain4_desc:'\u63a5\u53d7\u4efb\u4f55\u4ee3\u5e01',
+    how_works:'\u5982\u4f55\u8fd0\u4f5c',how_works_desc:'\u4e09\u6b65\u90e8\u7f72\u5e97\u94fa\u3002\u6258\u7ba1\u4fdd\u62a4\u3002\u5fcd\u8bda\u4ee3\u5e01\u3002\u4fdd\u754998.5%\u3002',
+    step1:'\u521b\u5efa\u5e97\u94fa\u8d44\u6599',step2:'\u6dfb\u52a0\u4ea7\u54c1',step3:'\u90e8\u7f72\u5e76\u9500\u552e',
+    features_cap:'\u529f\u80fd',features_title:'\u7ecf\u8425\u6240\u9700\u7684<br><span class="gradient-text">\u4e00\u5207</span>',
+    escrow_title:'\u667a\u80fd\u6258\u7ba1',escrow_desc:'\u786e\u8ba4\u4ea4\u4ed8\u540e\u81ea\u52a8\u91ca\u653e\u7684\u652f\u4ed8\u3002',
+    loyalty_title:'\u5fcd\u8bda\u4ee3\u5e01',loyalty_desc:'\u53d1\u884c\u81ea\u5b9a\u4e49\u4ee3\u5e01\u3002',loyalty_pts:'2,450\u5206',
+    reviews_title:'\u94fe\u4e0a\u8bc4\u8bba',reviews_desc:'\u9a8c\u8bc1\u7684\u4e0d\u53ef\u7be1\u6539\u8bc4\u8bba\u3002',
+    review_text:'\u201c\u6700\u597d\u7684\u5496\u5561\uff01\u201d',review_text2:'\u201c\u5feb\u901f\u914d\u9001\u3002\u201d',
+    currency_title:'\u591a\u5e01\u79cd',currency_desc:'\u63a5\u53d7USDC\u3001INIT\u3001\u672c\u5730\u7a33\u5b9a\u5e01\u3002',
+    analytics_title:'\u5b9e\u65f6\u5206\u6790',analytics_desc:'\u4f60\u62e5\u6709\u7684\u94fe\u4e0a\u5206\u6790\u3002',
+    live_demo_cap:'\u6f14\u793a',demo_title:'\u8ba4\u8bc6 <span class="gradient-text">\u739b\u4e3d\u4e9a\u5496\u5561</span>',demo_desc:'\u58a8\u897f\u54e5\u57ce\u7684\u5496\u5561\u5e97\u3002',
+    cafe_name:'\u739b\u4e3d\u4e9a\u5496\u5561',cafe_tag:'&#9679; CDMX &bull; \u8425\u4e1a\u4e2d &bull; &#9733; 4.9',
+    prod1:'\u62ff\u94c1',prod2:'\u7f8a\u89d2',prod3:'\u677e\u997c',prod4:'\u62b9\u8336\u62ff\u94c1',order_now:'\u4e0b\u5355 &#8594;',
+    detail1_title:'\u6258\u7ba1\u4fdd\u62a4',detail1_desc:'\u4ed8\u6b3e\u5728\u6258\u7ba1\u4e2d\u76f4\u5230\u786e\u8ba4\u3002',
+    detail2_title:'\u79ef\u5206',detail2_desc:'10\u4ee3\u5e01=\u514d\u8d39\u5496\u5561\u3002',
+    detail3_title:'\u9a8c\u8bc1\u8bc4\u8bba',detail3_desc:'847\u6761\u771f\u5b9e\u8bc4\u8bba\u3002',
+    detail4_title:'\u591a\u5e01\u79cd',detail4_desc:'USDC\u3001INIT\u6216MXN\u652f\u4ed8\u3002',
+    detail5_title:'\u5206\u6790',detail5_desc:'\u5b9e\u65f6\u9500\u552e\u6570\u636e\u3002',
+    stat1:'\u62c9\u7f8e\u6d88\u8d39\u8005',stat2:'\u8d39\u7528',stat3:'\u4fdd\u7559\u6536\u5165',stat4:'\u9501\u5b9a',stat4_num:'\u96f6',
+    cta_title:'\u62e5\u6709\u4f60\u7684<span class="gradient-text">\u5546\u4e1a\uff1f</span>',cta_desc:'\u52a0\u5165\u62c9\u7f8e\u5546\u5bb6\u3002',
+    explore_demo:'\u63a2\u7d22\u6f14\u793a',built_on:'\u57fa\u4e8eInitia',
+    demo_store_name:'\u739b\u4e3d\u4e9a\u5496\u5561',demo_store_status:'&#9679; \u6d3b\u8dc3',demo_revenue:'$2,847',demo_revenue_label:'\u4eca\u65e5\u6536\u5165',demo_orders_label:'\u8ba2\u5355',
+    demo_escrow:'\u6258\u7ba1',demo_order_detail:'2x\u62ff\u94c1, 1x\u7f8a\u89d2',demo_buyer:'\u4e70\u5bb6: 0x7f...3a2',demo_completed:'\u5b8c\u6210',demo_order_detail2:'1x\u6d53\u7f29, 3x\u677e\u997c'
+  }
+};
 
-        // ---- Navbar scroll ----
-        const navbar = document.getElementById('navbar');
-        let lastScroll = 0;
+let currentLang='en';
+function toggleLangDropdown(){document.getElementById('lang-dropdown').classList.toggle('open')}
+document.addEventListener('click',e=>{if(!e.target.closest('.lang-selector'))document.getElementById('lang-dropdown').classList.remove('open')});
 
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            if (currentScroll > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-            lastScroll = currentScroll;
-        }, { passive: true });
-
-        // ---- Smooth scroll for anchor links ----
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const offset = 80;
-                    const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
-                    window.scrollTo({ top, behavior: 'smooth' });
-                }
-            });
-        });
-
-        // ---- Mobile menu ----
-        function toggleMobileMenu() {
-            document.getElementById('mobileMenu').classList.toggle('active');
-            document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('active') ? 'hidden' : '';
-        }
-
-        // ---- Parallax glow effect ----
-        document.addEventListener('mousemove', (e) => {
-            const glows = document.querySelectorAll('.hero-glow, .hero-glow-2');
-            const x = (e.clientX / window.innerWidth - 0.5) * 30;
-            const y = (e.clientY / window.innerHeight - 0.5) * 30;
-            glows.forEach((glow, i) => {
-                const factor = i === 0 ? 1 : -0.7;
-                glow.style.transform = `translate(${x * factor}px, ${y * factor}px)`;
-            });
-        });
-
-        // ---- Counter animation for stats ----
-        const statElements = document.querySelectorAll('.problem-stat');
-        const statObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const el = entry.target;
-                    const text = el.textContent;
-                    const match = text.match(/(\d+)/);
-                    if (match) {
-                        const target = parseInt(match[1]);
-                        const suffix = text.replace(match[1], '');
-                        let current = 0;
-                        const duration = 1500;
-                        const step = target / (duration / 16);
-                        const counter = setInterval(() => {
-                            current += step;
-                            if (current >= target) {
-                                current = target;
-                                clearInterval(counter);
-                            }
-                            el.textContent = Math.floor(current) + suffix;
-                        }, 16);
-                    }
-                    statObserver.unobserve(el);
-                }
-            });
-        }, { threshold: 0.5 });
-
-        statElements.forEach(el => statObserver.observe(el));
-    </script>
-
+function setLang(lang){
+  currentLang=lang;
+  const t=I18N[lang]||I18N.en;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.dataset.i18n;
+    if(t[key])el.innerHTML=t[key];
+  });
+  document.querySelectorAll('[data-i18n-word]').forEach(el=>{
+    const key=el.dataset.i18nWord;
+    if(t[key]){
+      el.textContent='';
+      const text=t[key];
+      const cls=el.className.replace('word','').trim();
+      for(let i=0;i<text.length;i++){
+        const span=document.createElement('span');
+        span.className='char';
+        if(cls)cls.split(' ').forEach(c=>c&&span.classList.add(c));
+        span.textContent=text[i]===' '?'\u00A0':text[i];
+        span.style.opacity='1';span.style.transform='none';
+        el.appendChild(span);
+      }
+    }
+  });
+  document.querySelectorAll('.lang-option').forEach(o=>o.classList.toggle('active',o.dataset.lang===lang));
+  const names={en:'English',es:'Espa\u00f1ol',zh:'\u4e2d\u6587'};
+  document.getElementById('lang-current').textContent=names[lang]||'English';
+  document.getElementById('lang-dropdown').classList.remove('open');
+}
+</script>
 </body>
 </html>
