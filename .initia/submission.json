@@ -1,0 +1,66 @@
+{
+  "project_name": "Tienda",
+  "tagline": "Every merchant deserves their own chain.",
+  "description": "Tienda is the Shopify of Web3 for Latin America — an app-specific commerce rollup built on Initia that gives every merchant a sovereign, scalable, and radically simple storefront on the blockchain. Full marketplace logic in Move: escrow, disputes, loyalty, reviews. 1.5% fees vs 15-30% on Web2.",
+  "track": "Commerce / DeFi",
+  "team": {
+    "name": "Xpandia",
+    "members": [
+      {
+        "role": "Product Lead",
+        "responsibility": "Vision, UX strategy, merchant research"
+      },
+      {
+        "role": "Blockchain Engineer",
+        "responsibility": "Move modules, rollup config, on-chain integration"
+      },
+      {
+        "role": "Full-Stack Engineer",
+        "responsibility": "Node.js backend, API design, Initia SDK integration"
+      },
+      {
+        "role": "Designer",
+        "responsibility": "UI/UX, brand identity, landing page"
+      }
+    ]
+  },
+  "tech_stack": {
+    "l1_settlement": "Initia",
+    "rollup_runtime": "MoveVM",
+    "interchain": "IBC via Initia + InterwovenKit",
+    "backend": "Node.js + Express.js + @initia/initia.js",
+    "frontend": "HTML/CSS/JS",
+    "smart_contracts": "Move (marketplace.move)"
+  },
+  "initia_integration": {
+    "rollup_type": "app-specific",
+    "vm": "MoveVM",
+    "interwovenkit": true,
+    "ibc_enabled": true,
+    "enshrined_liquidity": true,
+    "sdk": "@initia/initia.js"
+  },
+  "features": [
+    "On-chain marketplace with Move module",
+    "Escrow-based buyer protection with 7-day auto-release",
+    "Dispute resolution system",
+    "On-chain loyalty program (100 points per TIENDA spent)",
+    "Reputation system with 1-5 star reviews",
+    "1.5% platform fee (configurable via basis points)",
+    "Cross-rollup payments via InterwovenKit",
+    "REST API with @initia/initia.js SDK integration"
+  ],
+  "links": {
+    "github": "https://github.com/xpandia/tienda",
+    "demo": "",
+    "video": "",
+    "dorahacks": ""
+  },
+  "deployment": {
+    "chain_id": "initiation-2",
+    "network": "testnet",
+    "module_address": "",
+    "contract_name": "marketplace"
+  },
+  "license": "MIT"
+}

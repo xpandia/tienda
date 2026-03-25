@@ -1496,6 +1496,130 @@ app.use((err, req, res, _next) => {
 });
 
 // =============================================================================
+// Seed Data — Café María + 5 products + 3 sample orders
+// =============================================================================
+
+(function seedData() {
+  const now = new Date().toISOString();
+  const merchantId = 'seed-merchant-001';
+  const walletAddr = 'init1cafemaria000000000000000000000000seed';
+
+  const merchant = {
+    merchantId,
+    walletAddress: walletAddr,
+    storeName: 'Café María',
+    description: 'El mejor café artesanal de Colombia. Granos selectos de origen, tostados con amor en Medellín. Tradición cafetera desde 1998.',
+    country: 'CO',
+    city: 'Medellín',
+    categories: ['food', 'beverages'],
+    contactEmail: 'hola@cafemaria.co',
+    contactPhone: '+57 300 123 4567',
+    logoUri: null,
+    isActive: true,
+    productCount: 5,
+    totalOrders: 3,
+    totalRevenue: 127.5,
+    totalRatingScore: 14,
+    ratingCount: 3,
+    registeredAt: now,
+    updatedAt: now,
+    onChainTxHash: null,
+    onChainStatus: 'confirmed',
+  };
+  db.merchants.set(merchantId, merchant);
+  db.merchantsByAddr.set(walletAddr, merchantId);
+
+  const products = [
+    { productId: 'seed-prod-001', name: 'Café Origen Huila', description: 'Café de origen único del Huila. Notas de chocolate, caramelo y frutos rojos. Tueste medio. Bolsa de 500g de granos enteros.', price: 18.50, stock: 45, category: 'food', tags: ['café', 'colombia', 'huila', 'artesanal'], imageUri: null, orderCount: 2 },
+    { productId: 'seed-prod-002', name: 'Café Blend Especial', description: 'Mezcla exclusiva de granos de Nariño y Sierra Nevada. Perfil balanceado con notas de nuez y miel. Molido fino, 340g.', price: 14.00, stock: 60, category: 'food', tags: ['café', 'blend', 'especial'], imageUri: null, orderCount: 1 },
+    { productId: 'seed-prod-003', name: 'Kit Barista Principiante', description: 'Todo lo que necesitas para preparar café como profesional. Incluye prensa francesa, molino manual y guía de preparación.', price: 55.00, stock: 15, category: 'home', tags: ['barista', 'kit', 'prensa francesa'], imageUri: null, orderCount: 0 },
+    { productId: 'seed-prod-004', name: 'Panela Orgánica 1kg', description: 'Panela orgánica del Valle del Cauca. Endulzante natural perfecto para tu café. Sin químicos ni aditivos.', price: 6.50, stock: 100, category: 'food', tags: ['panela', 'orgánico', 'endulzante'], imageUri: null, orderCount: 0 },
+    { productId: 'seed-prod-005', name: 'Taza Artesanal Café María', description: 'Taza de cerámica artesanal pintada a mano en Ráquira, Boyacá. Diseño exclusivo Café María. 350ml.', price: 12.00, stock: 30, category: 'home', tags: ['taza', 'artesanal', 'cerámica'], imageUri: null, orderCount: 0 },
+  ];
+
+  products.forEach((p) => {
+    db.products.set(p.productId, {
+      ...p,
+      merchantId,
+      merchantAddress: walletAddr,
+      merchantName: 'Café María',
+      images: [],
+      metadata: {},
+      weight: null,
+      dimensions: null,
+      shippingInfo: { freeShipping: p.price > 50, shippingCost: p.price > 50 ? 0 : 5.00, estimatedDays: 5, availableRegions: ['CO', 'MX', 'AR', 'CL', 'PE'] },
+      isActive: true,
+      viewCount: Math.floor(Math.random() * 100) + 10,
+      createdAt: now,
+      updatedAt: now,
+      onChainProductId: null,
+    });
+  });
+
+  const buyerAddr = 'init1buyer00000000000000000000000000seed';
+  const orders = [
+    { orderId: 'seed-order-001', productId: 'seed-prod-001', productName: 'Café Origen Huila', quantity: 2, unitPrice: 18.50, totalPrice: 37.00, status: 'completed', createdAt: new Date(Date.now() - 5 * 86400000).toISOString(), completedAt: new Date(Date.now() - 1 * 86400000).toISOString() },
+    { orderId: 'seed-order-002', productId: 'seed-prod-001', productName: 'Café Origen Huila', quantity: 1, unitPrice: 18.50, totalPrice: 18.50, status: 'shipped', createdAt: new Date(Date.now() - 2 * 86400000).toISOString(), completedAt: null },
+    { orderId: 'seed-order-003', productId: 'seed-prod-002', productName: 'Café Blend Especial', quantity: 3, unitPrice: 14.00, totalPrice: 42.00, status: 'paid', createdAt: new Date(Date.now() - 3600000).toISOString(), completedAt: null },
+  ];
+
+  orders.forEach((o) => {
+    const netAmount = o.totalPrice;
+    const platformFee = Math.floor(netAmount * 0.015);
+    db.orders.set(o.orderId, {
+      ...o,
+      buyerAddress: buyerAddr,
+      merchantId,
+      merchantAddress: walletAddr,
+      loyaltyDiscount: 0,
+      netAmount,
+      platformFee,
+      shippingRef: 'Calle 10 #43-12, Medellín',
+      trackingNumber: o.status === 'shipped' ? 'COL-2024-88421' : null,
+      paymentMethod: 'native',
+      escrow: { amount: netAmount - platformFee, platformFee, isReleased: o.status === 'completed', isRefunded: false, createdAt: o.createdAt },
+      paidAt: o.createdAt,
+      shippedAt: o.status !== 'paid' ? new Date(Date.now() - 3 * 86400000).toISOString() : null,
+      deliveredAt: o.status === 'completed' ? new Date(Date.now() - 2 * 86400000).toISOString() : null,
+      onChainTxHash: null,
+    });
+  });
+
+  // Seed reviews
+  const reviews = [
+    { reviewId: 'seed-review-001', orderId: 'seed-order-001', reviewerAddress: buyerAddr, merchantId, productId: 'seed-prod-001', productName: 'Café Origen Huila', rating: 5, comment: 'Increíble café! El mejor que he probado. Las notas de chocolate son perfectas.', createdAt: new Date(Date.now() - 86400000).toISOString() },
+    { reviewId: 'seed-review-002', orderId: 'seed-order-001', reviewerAddress: 'init1buyer2_seed', merchantId, productId: 'seed-prod-001', productName: 'Café Origen Huila', rating: 5, comment: 'Excelente calidad y envío rápido. 100% recomendado.', createdAt: new Date(Date.now() - 2 * 86400000).toISOString() },
+    { reviewId: 'seed-review-003', orderId: 'seed-order-001', reviewerAddress: 'init1buyer3_seed', merchantId, productId: 'seed-prod-002', productName: 'Café Blend Especial', rating: 4, comment: 'Muy bueno, el blend es balanceado. Me gustaría un tueste más oscuro.', createdAt: new Date(Date.now() - 3 * 86400000).toISOString() },
+  ];
+  reviews.forEach((r) => db.reviews.set(r.reviewId, r));
+
+  // Seed loyalty
+  db.loyaltyAccounts.set(buyerAddr, {
+    owner: buyerAddr,
+    balance: 3700,
+    totalEarned: 3700,
+    totalRedeemed: 0,
+    history: [{ type: 'earned', amount: 3700, orderId: 'seed-order-001', timestamp: now }],
+  });
+
+  // Seed analytics
+  db.analytics.set(merchantId, {
+    dailySales: [
+      { date: new Date(Date.now() - 5 * 86400000).toISOString(), amount: 37.00, orderId: 'seed-order-001' },
+      { date: new Date(Date.now() - 2 * 86400000).toISOString(), amount: 18.50, orderId: 'seed-order-002' },
+      { date: new Date(Date.now() - 3600000).toISOString(), amount: 42.00, orderId: 'seed-order-003' },
+    ],
+    totalViews: 247,
+    conversionRate: 1.2,
+    topProducts: [],
+    revenueByCategory: { food: 97.50, home: 0 },
+    customerRetention: 33,
+  });
+
+  logger.info('Seed data loaded: Café María + 5 products + 3 orders + 3 reviews');
+})();
+
+// =============================================================================
 // Server startup
 // =============================================================================
 

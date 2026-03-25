@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tienda — Commerce Chain for LATAM on Initia</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cream:#faf8f5;--cream-dark:#f0ece6;--orange:#ff6b35;--orange-light:#ff8c5a;--orange-dark:#e55a28;
+  --brown:#2d1810;--brown-light:#5a3825;--brown-mid:#8b6244;--brown-muted:#a08060;
+  --green:#2ecc71;--green-bg:#e8f8ef;--red:#e74c3c;--red-bg:#fce8e6;--blue:#3498db;--blue-bg:#eaf2fb;
+  --yellow:#f1c40f;--yellow-bg:#fef9e7;--white:#ffffff;--gray:#6b7280;--gray-light:#e5e7eb;--gray-bg:#f3f4f6;
+  --shadow-sm:0 1px 2px rgba(45,24,16,.06);--shadow:0 2px 8px rgba(45,24,16,.08);--shadow-lg:0 8px 24px rgba(45,24,16,.12);--shadow-xl:0 16px 48px rgba(45,24,16,.16);
+  --radius:12px;--radius-sm:8px;--radius-lg:16px;--radius-xl:24px;
+  --sidebar-w:260px;
+}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--cream);color:var(--brown);overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit;border:none;outline:none}
+input,select,textarea{font-family:inherit;outline:none}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--brown-muted);border-radius:3px}
+
+/* ========== LAYOUT ========== */
+#app{display:flex;flex-direction:column;height:100vh;width:100vw}
+
+/* TOP BAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 24px;background:var(--brown);color:var(--cream);z-index:100;flex-shrink:0}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-brand h1{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;letter-spacing:-.5px}
+.topbar-brand span{font-size:11px;background:var(--orange);padding:2px 8px;border-radius:20px;font-weight:600;color:#fff}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.mode-toggle{display:flex;background:rgba(255,255,255,.1);border-radius:30px;overflow:hidden}
+.mode-btn{padding:8px 18px;font-size:13px;font-weight:600;color:rgba(255,255,255,.6);background:transparent;transition:.2s}
+.mode-btn.active{background:var(--orange);color:#fff;border-radius:30px}
+.mode-btn:hover:not(.active){color:#fff}
+.topbar-wallet{font-size:12px;background:rgba(255,255,255,.08);padding:6px 14px;border-radius:8px;font-family:monospace;color:var(--orange-light)}
+.chain-badge{font-size:11px;color:var(--brown-muted);display:flex;align-items:center;gap:4px}
+.chain-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block}
+
+/* BODY */
+.body-wrap{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);background:var(--white);border-right:1px solid var(--gray-light);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-nav{padding:12px 10px;flex:1}
+.nav-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--brown-muted);padding:16px 12px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--radius-sm);font-size:14px;font-weight:500;color:var(--brown-light);cursor:pointer;transition:.15s;margin-bottom:2px}
+.nav-item:hover{background:var(--cream);color:var(--brown)}
+.nav-item.active{background:var(--orange);color:#fff;font-weight:600}
+.nav-item .icon{font-size:18px;width:24px;text-align:center}
+.sidebar-footer{padding:16px;border-top:1px solid var(--gray-light);font-size:11px;color:var(--brown-muted);text-align:center}
+.sidebar-footer a{color:var(--orange);font-weight:600}
+
+/* MAIN CONTENT */
+.main{flex:1;overflow-y:auto;padding:28px 32px}
+.page-title{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:4px}
+.page-subtitle{font-size:14px;color:var(--brown-muted);margin-bottom:24px}
+
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{background:var(--white);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-light);transition:.2s}
+.stat-card:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+.stat-label{font-size:12px;font-weight:600;color:var(--brown-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.stat-value{font-size:28px;font-weight:800;color:var(--brown)}
+.stat-sub{font-size:12px;color:var(--green);margin-top:4px;font-weight:500}
+.stat-icon{font-size:28px;float:right;margin-top:-4px}
+
+/* CARDS */
+.card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--gray-light);overflow:hidden}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--gray-light);display:flex;align-items:center;justify-content:space-between}
+.card-header h3{font-size:15px;font-weight:700}
+.card-body{padding:20px}
+.card-body.no-pad{padding:0}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--brown-muted);padding:10px 16px;border-bottom:1px solid var(--gray-light)}
+td{padding:12px 16px;font-size:13px;border-bottom:1px solid rgba(0,0,0,.04)}
+tr:hover td{background:var(--cream)}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-paid{background:var(--blue-bg);color:var(--blue)}.badge-shipped{background:var(--yellow-bg);color:#b8860b}.badge-delivered{background:var(--green-bg);color:var(--green)}.badge-completed{background:var(--green-bg);color:#1a8a4a}.badge-cancelled{background:var(--red-bg);color:var(--red)}.badge-disputed{background:var(--red-bg);color:var(--red)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;transition:.2s}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark)}
+.btn-secondary{background:var(--cream);color:var(--brown);border:1px solid var(--gray-light)}.btn-secondary:hover{background:var(--cream-dark)}
+.btn-success{background:var(--green);color:#fff}.btn-success:hover{background:#27ae60}
+.btn-sm{padding:6px 14px;font-size:12px}
+.btn-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);background:var(--cream);color:var(--brown);font-size:16px;border:1px solid var(--gray-light)}
+.btn-icon:hover{background:var(--orange);color:#fff}
+
+/* PRODUCT GRID */
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+.product-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--gray-light);overflow:hidden;transition:.2s;cursor:pointer}
+.product-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px)}
+.product-img{height:180px;background:linear-gradient(135deg,var(--cream-dark),var(--cream));display:flex;align-items:center;justify-content:center;font-size:48px;color:var(--brown-muted);position:relative}
+.product-img .fav-btn{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--brown-muted);border:none;transition:.2s}
+.product-img .fav-btn:hover,.product-img .fav-btn.favorited{color:var(--red)}
+.product-info{padding:14px}
+.product-name{font-size:14px;font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.product-merchant{font-size:11px;color:var(--brown-muted);margin-bottom:8px}
+.product-price{font-size:18px;font-weight:800;color:var(--orange)}
+.product-stock{font-size:11px;color:var(--green);margin-top:4px;font-weight:500}
+.product-category-badge{display:inline-block;font-size:10px;background:var(--cream);color:var(--brown-muted);padding:2px 8px;border-radius:10px;margin-top:6px;font-weight:600}
+
+/* CATEGORY GRID */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin-bottom:28px}
+.cat-card{background:var(--white);border-radius:var(--radius);padding:20px;text-align:center;border:1px solid var(--gray-light);cursor:pointer;transition:.2s}
+.cat-card:hover{border-color:var(--orange);box-shadow:var(--shadow)}
+.cat-card .cat-icon{font-size:32px;margin-bottom:8px}
+.cat-card .cat-name{font-size:13px;font-weight:600}
+
+/* SEARCH */
+.search-wrap{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.search-input{flex:1;min-width:250px;padding:12px 18px;border-radius:var(--radius);border:1px solid var(--gray-light);font-size:14px;background:var(--white);transition:.2s}
+.search-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,107,53,.15)}
+.filter-select{padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--gray-light);font-size:13px;background:var(--white);min-width:140px}
+
+/* MODAL */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(45,24,16,.5);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.show{display:flex}
+.modal{background:var(--white);border-radius:var(--radius-lg);width:580px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-xl)}
+.modal-wide{width:720px}
+.modal-head{padding:20px 24px;border-bottom:1px solid var(--gray-light);display:flex;align-items:center;justify-content:space-between}
+.modal-head h2{font-size:18px;font-weight:700}
+.modal-close{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--brown-muted);background:var(--cream);border:none;transition:.2s}
+.modal-close:hover{background:var(--red-bg);color:var(--red)}
+.modal-body{padding:24px}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--gray-light);display:flex;justify-content:flex-end;gap:10px}
+
+/* FORM */
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--brown-light);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+.form-input{width:100%;padding:10px 14px;border:1px solid var(--gray-light);border-radius:var(--radius-sm);font-size:14px;transition:.2s}
+.form-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,107,53,.12)}
+textarea.form-input{resize:vertical;min-height:80px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* REVIEW STARS */
+.stars{color:var(--yellow);font-size:14px;letter-spacing:1px}
+
+/* ESCROW BAR */
+.escrow-bar{background:var(--cream);border-radius:var(--radius-sm);padding:12px 16px;margin:12px 0;display:flex;align-items:center;gap:12px;font-size:13px}
+.escrow-dot{width:8px;height:8px;border-radius:50%}
+.escrow-held .escrow-dot{background:var(--yellow)}
+.escrow-released .escrow-dot{background:var(--green)}
+
+/* ORDER FLOW */
+.order-flow{display:flex;align-items:center;gap:0;margin:16px 0}
+.flow-step{display:flex;flex-direction:column;align-items:center;flex:1;position:relative}
+.flow-step .flow-circle{width:28px;height:28px;border-radius:50%;background:var(--gray-light);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gray);z-index:2;position:relative}
+.flow-step.done .flow-circle{background:var(--green);color:#fff}
+.flow-step.current .flow-circle{background:var(--orange);color:#fff;box-shadow:0 0 0 4px rgba(255,107,53,.2)}
+.flow-step .flow-label{font-size:10px;margin-top:6px;color:var(--brown-muted);font-weight:600}
+.flow-line{flex:1;height:2px;background:var(--gray-light);margin:0 -8px}
+.flow-line.done{background:var(--green)}
+
+/* CART */
+.cart-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--gray-light)}
+.cart-item-img{width:60px;height:60px;border-radius:var(--radius-sm);background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:24px}
+.cart-item-info{flex:1}
+.cart-item-name{font-size:14px;font-weight:600}
+.cart-item-price{font-size:13px;color:var(--orange);font-weight:700}
+.cart-qty{display:flex;align-items:center;gap:8px}
+.cart-qty button{width:28px;height:28px;border-radius:6px;background:var(--cream);border:1px solid var(--gray-light);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.cart-qty span{font-size:14px;font-weight:600;min-width:20px;text-align:center}
+.cart-summary{margin-top:20px;padding:20px;background:var(--cream);border-radius:var(--radius);font-size:14px}
+.cart-summary-row{display:flex;justify-content:space-between;padding:6px 0}
+.cart-summary-total{font-size:18px;font-weight:800;border-top:2px solid var(--brown);padding-top:10px;margin-top:8px}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:60px 20px;color:var(--brown-muted)}
+.empty-state .empty-icon{font-size:56px;margin-bottom:12px}
+.empty-state h3{font-size:18px;font-weight:600;margin-bottom:6px;color:var(--brown)}
+.empty-state p{font-size:13px}
+
+/* SECTION */
+.section-title{font-size:16px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+/* TWO COL LAYOUT */
+.two-col{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+@media(max-width:900px){.two-col{grid-template-columns:1fr}}
+
+/* ANIMATIONS */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeIn .3s ease}
+
+/* Store settings */
+.store-header{display:flex;align-items:center;gap:20px;margin-bottom:28px}
+.store-avatar{width:80px;height:80px;border-radius:var(--radius-lg);background:linear-gradient(135deg,var(--orange),var(--orange-dark));display:flex;align-items:center;justify-content:center;font-size:36px;color:#fff;font-family:'Playfair Display',serif;font-weight:700}
+.store-meta h2{font-size:22px;font-weight:700}
+.store-meta p{font-size:13px;color:var(--brown-muted)}
+
+/* Finance card */
+.finance-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.finance-card{background:var(--cream);border-radius:var(--radius);padding:18px;text-align:center}
+.finance-card .fc-val{font-size:24px;font-weight:800;color:var(--brown)}
+.finance-card .fc-label{font-size:11px;color:var(--brown-muted);font-weight:600;margin-top:4px}
+
+/* REVIEW CARD */
+.review-card{padding:14px 0;border-bottom:1px solid var(--gray-light)}
+.review-card:last-child{border-bottom:none}
+.review-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.review-avatar{width:32px;height:32px;border-radius:50%;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--brown-muted)}
+.review-meta{flex:1}.review-meta .name{font-size:13px;font-weight:600}.review-meta .date{font-size:11px;color:var(--brown-muted)}
+.review-text{font-size:13px;line-height:1.5;color:var(--brown-light)}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--brown);color:#fff;padding:14px 22px;border-radius:var(--radius);font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);z-index:2000;opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0);pointer-events:auto}
+</style>
+</head>
+<body>
+<div id="app">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <h1>Tienda</h1>
+      <span>LATAM Web3</span>
+    </div>
+    <div class="topbar-right">
+      <div class="chain-badge"><span class="chain-dot"></span> Initia Testnet</div>
+      <div class="mode-toggle">
+        <button class="mode-btn active" onclick="setMode('merchant')">Modo Vendedor</button>
+        <button class="mode-btn" onclick="setMode('buyer')">Modo Comprador</button>
+      </div>
+      <div class="topbar-wallet" id="walletDisplay">init1cafe...seed</div>
+    </div>
+  </div>
+
+  <div class="body-wrap">
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar"></div>
+    <!-- MAIN -->
+    <div class="main" id="mainContent"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'http://localhost:3000/api/v1';
+const MERCHANT_KEY = 'init1cafemaria000000000000000000000000seed';
+const BUYER_ADDR = 'init1buyer00000000000000000000000000seed';
+
+let currentMode = 'merchant';
+let currentTab = 'dashboard';
+let cart = [];
+let favorites = new Set();
+let allProducts = [];
+let allOrders = [];
+let allReviews = [];
+let merchantData = null;
+let merchantId = 'seed-merchant-001';
+
+// ============ NAVIGATION ============
+const merchantTabs = [
+  { id:'dashboard', icon:'&#127968;', label:'Dashboard' },
+  { id:'products', icon:'&#128230;', label:'Productos' },
+  { id:'orders', icon:'&#128203;', label:'Pedidos' },
+  { id:'finance', icon:'&#128176;', label:'Finanzas' },
+  { id:'reviews', icon:'&#11088;', label:'Resenas' },
+  { id:'store', icon:'&#9881;', label:'Mi Tienda' },
+];
+const buyerTabs = [
+  { id:'home', icon:'&#127968;', label:'Inicio' },
+  { id:'explore', icon:'&#128269;', label:'Explorar' },
+  { id:'cart', icon:'&#128722;', label:'Carrito' },
+  { id:'myorders', icon:'&#128230;', label:'Mis Pedidos' },
+  { id:'favorites', icon:'&#10084;', label:'Favoritos' },
+];
+
+const categoryMap = {
+  food:'Alimentos', clothing:'Ropa', electronics:'Electronica', home:'Hogar',
+  beauty:'Artesanias', sports:'Deportes', toys:'Juguetes', automotive:'Automotriz',
+  books:'Libros', services:'Servicios', beverages:'Bebidas'
+};
+const categoryIcons = {
+  food:'&#127828;', clothing:'&#128085;', electronics:'&#128187;', home:'&#127970;',
+  beauty:'&#127912;', sports:'&#9917;', toys:'&#129531;', automotive:'&#128663;',
+  books:'&#128218;', services:'&#128736;', beverages:'&#9749;'
+};
+const catDisplay = [
+  { id:'clothing', name:'Ropa', icon:'&#128085;' },
+  { id:'electronics', name:'Electronica', icon:'&#128187;' },
+  { id:'home', name:'Hogar', icon:'&#127970;' },
+  { id:'beauty', name:'Artesanias', icon:'&#127912;' },
+  { id:'food', name:'Alimentos', icon:'&#127828;' },
+];
+
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-btn').forEach((b,i) => b.classList.toggle('active', (mode==='merchant'?i===0:i===1)));
+  document.getElementById('walletDisplay').textContent = mode==='merchant' ? 'init1cafe...seed' : 'init1buyer...seed';
+  currentTab = mode==='merchant' ? 'dashboard' : 'home';
+  renderSidebar();
+  renderPage();
+}
+
+function renderSidebar() {
+  const tabs = currentMode==='merchant' ? merchantTabs : buyerTabs;
+  const sb = document.getElementById('sidebar');
+  sb.innerHTML = `
+    <div class="sidebar-nav">
+      <div class="nav-label">${currentMode==='merchant'?'Panel Vendedor':'Marketplace'}</div>
+      ${tabs.map(t => `
+        <div class="nav-item ${currentTab===t.id?'active':''}" onclick="navigate('${t.id}')">
+          <span class="icon">${t.icon}</span>${t.label}
+          ${t.id==='cart'&&cart.length?`<span style="margin-left:auto;background:var(--orange);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700">${cart.reduce((s,c)=>s+c.qty,0)}</span>`:''}
+        </div>
+      `).join('')}
+    </div>
+    <div class="sidebar-footer">
+      Powered by <a href="#">Initia</a><br>
+      &copy; 2026 Tienda
+    </div>
+  `;
+}
+
+function navigate(tab) {
+  currentTab = tab;
+  renderSidebar();
+  renderPage();
+}
+
+// ============ DATA FETCHING ============
+async function fetchData() {
+  try {
+    const [prodRes, ordRes, revRes, merchRes] = await Promise.all([
+      fetch(`${API}/search?limit=100`).then(r=>r.json()),
+      fetch(`${API}/orders?limit=100`).then(r=>r.json()),
+      fetch(`${API}/merchants/${merchantId}/reviews`).then(r=>r.json()),
+      fetch(`${API}/merchants/${merchantId}`).then(r=>r.json()),
+    ]);
+    allProducts = prodRes.results || [];
+    allOrders = ordRes.orders || [];
+    allReviews = revRes.reviews || [];
+    merchantData = merchRes;
+  } catch(e) {
+    console.warn('API not available, using empty data', e);
+    allProducts = []; allOrders = []; allReviews = []; merchantData = {};
+  }
+  renderPage();
+}
+
+// ============ RENDER ROUTER ============
+function renderPage() {
+  const main = document.getElementById('mainContent');
+  const map = {
+    dashboard: renderMerchantDashboard,
+    products: renderMerchantProducts,
+    orders: renderMerchantOrders,
+    finance: renderFinance,
+    reviews: renderMerchantReviews,
+    store: renderStoreSettings,
+    home: renderBuyerHome,
+    explore: renderExplore,
+    cart: renderCart,
+    myorders: renderMyOrders,
+    favorites: renderFavorites,
+  };
+  const fn = map[currentTab];
+  if (fn) main.innerHTML = fn();
+  main.scrollTop = 0;
+}
+
+// ============ MERCHANT PAGES ============
+function renderMerchantDashboard() {
+  const todayOrders = allOrders.filter(o => o.createdAt && o.createdAt.startsWith(new Date().toISOString().slice(0,10)));
+  const pendingOrders = allOrders.filter(o => o.status==='paid');
+  const totalRev = merchantData?.totalRevenue || 0;
+  const loyaltyPts = allOrders.filter(o=>o.status==='completed').reduce((s,o)=>s+Math.floor((o.netAmount||0)*100),0);
+  return `
+    <div class="fade-in">
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle">Bienvenido de vuelta, Cafe Maria</p>
+      <div class="stats-grid">
+        <div class="stat-card"><span class="stat-icon">&#128176;</span><div class="stat-label">Ventas Hoy</div><div class="stat-value">$${todayOrders.reduce((s,o)=>s+(o.totalPrice||0),0).toFixed(2)}</div><div class="stat-sub">${todayOrders.length} orden(es)</div></div>
+        <div class="stat-card"><span class="stat-icon">&#128230;</span><div class="stat-label">Pedidos Pendientes</div><div class="stat-value">${pendingOrders.length}</div><div class="stat-sub">Requieren atencion</div></div>
+        <div class="stat-card"><span class="stat-icon">&#128200;</span><div class="stat-label">Ingresos Totales</div><div class="stat-value">$${totalRev.toFixed(2)}</div><div class="stat-sub">+12% vs mes anterior</div></div>
+        <div class="stat-card"><span class="stat-icon">&#11088;</span><div class="stat-label">Puntos Distribuidos</div><div class="stat-value">${loyaltyPts.toLocaleString()}</div><div class="stat-sub">Programa de lealtad</div></div>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header"><h3>&#128293; Productos Top</h3></div>
+          <div class="card-body no-pad">
+            <table>
+              <thead><tr><th>Producto</th><th>Ventas</th><th>Ingresos</th><th>Stock</th></tr></thead>
+              <tbody>
+                ${allProducts.sort((a,b)=>(b.orderCount||0)-(a.orderCount||0)).slice(0,5).map(p=>`
+                  <tr>
+                    <td><strong>${p.name}</strong></td>
+                    <td>${p.orderCount||0}</td>
+                    <td style="color:var(--orange);font-weight:700">$${((p.orderCount||0)*p.price).toFixed(2)}</td>
+                    <td><span class="badge ${p.stock>10?'badge-completed':'badge-cancelled'}">${p.stock}</span></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>&#128196; Pedidos Recientes</h3></div>
+          <div class="card-body">
+            ${allOrders.slice(0,5).map(o=>`
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray-light)">
+                <div>
+                  <div style="font-size:13px;font-weight:600">${o.productName}</div>
+                  <div style="font-size:11px;color:var(--brown-muted)">x${o.quantity} &bull; ${timeAgo(o.createdAt)}</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:14px;font-weight:700;color:var(--orange)">$${(o.totalPrice||0).toFixed(2)}</div>
+                  <span class="badge badge-${o.status}">${statusLabel(o.status)}</span>
+                </div>
+              </div>
+            `).join('')||'<p style="color:var(--brown-muted);font-size:13px">Sin pedidos aun</p>'}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderMerchantProducts() {
+  const myProducts = allProducts.filter(p=>p.merchantId===merchantId);
+  return `
+    <div class="fade-in">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div><h1 class="page-title">Productos</h1><p class="page-subtitle">${myProducts.length} productos activos</p></div>
+        <button class="btn btn-primary" onclick="openProductModal()">+ Nuevo Producto</button>
+      </div>
+      <div class="product-grid">
+        ${myProducts.map(p=>`
+          <div class="product-card" onclick="openProductModal('${p.productId}')">
+            <div class="product-img">${categoryIcons[p.category]||'&#128230;'}</div>
+            <div class="product-info">
+              <div class="product-name">${p.name}</div>
+              <div class="product-price">$${p.price.toFixed(2)}</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+                <span class="product-stock">Stock: ${p.stock}</span>
+                <span class="product-category-badge">${categoryMap[p.category]||p.category}</span>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderMerchantOrders() {
+  const mOrders = allOrders.filter(o=>o.merchantId===merchantId);
+  return `
+    <div class="fade-in">
+      <h1 class="page-title">Pedidos</h1>
+      <p class="page-subtitle">${mOrders.length} pedidos en total</p>
+      <div class="card">
+        <div class="card-body no-pad">
+          <table>
+            <thead><tr><th>ID</th><th>Producto</th><th>Cant.</th><th>Total</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead>
+            <tbody>
+              ${mOrders.map(o=>`
+                <tr>
+                  <td style="font-family:monospace;font-size:11px">${o.orderId.slice(0,12)}...</td>
+                  <td><strong>${o.productName}</strong></td>
+                  <td>${o.quantity}</td>
+                  <td style="font-weight:700;color:var(--orange)">$${(o.totalPrice||0).toFixed(2)}</td>
+                  <td><span class="badge badge-${o.status}">${statusLabel(o.status)}</span></td>
+                  <td style="font-size:12px;color:var(--brown-muted)">${formatDate(o.createdAt)}</td>
+                  <td>
+                    <button class="btn-icon" onclick="event.stopPropagation();openOrderDetail('${o.orderId}')" title="Ver detalle">&#128065;</button>
+                    ${o.status==='paid'?`<button class="btn btn-sm btn-success" onclick="event.stopPropagation();shipOrder('${o.orderId}')" style="margin-left:6px">Enviar</button>`:''}
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderFinance() {
+  const totalRev = merchantData?.totalRevenue || 0;
+  const fees = allOrders.reduce((s,o)=>s+(o.platformFee||0),0);
+  const net = totalRev - fees;
+  const escrowHeld = allOrders.filter(o=>!o.escrow?.isReleased&&o.status!=='cancelled').reduce((s,o)=>s+(o.escrow?.amount||0),0);
+  return `
+    <div class="fade-in">
+      <h1 class="page-title">Finanzas</h1>
+      <p class="page-subtitle">Resumen financiero de tu tienda</p>
+      <div class="finance-row">
+        <div class="finance-card"><div class="fc-val" style="color:var(--green)">$${totalRev.toFixed(2)}</div><div class="fc-label">Ingresos Totales</div></div>
+        <div class="finance-card"><div class="fc-val" style="color:var(--orange)">$${fees.toFixed(2)}</div><div class="fc-label">Comisiones (1.5%)</div></div>
+        <div class="finance-card"><div class="fc-val">$${net.toFixed(2)}</div><div class="fc-label">Ingreso Neto</div></div>
+      </div>
+      <div class="stats-grid" style="grid-template-columns:1fr 1fr">
+        <div class="stat-card">
+          <div class="stat-label">Escrow Retenido</div>
+          <div class="stat-value" style="color:var(--yellow)">$${escrowHeld.toFixed(2)}</div>
+          <div class="stat-sub" style="color:var(--brown-muted)">Se libera al completar pedido</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Escrow Liberado</div>
+          <div class="stat-value" style="color:var(--green)">$${(net - escrowHeld).toFixed(2)}</div>
+          <div class="stat-sub">Fondos disponibles</div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:20px">
+        <div class="card-header"><h3>&#128176; Historial de Transacciones</h3></div>
+        <div class="card-body no-pad">
+          <table>
+            <thead><tr><th>Fecha</th><th>Pedido</th><th>Monto</th><th>Comision</th><th>Neto</th><th>Escrow</th></tr></thead>
+            <tbody>
+              ${allOrders.filter(o=>o.merchantId===merchantId).map(o=>`
+                <tr>
+                  <td style="font-size:12px">${formatDate(o.createdAt)}</td>
+                  <td style="font-size:12px;font-family:monospace">${o.orderId.slice(0,10)}...</td>
+                  <td style="font-weight:600">$${(o.totalPrice||0).toFixed(2)}</td>
+                  <td style="color:var(--orange)">-$${(o.platformFee||0).toFixed(2)}</td>
+                  <td style="font-weight:700">$${(o.netAmount - (o.platformFee||0)).toFixed(2)}</td>
+                  <td><span class="badge ${o.escrow?.isReleased?'badge-completed':'badge-shipped'}">${o.escrow?.isReleased?'Liberado':'Retenido'}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderMerchantReviews() {
+  const avg = merchantData?.averageRating || merchantData?.totalRatingScore && merchantData?.ratingCount ? (merchantData.totalRatingScore/merchantData.ratingCount).toFixed(1) : 'N/A';
+  return `
+    <div class="fade-in">
+      <h1 class="page-title">Resenas</h1>
+      <p class="page-subtitle">${allReviews.length} resenas &bull; Promedio: ${avg} &#11088;</p>
+      <div class="stats-grid" style="grid-template-columns:repeat(5,1fr);margin-bottom:24px">
+        ${[5,4,3,2,1].map(s => {
+          const cnt = allReviews.filter(r=>r.rating===s).length;
+          const pct = allReviews.length ? Math.round(cnt/allReviews.length*100) : 0;
+          return `<div class="stat-card" style="text-align:center">
+            <div style="font-size:20px;margin-bottom:4px">${'&#11088;'.repeat(s)}</div>
+            <div style="font-size:22px;font-weight:800">${cnt}</div>
+            <div style="height:4px;background:var(--gray-light);border-radius:2px;margin-top:6px"><div style="height:100%;width:${pct}%;background:var(--orange);border-radius:2px"></div></div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>Todas las Resenas</h3></div>
+        <div class="card-body">
+          ${allReviews.map(r=>`
+            <div class="review-card">
+              <div class="review-header">
+                <div class="review-avatar">${r.reviewerAddress?.slice(-2).toUpperCase()||'?'}</div>
+                <div class="review-meta">
+                  <div class="name">${r.reviewerAddress?.slice(0,16)||'Anonimo'}...</div>
+                  <div class="date">${formatDate(r.createdAt)} &bull; <span class="stars">${'&#9733;'.repeat(r.rating)}${'&#9734;'.repeat(5-r.rating)}</span></div>
+                </div>
+              </div>
+              <div class="review-text">${r.comment}</div>
+              <div style="margin-top:6px;font-size:11px;color:var(--brown-muted)">Producto: ${r.productName}</div>
+            </div>
+          `).join('')||'<div class="empty-state"><div class="empty-icon">&#11088;</div><h3>Sin resenas aun</h3></div>'}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderStoreSettings() {
+  const m = merchantData || {};
+  return `
+    <div class="fade-in">
+      <h1 class="page-title">Mi Tienda</h1>
+      <p class="page-subtitle">Configuracion de tu perfil de vendedor</p>
+      <div class="store-header">
+        <div class="store-avatar">CM</div>
+        <div class="store-meta">
+          <h2>${m.storeName||'Cafe Maria'}</h2>
+          <p>${m.city||'Medellin'}, ${m.country||'CO'} &bull; Desde ${formatDate(m.registeredAt)}</p>
+          <p style="margin-top:4px"><span class="badge badge-completed">Verificado On-Chain</span></p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>&#9881; Informacion de la Tienda</h3></div>
+        <div class="card-body">
+          <div class="form-group"><label class="form-label">Nombre de la Tienda</label><input class="form-input" value="${m.storeName||''}" id="storeNameInput"></div>
+          <div class="form-group"><label class="form-label">Descripcion</label><textarea class="form-input" id="storeDescInput">${m.description||''}</textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Email</label><input class="form-input" value="${m.contactEmail||''}" id="storeEmailInput"></div>
+            <div class="form-group"><label class="form-label">Telefono</label><input class="form-input" value="${m.contactPhone||''}" id="storePhoneInput"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Ciudad</label><input class="form-input" value="${m.city||''}" id="storeCityInput"></div>
+            <div class="form-group"><label class="form-label">Pais</label><input class="form-input" value="${m.country||''}" id="storeCountryInput" maxlength="2"></div>
+          </div>
+          <button class="btn btn-primary" onclick="updateStore()" style="margin-top:8px">Guardar Cambios</button>
+        </div>
+      </div>
+      <div class="card" style="margin-top:20px">
+        <div class="card-header"><h3>&#128279; Datos On-Chain</h3></div>
+        <div class="card-body">
+          <div style="font-size:13px;color:var(--brown-muted)">
+            <div style="margin-bottom:8px"><strong>Merchant ID:</strong> <code style="background:var(--cream);padding:2px 8px;border-radius:4px">${m.merchantId||merchantId}</code></div>
+            <div style="margin-bottom:8px"><strong>Wallet:</strong> <code style="background:var(--cream);padding:2px 8px;border-radius:4px">${MERCHANT_KEY}</code></div>
+            <div style="margin-bottom:8px"><strong>Chain:</strong> Initia Testnet (initiation-2)</div>
+            <div><strong>Estado:</strong> <span class="badge badge-completed">${m.onChainStatus||'confirmed'}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============ BUYER PAGES ============
+function renderBuyerHome() {
+  const featured = [...allProducts].sort((a,b)=>(b.orderCount||0)-(a.orderCount||0)).slice(0,4);
+  const trending = [...allProducts].sort((a,b)=>(b.viewCount||0)-(a.viewCount||0)).slice(0,4);
+  return `
+    <div class="fade-in">
+      <div style="background:linear-gradient(135deg,var(--orange),var(--orange-dark));border-radius:var(--radius-lg);padding:40px 36px;color:#fff;margin-bottom:28px;position:relative;overflow:hidden">
+        <div style="position:absolute;top:-30px;right:-20px;font-size:120px;opacity:.15">&#9749;</div>
+        <h1 style="font-family:'Playfair Display',serif;font-size:32px;margin-bottom:8px">Descubre lo mejor de LATAM</h1>
+        <p style="font-size:15px;opacity:.9;max-width:500px">Productos unicos de emprendedores latinoamericanos. Compra seguro con escrow on-chain en Initia.</p>
+        <button class="btn" style="background:#fff;color:var(--orange);margin-top:16px;font-weight:700" onclick="navigate('explore')">Explorar Ahora &#8594;</button>
+      </div>
+
+      <div class="section-title">&#128193; Categorias</div>
+      <div class="cat-grid">
+        ${catDisplay.map(c=>`
+          <div class="cat-card" onclick="navigateExplore('${c.id}')">
+            <div class="cat-icon">${c.icon}</div>
+            <div class="cat-name">${c.name}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="section-title">&#127942; Productos Destacados</div>
+      <div class="product-grid" style="margin-bottom:28px">
+        ${featured.map(p=>productCard(p)).join('')}
+      </div>
+
+      <div class="section-title">&#128293; Tendencia</div>
+      <div class="product-grid">
+        ${trending.map(p=>productCard(p)).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderExplore() {
+  return `
+    <div class="fade-in">
+      <h1 class="page-title">Explorar</h1>
+      <p class="page-subtitle">Encuentra productos increibles</p>
+      <div class="search-wrap">
+        <input class="search-input" placeholder="Buscar productos..." id="searchInput" oninput="doSearch()">
+        <select class="filter-select" id="catFilter" onchange="doSearch()">
+          <option value="">Todas las categorias</option>
+          ${Object.entries(categoryMap).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}
+        </select>
+        <select class="filter-select" id="sortFilter" onchange="doSearch()">
+          <option value="newest">Mas recientes</option>
+          <option value="price_asc">Precio: menor a mayor</option>
+          <option value="price_desc">Precio: mayor a menor</option>
+          <option value="popularity">Popularidad</option>
+        </select>
+      </div>
+      <div class="product-grid" id="exploreGrid">
+        ${allProducts.map(p=>productCard(p)).join('')}
+      </div>
+      ${allProducts.length===0?'<div class="empty-state"><div class="empty-icon">&#128269;</div><h3>No se encontraron productos</h3><p>Intenta con otra busqueda</p></div>':''}
+    </div>
+  `;
+}
+
+function renderCart() {
+  const subtotal = cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const shipping = cart.length ? 5.00 : 0;
+  const total = subtotal + shipping;
+  if (!cart.length) {
+    return `<div class="fade-in"><h1 class="page-title">Carrito</h1><div class="empty-state" style="margin-top:60px"><div class="empty-icon">&#128722;</div><h3>Tu carrito esta vacio</h3><p>Explora productos increibles y agretalos aqui</p><button class="btn btn-primary" style="margin-top:16px" onclick="navigate('explore')">Explorar Productos</button></div></div>`;
+  }
+  return `
+    <div class="fade-in">
+      <h1 class="page-title">Carrito</h1>
+      <p class="page-subtitle">${cart.reduce((s,c)=>s+c.qty,0)} articulo(s)</p>
+      <div class="two-col">
+        <div class="card">
+          <div class="card-body">
+            ${cart.map((c,i)=>`
+              <div class="cart-item">
+                <div class="cart-item-img">${categoryIcons[c.category]||'&#128230;'}</div>
+                <div class="cart-item-info">
+                  <div class="cart-item-name">${c.name}</div>
+                  <div class="cart-item-price">$${c.price.toFixed(2)}</div>
+                </div>
+                <div class="cart-qty">
+                  <button onclick="updateCartQty(${i},-1)">-</button>
+                  <span>${c.qty}</span>
+                  <button onclick="updateCartQty(${i},1)">+</button>
+                </div>
+                <button class="btn-icon" onclick="removeFromCart(${i})" style="color:var(--red)">&#128465;</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-header"><h3>Resumen del Pedido</h3></div>
+            <div class="card-body">
+              <div class="cart-summary" style="margin:0">
+                <div class="cart-summary-row"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>
+                <div class="cart-summary-row"><span>Envio</span><span>$${shipping.toFixed(2)}</span></div>
+                <div class="cart-summary-row"><span>Comision plataforma (1.5%)</span><span>$${(subtotal*0.015).toFixed(2)}</span></div>
+                <div class="cart-summary-row cart-summary-total"><span>Total</span><span style="color:var(--orange)">$${total.toFixed(2)}</span></div>
+              </div>
+              <div class="escrow-bar escrow-held" style="margin-top:14px">
+                <span class="escrow-dot"></span>
+                <span>Pago protegido con <strong>escrow on-chain</strong> en Initia</span>
+              </div>
+              <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:12px;padding:14px" onclick="checkout()">Pagar con Initia &#128274;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderMyOrders() {
+  const buyerOrders = allOrders.filter(o=>o.buyerAddress===BUYER_ADDR);
+  return `
+    <div class="fade-in">
+      <h1 class="page-title">Mis Pedidos</h1>
+      <p class="page-subtitle">${buyerOrders.length} pedido(s)</p>
+      ${buyerOrders.length?`
+        <div class="card">
+          <div class="card-body no-pad">
+            <table>
+              <thead><tr><th>Producto</th><th>Cant.</th><th>Total</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
+              <tbody>
+                ${buyerOrders.map(o=>`
+                  <tr>
+                    <td><strong>${o.productName}</strong></td>
+                    <td>${o.quantity}</td>
+                    <td style="font-weight:700;color:var(--orange)">$${(o.totalPrice||0).toFixed(2)}</td>
+                    <td><span class="badge badge-${o.status}">${statusLabel(o.status)}</span></td>
+                    <td style="font-size:12px;color:var(--brown-muted)">${formatDate(o.createdAt)}</td>
+                    <td><button class="btn-icon" onclick="openOrderDetail('${o.orderId}')">&#128065;</button></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `:'<div class="empty-state"><div class="empty-icon">&#128230;</div><h3>Sin pedidos aun</h3><p>Explora y realiza tu primera compra</p></div>'}
+    </div>
+  `;
+}
+
+function renderFavorites() {
+  const favProducts = allProducts.filter(p=>favorites.has(p.productId));
+  return `
+    <div class="fade-in">
+      <h1 class="page-title">Favoritos</h1>
+      <p class="page-subtitle">${favProducts.length} producto(s) guardado(s)</p>
+      ${favProducts.length?`
+        <div class="product-grid">${favProducts.map(p=>productCard(p)).join('')}</div>
+      `:'<div class="empty-state"><div class="empty-icon">&#10084;</div><h3>Sin favoritos aun</h3><p>Marca productos con el corazon para guardarlos aqui</p></div>'}
+    </div>
+  `;
+}
+
+// ============ COMPONENTS ============
+function productCard(p) {
+  const isFav = favorites.has(p.productId);
+  return `
+    <div class="product-card" onclick="openProductDetail('${p.productId}')">
+      <div class="product-img">
+        ${categoryIcons[p.category]||'&#128230;'}
+        <button class="fav-btn ${isFav?'favorited':''}" onclick="event.stopPropagation();toggleFav('${p.productId}')">${isFav?'&#10084;':'&#9825;'}</button>
+      </div>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-merchant">${p.merchantName||'Tienda'}</div>
+        <div class="product-price">$${p.price.toFixed(2)}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
+          <span class="product-stock">${p.stock>0?`${p.stock} disponibles`:'Agotado'}</span>
+          <span class="product-category-badge">${categoryMap[p.category]||p.category}</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function statusLabel(s) {
+  return {paid:'Nuevo',shipped:'Enviado',delivered:'Entregado',completed:'Completado',cancelled:'Cancelado',disputed:'Disputado'}[s]||s;
+}
+function statusFlow(status) {
+  const steps = ['paid','shipped','delivered','completed'];
+  const idx = steps.indexOf(status);
+  return steps.map((s,i) => {
+    const cls = i<idx?'done':i===idx?'current':'';
+    return { step:s, cls, label:statusLabel(s) };
+  });
+}
+
+// ============ MODALS ============
+function openModal(html, wide) {
+  const ov = document.getElementById('modalOverlay');
+  const mc = document.getElementById('modalContent');
+  mc.className = 'modal' + (wide?' modal-wide':'');
+  mc.innerHTML = html;
+  ov.classList.add('show');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+function openProductDetail(productId) {
+  const p = allProducts.find(x=>x.productId===productId);
+  if(!p) return;
+  const pReviews = allReviews.filter(r=>r.productId===productId);
+  const avgRating = pReviews.length ? (pReviews.reduce((s,r)=>s+r.rating,0)/pReviews.length).toFixed(1) : null;
+  openModal(`
+    <div class="modal-head">
+      <h2>${p.name}</h2>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+        <div style="background:var(--cream);border-radius:var(--radius);height:240px;display:flex;align-items:center;justify-content:center;font-size:72px">${categoryIcons[p.category]||'&#128230;'}</div>
+        <div>
+          <div style="font-size:11px;color:var(--brown-muted);font-weight:600;margin-bottom:4px">${categoryMap[p.category]||p.category} &bull; ${p.merchantName}</div>
+          ${avgRating?`<div class="stars" style="margin-bottom:8px">${'&#9733;'.repeat(Math.round(avgRating))}${'&#9734;'.repeat(5-Math.round(avgRating))} <span style="color:var(--brown-muted);font-size:12px">${avgRating} (${pReviews.length})</span></div>`:''}
+          <div style="font-size:32px;font-weight:800;color:var(--orange);margin-bottom:12px">$${p.price.toFixed(2)}</div>
+          <div style="font-size:13px;color:var(--brown-light);line-height:1.6;margin-bottom:16px">${p.description}</div>
+          <div style="font-size:12px;margin-bottom:12px">
+            <span class="badge ${p.stock>0?'badge-completed':'badge-cancelled'}">${p.stock>0?p.stock+' disponibles':'Agotado'}</span>
+            ${p.shippingInfo?.freeShipping?'<span class="badge badge-delivered" style="margin-left:6px">Envio gratis</span>':''}
+          </div>
+          ${p.tags?.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:16px">${p.tags.map(t=>`<span style="background:var(--cream);padding:3px 10px;border-radius:12px;font-size:11px;color:var(--brown-muted)">#${t}</span>`).join('')}</div>`:''}
+          ${p.stock>0?`<button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px" onclick="addToCart('${p.productId}')">&#128722; Agregar al Carrito</button>`:'<button class="btn btn-secondary" style="width:100%;justify-content:center;padding:14px" disabled>Agotado</button>'}
+        </div>
+      </div>
+      ${pReviews.length?`
+        <div style="margin-top:24px;border-top:1px solid var(--gray-light);padding-top:16px">
+          <h3 style="font-size:15px;font-weight:700;margin-bottom:12px">&#11088; Resenas (${pReviews.length})</h3>
+          ${pReviews.map(r=>`
+            <div class="review-card">
+              <div class="review-header">
+                <div class="review-avatar">${r.reviewerAddress?.slice(-2).toUpperCase()}</div>
+                <div class="review-meta">
+                  <div class="name">${r.reviewerAddress?.slice(0,14)}...</div>
+                  <div class="date"><span class="stars">${'&#9733;'.repeat(r.rating)}${'&#9734;'.repeat(5-r.rating)}</span> &bull; ${formatDate(r.createdAt)}</div>
+                </div>
+              </div>
+              <div class="review-text">${r.comment}</div>
+            </div>
+          `).join('')}
+        </div>
+      `:''}
+    </div>
+  `, true);
+}
+
+function openProductModal(productId) {
+  const p = productId ? allProducts.find(x=>x.productId===productId) : null;
+  openModal(`
+    <div class="modal-head">
+      <h2>${p?'Editar Producto':'Nuevo Producto'}</h2>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" id="pName" value="${p?.name||''}"></div>
+      <div class="form-group"><label class="form-label">Descripcion</label><textarea class="form-input" id="pDesc">${p?.description||''}</textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Precio (USD)</label><input class="form-input" type="number" step="0.01" id="pPrice" value="${p?.price||''}"></div>
+        <div class="form-group"><label class="form-label">Stock</label><input class="form-input" type="number" id="pStock" value="${p?.stock??''}"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Categoria</label>
+        <select class="form-input" id="pCategory">
+          ${Object.entries(categoryMap).map(([k,v])=>`<option value="${k}" ${p?.category===k?'selected':''}>${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Tags (separados por coma)</label><input class="form-input" id="pTags" value="${p?.tags?.join(', ')||''}"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveProduct('${productId||''}')">${p?'Guardar Cambios':'Crear Producto'}</button>
+    </div>
+  `);
+}
+
+function openOrderDetail(orderId) {
+  const o = allOrders.find(x=>x.orderId===orderId);
+  if(!o) return;
+  const flow = statusFlow(o.status);
+  openModal(`
+    <div class="modal-head">
+      <h2>Pedido #${o.orderId.slice(0,8)}</h2>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="order-flow">
+        ${flow.map((f,i) => `
+          ${i>0?`<div class="flow-line ${f.cls==='done'||f.cls==='current'?'done':''}"></div>`:''}
+          <div class="flow-step ${f.cls}">
+            <div class="flow-circle">${i+1}</div>
+            <div class="flow-label">${f.label}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px">
+        <div>
+          <h4 style="font-size:13px;font-weight:700;margin-bottom:10px">Detalles del Pedido</h4>
+          <div style="font-size:13px;line-height:2;color:var(--brown-light)">
+            <div><strong>Producto:</strong> ${o.productName}</div>
+            <div><strong>Cantidad:</strong> ${o.quantity}</div>
+            <div><strong>Precio unitario:</strong> $${(o.unitPrice||0).toFixed(2)}</div>
+            <div><strong>Total:</strong> <span style="color:var(--orange);font-weight:700">$${(o.totalPrice||0).toFixed(2)}</span></div>
+            <div><strong>Metodo de pago:</strong> ${o.paymentMethod||'native'}</div>
+            ${o.trackingNumber?`<div><strong>Tracking:</strong> <code>${o.trackingNumber}</code></div>`:''}
+          </div>
+        </div>
+        <div>
+          <h4 style="font-size:13px;font-weight:700;margin-bottom:10px">Informacion del Comprador</h4>
+          <div style="font-size:13px;line-height:2;color:var(--brown-light)">
+            <div><strong>Wallet:</strong> <code style="font-size:11px">${o.buyerAddress?.slice(0,20)}...</code></div>
+            <div><strong>Direccion:</strong> ${o.shippingRef||'N/A'}</div>
+            <div><strong>Fecha:</strong> ${formatDate(o.createdAt)}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="escrow-bar ${o.escrow?.isReleased?'escrow-released':'escrow-held'}" style="margin-top:20px">
+        <span class="escrow-dot"></span>
+        <div style="flex:1">
+          <strong>Escrow:</strong> $${(o.escrow?.amount||0).toFixed(2)}
+          &bull; Comision: $${(o.escrow?.platformFee||0).toFixed(2)}
+          &bull; Estado: <strong>${o.escrow?.isReleased?'Liberado':'Retenido en escrow'}</strong>
+        </div>
+      </div>
+
+      ${currentMode==='merchant'&&o.status==='paid'?`
+        <div style="margin-top:16px">
+          <div class="form-group"><label class="form-label">Numero de Tracking</label><input class="form-input" id="trackingInput" placeholder="Ej: COL-2024-12345"></div>
+          <button class="btn btn-success" onclick="shipOrder('${o.orderId}')">Marcar como Enviado</button>
+        </div>
+      `:''}
+      ${currentMode==='buyer'&&o.status==='shipped'?`<button class="btn btn-success" style="margin-top:16px" onclick="confirmDelivery('${o.orderId}')">Confirmar Entrega</button>`:''}
+      ${currentMode==='buyer'&&o.status==='delivered'?`<button class="btn btn-primary" style="margin-top:16px" onclick="completeOrder('${o.orderId}')">Completar y Liberar Escrow</button>`:''}
+    </div>
+  `, true);
+}
+
+// ============ ACTIONS ============
+function toggleFav(productId) {
+  if(favorites.has(productId)) favorites.delete(productId); else favorites.add(productId);
+  renderSidebar();
+  renderPage();
+}
+
+function addToCart(productId) {
+  const p = allProducts.find(x=>x.productId===productId);
+  if(!p) return;
+  const existing = cart.find(c=>c.productId===productId);
+  if(existing) { existing.qty++; } else { cart.push({productId,name:p.name,price:p.price,category:p.category,qty:1,merchantId:p.merchantId}); }
+  closeModal();
+  renderSidebar();
+  showToast('Producto agregado al carrito');
+}
+
+function updateCartQty(idx, delta) {
+  cart[idx].qty += delta;
+  if(cart[idx].qty <= 0) cart.splice(idx,1);
+  renderSidebar();
+  renderPage();
+}
+function removeFromCart(idx) {
+  cart.splice(idx,1);
+  renderSidebar();
+  renderPage();
+}
+
+async function checkout() {
+  for(const item of cart) {
+    try {
+      await fetch(`${API}/orders`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          buyerAddress: BUYER_ADDR,
+          productId: item.productId,
+          quantity: item.qty,
+          shippingRef: 'Calle 10 #43-12, Medellin, CO',
+          paymentMethod:'native'
+        })
+      });
+    } catch(e) { console.error('Order error',e); }
+  }
+  cart = [];
+  showToast('Pedido creado exitosamente! Pago protegido con escrow.');
+  await fetchData();
+  renderSidebar();
+  navigate('myorders');
+}
+
+async function saveProduct(productId) {
+  const name = document.getElementById('pName').value;
+  const description = document.getElementById('pDesc').value;
+  const price = parseFloat(document.getElementById('pPrice').value);
+  const stock = parseInt(document.getElementById('pStock').value);
+  const category = document.getElementById('pCategory').value;
+  const tags = document.getElementById('pTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+
+  if(!name||!description||isNaN(price)||isNaN(stock)) { showToast('Completa todos los campos'); return; }
+
+  try {
+    const url = productId ? `${API}/products/${productId}` : `${API}/products`;
+    const method = productId ? 'PUT' : 'POST';
+    await fetch(url, {
+      method,
+      headers:{'Content-Type':'application/json','X-Merchant-Key':MERCHANT_KEY},
+      body:JSON.stringify({name,description,price,stock,category,tags})
+    });
+    closeModal();
+    showToast(productId?'Producto actualizado':'Producto creado');
+    await fetchData();
+    renderPage();
+  } catch(e) { showToast('Error al guardar producto'); }
+}
+
+async function shipOrder(orderId) {
+  const trackingEl = document.getElementById('trackingInput');
+  const tracking = trackingEl ? trackingEl.value : 'COL-' + Date.now().toString().slice(-6);
+  if(!tracking) { showToast('Ingresa un numero de tracking'); return; }
+  try {
+    await fetch(`${API}/orders/${orderId}/ship`, {
+      method:'PATCH',
+      headers:{'Content-Type':'application/json','X-Merchant-Key':MERCHANT_KEY},
+      body:JSON.stringify({trackingNumber:tracking})
+    });
+    closeModal();
+    showToast('Pedido marcado como enviado');
+    await fetchData();
+    renderPage();
+  } catch(e) { showToast('Error al enviar pedido'); }
+}
+
+async function confirmDelivery(orderId) {
+  try {
+    await fetch(`${API}/orders/${orderId}/deliver`, {
+      method:'PATCH',
+      headers:{'Content-Type':'application/json','X-Buyer-Address':BUYER_ADDR}
+    });
+    closeModal();
+    showToast('Entrega confirmada');
+    await fetchData();
+    renderPage();
+  } catch(e) { showToast('Error'); }
+}
+
+async function completeOrder(orderId) {
+  try {
+    await fetch(`${API}/orders/${orderId}/complete`, {
+      method:'PATCH',
+      headers:{'Content-Type':'application/json','X-Buyer-Address':BUYER_ADDR}
+    });
+    closeModal();
+    showToast('Pedido completado! Escrow liberado. Puntos de lealtad ganados!');
+    await fetchData();
+    renderPage();
+  } catch(e) { showToast('Error'); }
+}
+
+async function updateStore() {
+  try {
+    await fetch(`${API}/merchants/${merchantId}`, {
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Merchant-Key':MERCHANT_KEY},
+      body:JSON.stringify({
+        storeName: document.getElementById('storeNameInput').value,
+        description: document.getElementById('storeDescInput').value,
+        contactEmail: document.getElementById('storeEmailInput').value,
+        contactPhone: document.getElementById('storePhoneInput').value,
+        city: document.getElementById('storeCityInput').value,
+      })
+    });
+    showToast('Tienda actualizada');
+    await fetchData();
+    renderPage();
+  } catch(e) { showToast('Error al actualizar'); }
+}
+
+async function doSearch() {
+  const q = document.getElementById('searchInput')?.value || '';
+  const category = document.getElementById('catFilter')?.value || '';
+  const sortBy = document.getElementById('sortFilter')?.value || 'newest';
+  try {
+    const params = new URLSearchParams();
+    if(q) params.set('q',q);
+    if(category) params.set('category',category);
+    if(sortBy) params.set('sortBy',sortBy);
+    params.set('limit','100');
+    const res = await fetch(`${API}/search?${params}`);
+    const data = await res.json();
+    const grid = document.getElementById('exploreGrid');
+    if(grid) {
+      const prods = data.results || [];
+      grid.innerHTML = prods.length ? prods.map(p=>productCard(p)).join('') :
+        '<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">&#128269;</div><h3>No se encontraron productos</h3></div>';
+    }
+  } catch(e) { console.error('Search error',e); }
+}
+
+function navigateExplore(cat) {
+  currentTab = 'explore';
+  renderSidebar();
+  renderPage();
+  setTimeout(()=>{
+    const cf = document.getElementById('catFilter');
+    if(cf) { cf.value = cat; doSearch(); }
+  }, 50);
+}
+
+// ============ UTILS ============
+function formatDate(d) {
+  if(!d) return 'N/A';
+  try { return new Date(d).toLocaleDateString('es-CO',{day:'numeric',month:'short',year:'numeric'}); } catch(e) { return d; }
+}
+function timeAgo(d) {
+  if(!d) return '';
+  const ms = Date.now() - new Date(d).getTime();
+  const mins = Math.floor(ms/60000);
+  if(mins<1) return 'Justo ahora';
+  if(mins<60) return `Hace ${mins}m`;
+  const hrs = Math.floor(mins/60);
+  if(hrs<24) return `Hace ${hrs}h`;
+  return `Hace ${Math.floor(hrs/24)}d`;
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+// ============ INIT ============
+renderSidebar();
+fetchData();
+</script>
+</body>
+</html>
