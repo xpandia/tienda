@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda — Tu tienda. Tu cadena. Tu futuro.</title>
+    <title>Tienda — Your store. Your chain. Your future.</title>
     <meta name="description" content="The Shopify of Web3 for Latin America. An app-specific commerce chain built on Initia.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1359,6 +1359,15 @@
             color: var(--brown);
             cursor: pointer;
         }
+        /* ---- i18n LANGUAGE SELECTOR ---- */
+        .lang-selector { position: relative; margin-left: 8px; }
+        .lang-btn { background: none; border: 1px solid rgba(45,24,16,.12); border-radius: 100px; padding: 6px 14px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; color: var(--brown-muted); font-weight: 500; font-family: inherit; transition: all 0.2s; }
+        .lang-btn:hover { border-color: var(--orange); color: var(--brown); }
+        .lang-dropdown { position: absolute; top: calc(100% + 8px); right: 0; background: var(--white); border: 1px solid rgba(45,24,16,.08); border-radius: 12px; box-shadow: var(--shadow-lg); overflow: hidden; display: none; z-index: 1001; min-width: 180px; }
+        .lang-dropdown.open { display: block; }
+        .lang-option { display: flex; align-items: center; gap: 10px; padding: 10px 16px; cursor: pointer; font-size: 0.85rem; font-weight: 500; color: var(--brown); transition: background 0.15s; }
+        .lang-option:hover { background: var(--cream-dark); }
+        .lang-option.active { background: rgba(255,107,53,.08); color: var(--orange); font-weight: 600; }
     </style>
 </head>
 <body>
@@ -1371,11 +1380,21 @@
                 Tienda
             </a>
             <ul class="nav-links">
-                <li><a href="#problem">Problema</a></li>
-                <li><a href="#solution">Solucion</a></li>
-                <li><a href="#how">Como Funciona</a></li>
-                <li><a href="#merchants">Comerciantes</a></li>
-                <li><a href="#cta" class="nav-cta">Comenzar</a></li>
+                <li><a href="#problem" data-i18n="nav_problem">Problem</a></li>
+                <li><a href="#solution" data-i18n="nav_solution">Solution</a></li>
+                <li><a href="#how" data-i18n="nav_how">How It Works</a></li>
+                <li><a href="#merchants" data-i18n="nav_merchants">Merchants</a></li>
+                <li><a href="#cta" class="nav-cta" data-i18n="nav_cta">Get Started</a></li>
+                <li>
+                    <div class="lang-selector">
+                        <button class="lang-btn" onclick="toggleLangDropdown(event)">&#127760; <span id="currentLangLabel">English</span></button>
+                        <div class="lang-dropdown" id="langDropdown">
+                            <div class="lang-option active" onclick="setLanguage('en')">&#127468;&#127463; English</div>
+                            <div class="lang-option" onclick="setLanguage('es')">&#127466;&#127480; Espa&#241;ol</div>
+                            <div class="lang-option" onclick="setLanguage('zh')">&#127464;&#127475; &#20013;&#25991;</div>
+                        </div>
+                    </div>
+                </li>
             </ul>
             <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                 <span></span>
@@ -1388,11 +1407,19 @@
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
         <button class="mobile-menu-close" onclick="toggleMobileMenu()">&times;</button>
-        <a href="#problem" onclick="toggleMobileMenu()">Problema</a>
-        <a href="#solution" onclick="toggleMobileMenu()">Solucion</a>
-        <a href="#how" onclick="toggleMobileMenu()">Como Funciona</a>
-        <a href="#merchants" onclick="toggleMobileMenu()">Comerciantes</a>
-        <a href="#cta" onclick="toggleMobileMenu()">Comenzar</a>
+        <a href="#problem" onclick="toggleMobileMenu()" data-i18n="nav_problem">Problem</a>
+        <a href="#solution" onclick="toggleMobileMenu()" data-i18n="nav_solution">Solution</a>
+        <a href="#how" onclick="toggleMobileMenu()" data-i18n="nav_how">How It Works</a>
+        <a href="#merchants" onclick="toggleMobileMenu()" data-i18n="nav_merchants">Merchants</a>
+        <a href="#cta" onclick="toggleMobileMenu()" data-i18n="nav_cta">Get Started</a>
+        <div class="lang-selector" style="margin-top:16px;">
+            <button class="lang-btn" onclick="toggleLangDropdown(event)" style="color:#fff;border-color:rgba(255,255,255,.3);">&#127760; <span class="currentLangLabelMobile">English</span></button>
+            <div class="lang-dropdown" id="langDropdownMobile">
+                <div class="lang-option active" onclick="setLanguage('en')">&#127468;&#127463; English</div>
+                <div class="lang-option" onclick="setLanguage('es')">&#127466;&#127480; Espa&#241;ol</div>
+                <div class="lang-option" onclick="setLanguage('zh')">&#127464;&#127475; &#20013;&#25991;</div>
+            </div>
+        </div>
     </div>
 
     <!-- Hero -->
@@ -1408,21 +1435,21 @@
                     Built on Initia
                 </div>
                 <h1>
-                    Tu tienda.<br>
-                    Tu <span class="highlight">cadena</span>.<br>
-                    Tu futuro.
+                    <span data-i18n="hero_line1">Your store.</span><br>
+                    <span data-i18n="hero_line2_pre">Your </span><span class="highlight" data-i18n="hero_line2_hl">chain</span>.<br>
+                    <span data-i18n="hero_line3">Your future.</span>
                 </h1>
-                <p class="hero-subtitle">
-                    La primera plataforma de comercio Web3 disenada para Latinoamerica.
-                    Sin wallets. Sin gas. Solo tu negocio, en tu propia blockchain.
+                <p class="hero-subtitle" data-i18n="hero_subtitle">
+                    The first Web3 commerce platform designed for Latin America.
+                    No wallets. No gas. Just your business, on your own blockchain.
                 </p>
                 <div class="hero-actions">
                     <a href="#cta" class="btn-primary">
-                        Abre tu tienda
+                        <span data-i18n="hero_cta">Open your store</span>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
-                    <a href="#how" class="btn-secondary">
-                        Como funciona
+                    <a href="#how" class="btn-secondary" data-i18n="hero_secondary">
+                        How it works
                     </a>
                 </div>
             </div>
@@ -1436,7 +1463,7 @@
                                 <div></div><div></div><div></div><div></div>
                             </div>
                         </div>
-                        <div class="storefront-sign">Mi Tienda</div>
+                        <div class="storefront-sign" data-i18n="storefront_sign">My Store</div>
                         <div class="storefront-window">
                             <div class="product-card">
                                 <span class="product-emoji">&#9749;</span>
@@ -1468,7 +1495,7 @@
                     </div>
                     <div class="float-element float-sale">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34c759" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-                        Venta completada
+                        <span data-i18n="float_sale">Sale completed</span>
                     </div>
                     <div class="float-element float-rating">
                         &#9733; 4.9 rating
@@ -1485,35 +1512,35 @@
     <!-- Problem -->
     <section class="problem-section" id="problem">
         <div class="section-inner">
-            <div class="section-label reveal">El Problema</div>
-            <h2 class="section-title reveal reveal-delay-1">
-                300 millones de consumidores.<br>Cero soluciones Web3 que funcionen.
+            <div class="section-label reveal" data-i18n="problem_label">The Problem</div>
+            <h2 class="section-title reveal reveal-delay-1" data-i18n="problem_title">
+                300 million consumers.<br>Zero Web3 solutions that work.
             </h2>
-            <p class="section-subtitle reveal reveal-delay-2">
-                El comercio en Latinoamerica esta listo para blockchain. Pero las herramientas actuales
-                fueron construidas para desarrolladores, no para comerciantes.
+            <p class="section-subtitle reveal reveal-delay-2" data-i18n="problem_subtitle">
+                Commerce in Latin America is ready for blockchain. But current tools
+                were built for developers, not merchants.
             </p>
 
             <div class="problem-grid">
                 <div class="problem-card reveal reveal-delay-1">
                     <span class="problem-stat">15-30%</span>
-                    <h3>Comisiones abusivas</h3>
-                    <p>Las plataformas Web2 cobran comisiones que devoran los margenes de los pequenos comerciantes.</p>
+                    <h3 data-i18n="problem_fees_title">Abusive commissions</h3>
+                    <p data-i18n="problem_fees_desc">Web2 platforms charge fees that devour the margins of small merchants.</p>
                 </div>
                 <div class="problem-card reveal reveal-delay-2">
                     <span class="problem-icon">&#128274;</span>
-                    <h3>Complejidad innecesaria</h3>
-                    <p>Wallets, seed phrases, gas fees. Cada paso aleja a un comerciante del blockchain.</p>
+                    <h3 data-i18n="problem_complexity_title">Unnecessary complexity</h3>
+                    <p data-i18n="problem_complexity_desc">Wallets, seed phrases, gas fees. Every step drives a merchant away from blockchain.</p>
                 </div>
                 <div class="problem-card reveal reveal-delay-3">
                     <span class="problem-icon">&#127760;</span>
-                    <h3>Sin contexto local</h3>
-                    <p>Las soluciones existentes no hablan espanol, no entienden LATAM, y no resuelven problemas locales.</p>
+                    <h3 data-i18n="problem_local_title">No local context</h3>
+                    <p data-i18n="problem_local_desc">Existing solutions don't speak the language, don't understand LATAM, and don't solve local problems.</p>
                 </div>
                 <div class="problem-card reveal reveal-delay-4">
                     <span class="problem-icon">&#9203;</span>
-                    <h3>Pagos lentos</h3>
-                    <p>Dias para recibir pagos. Bridges inseguros. Tokens envueltos que nadie entiende.</p>
+                    <h3 data-i18n="problem_slow_title">Slow payments</h3>
+                    <p data-i18n="problem_slow_desc">Days to receive payments. Insecure bridges. Wrapped tokens nobody understands.</p>
                 </div>
             </div>
         </div>
@@ -1522,30 +1549,30 @@
     <!-- Solution -->
     <section class="solution-section" id="solution">
         <div class="section-inner">
-            <div class="section-label reveal">La Solucion</div>
-            <h2 class="section-title reveal reveal-delay-1">
-                Comercio soberano.<br>Simplicidad radical.
+            <div class="section-label reveal" data-i18n="solution_label">The Solution</div>
+            <h2 class="section-title reveal reveal-delay-1" data-i18n="solution_title">
+                Sovereign commerce.<br>Radical simplicity.
             </h2>
-            <p class="section-subtitle reveal reveal-delay-2">
-                Tienda es un rollup de comercio construido en Initia.
-                Cada tienda tiene su propio contrato. Cada transaccion es transparente. Cada pago es instantaneo.
+            <p class="section-subtitle reveal reveal-delay-2" data-i18n="solution_subtitle">
+                Tienda is a commerce rollup built on Initia.
+                Every store has its own contract. Every transaction is transparent. Every payment is instant.
             </p>
 
             <div class="solution-grid">
                 <div class="solution-card reveal reveal-delay-1">
                     <div class="solution-number">01</div>
-                    <h3>Tu propia cadena</h3>
-                    <p>Un rollup dedicado a comercio en LATAM. Optimizado para velocidad, costo y experiencia del comerciante. No compartes recursos con DeFi degens.</p>
+                    <h3 data-i18n="solution_chain_title">Your own chain</h3>
+                    <p data-i18n="solution_chain_desc">A rollup dedicated to LATAM commerce. Optimized for speed, cost, and merchant experience. No sharing resources with DeFi degens.</p>
                 </div>
                 <div class="solution-card reveal reveal-delay-2">
                     <div class="solution-number">02</div>
-                    <h3>Cero friccion</h3>
-                    <p>Registrate con tu telefono. Account abstraction crea tu wallet en silencio. Transacciones patrocinadas. El blockchain desaparece.</p>
+                    <h3 data-i18n="solution_friction_title">Zero friction</h3>
+                    <p data-i18n="solution_friction_desc">Sign up with your phone. Account abstraction creates your wallet silently. Sponsored transactions. The blockchain disappears.</p>
                 </div>
                 <div class="solution-card reveal reveal-delay-3">
                     <div class="solution-number">03</div>
-                    <h3>Liquidez nativa</h3>
-                    <p>Gracias a la liquidez enshrined de Initia y IBC nativo, los pagos llegan al instante en la moneda que prefieras. Sin bridges. Sin esperas.</p>
+                    <h3 data-i18n="solution_liquidity_title">Native liquidity</h3>
+                    <p data-i18n="solution_liquidity_desc">Thanks to Initia's enshrined liquidity and native IBC, payments arrive instantly in your preferred currency. No bridges. No waiting.</p>
                 </div>
             </div>
         </div>
@@ -1554,22 +1581,22 @@
     <!-- How It Works -->
     <section class="how-section" id="how">
         <div class="section-inner">
-            <div class="section-label reveal">Como Funciona</div>
-            <h2 class="section-title reveal reveal-delay-1">
-                Tres pasos. Cero blockchain.
+            <div class="section-label reveal" data-i18n="how_label">How It Works</div>
+            <h2 class="section-title reveal reveal-delay-1" data-i18n="how_title">
+                Three steps. Zero blockchain.
             </h2>
-            <p class="section-subtitle reveal reveal-delay-2">
-                Si puedes publicar en Instagram, puedes abrir tu tienda on-chain.
+            <p class="section-subtitle reveal reveal-delay-2" data-i18n="how_subtitle">
+                If you can post on Instagram, you can open your store on-chain.
             </p>
 
             <div class="steps">
                 <div class="step reveal">
                     <div class="step-marker">1</div>
                     <div class="step-content">
-                        <h3 class="step-title">Abre tu tienda</h3>
-                        <p class="step-desc">
-                            Registrate con tu numero de telefono. Elige un nombre para tu tienda.
-                            En 30 segundos tienes un contrato inteligente desplegado y una URL unica.
+                        <h3 class="step-title" data-i18n="step1_title">Open your store</h3>
+                        <p class="step-desc" data-i18n="step1_desc">
+                            Sign up with your phone number. Choose a name for your store.
+                            In 30 seconds you have a deployed smart contract and a unique URL.
                         </p>
                         <div class="step-tech">
                             &#9889; CosmWasm + Account Abstraction
@@ -1580,10 +1607,10 @@
                 <div class="step reveal reveal-delay-1">
                     <div class="step-marker">2</div>
                     <div class="step-content">
-                        <h3 class="step-title">Agrega productos</h3>
-                        <p class="step-desc">
-                            Toma una foto, ponle precio, y publica. Los productos se guardan on-chain
-                            con imagenes en IPFS. Inventario atomico via Move.
+                        <h3 class="step-title" data-i18n="step2_title">Add products</h3>
+                        <p class="step-desc" data-i18n="step2_desc">
+                            Take a photo, set a price, and publish. Products are stored on-chain
+                            with images on IPFS. Atomic inventory via Move.
                         </p>
                         <div class="step-tech">
                             &#128247; Move Modules + IPFS
@@ -1594,10 +1621,10 @@
                 <div class="step reveal reveal-delay-2">
                     <div class="step-marker">3</div>
                     <div class="step-content">
-                        <h3 class="step-title">Vende y cobra</h3>
-                        <p class="step-desc">
-                            Comparte tu link. Los compradores pagan en cualquier token. Tu recibes en la moneda que prefieras.
-                            Liquidacion instantanea via Initia.
+                        <h3 class="step-title" data-i18n="step3_title">Sell and get paid</h3>
+                        <p class="step-desc" data-i18n="step3_desc">
+                            Share your link. Buyers pay with any token. You receive in your preferred currency.
+                            Instant settlement via Initia.
                         </p>
                         <div class="step-tech">
                             &#128176; Initia Enshrined Liquidity + IBC
@@ -1613,41 +1640,41 @@
         <div class="section-inner">
             <div class="merchants-grid">
                 <div>
-                    <div class="section-label reveal">Para Comerciantes</div>
-                    <h2 class="section-title reveal reveal-delay-1">
-                        Tu negocio merece su propia blockchain.
+                    <div class="section-label reveal" data-i18n="merchants_label">For Merchants</div>
+                    <h2 class="section-title reveal reveal-delay-1" data-i18n="merchants_title">
+                        Your business deserves its own blockchain.
                     </h2>
-                    <p class="section-subtitle reveal reveal-delay-2">
-                        Cada funcion de Tienda fue disenada con un comerciante de LATAM en mente.
+                    <p class="section-subtitle reveal reveal-delay-2" data-i18n="merchants_subtitle">
+                        Every feature in Tienda was designed with a LATAM merchant in mind.
                     </p>
 
                     <div class="merchant-features">
                         <div class="merchant-feature reveal reveal-delay-1">
                             <div class="feature-icon">&#127979;</div>
                             <div class="feature-text">
-                                <h4>Tienda soberana</h4>
-                                <p>Tu propio smart contract. Tus reglas. Tus datos. Sin intermediarios.</p>
+                                <h4 data-i18n="merchant_f1_title">Sovereign store</h4>
+                                <p data-i18n="merchant_f1_desc">Your own smart contract. Your rules. Your data. No middlemen.</p>
                             </div>
                         </div>
                         <div class="merchant-feature reveal reveal-delay-2">
                             <div class="feature-icon">&#128184;</div>
                             <div class="feature-text">
-                                <h4>Pagos multi-moneda</h4>
-                                <p>Acepta cualquier token. Recibe en tu moneda preferida. Automaticamente.</p>
+                                <h4 data-i18n="merchant_f2_title">Multi-currency payments</h4>
+                                <p data-i18n="merchant_f2_desc">Accept any token. Receive in your preferred currency. Automatically.</p>
                             </div>
                         </div>
                         <div class="merchant-feature reveal reveal-delay-3">
                             <div class="feature-icon">&#127942;</div>
                             <div class="feature-text">
-                                <h4>Lealtad on-chain</h4>
-                                <p>Programas de recompensas transparentes y componibles via Move.</p>
+                                <h4 data-i18n="merchant_f3_title">On-chain loyalty</h4>
+                                <p data-i18n="merchant_f3_desc">Transparent and composable rewards programs via Move.</p>
                             </div>
                         </div>
                         <div class="merchant-feature reveal reveal-delay-4">
                             <div class="feature-icon">&#128202;</div>
                             <div class="feature-text">
-                                <h4>Dashboard en tiempo real</h4>
-                                <p>Ventas, inventario y clientes. Todo visible. Todo verificable.</p>
+                                <h4 data-i18n="merchant_f4_title">Real-time dashboard</h4>
+                                <p data-i18n="merchant_f4_desc">Sales, inventory, and customers. All visible. All verifiable.</p>
                             </div>
                         </div>
                     </div>
@@ -1699,34 +1726,34 @@
     <!-- For Buyers -->
     <section class="buyers-section" id="buyers">
         <div class="section-inner">
-            <div class="section-label reveal">Para Compradores</div>
-            <h2 class="section-title reveal reveal-delay-1">
-                Compra local. Paga global.
+            <div class="section-label reveal" data-i18n="buyers_label">For Buyers</div>
+            <h2 class="section-title reveal reveal-delay-1" data-i18n="buyers_title">
+                Buy local. Pay global.
             </h2>
-            <p class="section-subtitle reveal reveal-delay-2">
-                Una experiencia de compra tan simple que olvidaras que estas usando blockchain.
+            <p class="section-subtitle reveal reveal-delay-2" data-i18n="buyers_subtitle">
+                A shopping experience so simple you'll forget you're using blockchain.
             </p>
 
             <div class="buyers-grid">
                 <div class="buyer-card reveal reveal-delay-1">
                     <div class="buyer-icon">&#128722;</div>
-                    <h3>Browse & Discover</h3>
-                    <p>Explora tiendas locales con productos verificados on-chain. Resenas reales e inmutables.</p>
+                    <h3 data-i18n="buyer_f1_title">Browse & Discover</h3>
+                    <p data-i18n="buyer_f1_desc">Explore local stores with on-chain verified products. Real and immutable reviews.</p>
                 </div>
                 <div class="buyer-card reveal reveal-delay-2">
                     <div class="buyer-icon">&#128179;</div>
-                    <h3>Paga con cualquier token</h3>
-                    <p>USDC, INIT, o cualquier token del ecosistema Initia. La conversion es automatica.</p>
+                    <h3 data-i18n="buyer_f2_title">Pay with any token</h3>
+                    <p data-i18n="buyer_f2_desc">USDC, INIT, or any token in the Initia ecosystem. Conversion is automatic.</p>
                 </div>
                 <div class="buyer-card reveal reveal-delay-3">
                     <div class="buyer-icon">&#128737;</div>
-                    <h3>Proteccion total</h3>
-                    <p>Transacciones transparentes. Historial verificable. Disputas resueltas on-chain.</p>
+                    <h3 data-i18n="buyer_f3_title">Full protection</h3>
+                    <p data-i18n="buyer_f3_desc">Transparent transactions. Verifiable history. Disputes resolved on-chain.</p>
                 </div>
                 <div class="buyer-card reveal reveal-delay-4">
                     <div class="buyer-icon">&#127873;</div>
-                    <h3>Recompensas portables</h3>
-                    <p>Puntos de lealtad que funcionan en cualquier tienda del ecosistema. Tus recompensas, tu propiedad.</p>
+                    <h3 data-i18n="buyer_f4_title">Portable rewards</h3>
+                    <p data-i18n="buyer_f4_desc">Loyalty points that work at any store in the ecosystem. Your rewards, your property.</p>
                 </div>
             </div>
         </div>
@@ -1735,12 +1762,12 @@
     <!-- Tech -->
     <section class="tech-section" id="tech">
         <div class="section-inner">
-            <div class="section-label reveal">Tecnologia</div>
-            <h2 class="section-title reveal reveal-delay-1">
-                Construido sobre gigantes.
+            <div class="section-label reveal" data-i18n="tech_label">Technology</div>
+            <h2 class="section-title reveal reveal-delay-1" data-i18n="tech_title">
+                Built on giants.
             </h2>
-            <p class="section-subtitle reveal reveal-delay-2">
-                La infraestructura mas avanzada, invisible para el usuario final.
+            <p class="section-subtitle reveal reveal-delay-2" data-i18n="tech_subtitle">
+                The most advanced infrastructure, invisible to the end user.
             </p>
 
             <div class="tech-grid">
@@ -1782,21 +1809,21 @@
     <section class="cta-section" id="cta">
         <div class="section-inner">
             <div class="cta-inner">
-                <div class="section-label reveal" style="color: var(--orange-light);">Unete</div>
-                <h2 class="section-title reveal reveal-delay-1">
-                    El futuro del comercio en LATAM empieza contigo.
+                <div class="section-label reveal" style="color: var(--orange-light);" data-i18n="cta_label">Join Us</div>
+                <h2 class="section-title reveal reveal-delay-1" data-i18n="cta_title">
+                    The future of LATAM commerce starts with you.
                 </h2>
-                <p class="section-subtitle reveal reveal-delay-2">
-                    Se parte de los primeros comerciantes en tener su propia blockchain.
-                    Sin costo. Sin complicaciones. Solo oportunidad.
+                <p class="section-subtitle reveal reveal-delay-2" data-i18n="cta_subtitle">
+                    Be among the first merchants to have your own blockchain.
+                    No cost. No complications. Just opportunity.
                 </p>
                 <div class="cta-buttons reveal reveal-delay-3">
                     <a href="#" class="btn-primary" style="font-size: 1.1rem; padding: 18px 44px;">
-                        Abre tu tienda gratis
+                        <span data-i18n="cta_btn_primary">Open your store for free</span>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
-                    <a href="#" class="btn-secondary">
-                        Leer documentacion
+                    <a href="#" class="btn-secondary" data-i18n="cta_btn_secondary">
+                        Read documentation
                     </a>
                 </div>
             </div>
@@ -1823,6 +1850,159 @@
     </footer>
 
     <script>
+        // ---- i18n SYSTEM ----
+        const i18n = {
+            en: {
+                nav_problem: 'Problem', nav_solution: 'Solution', nav_how: 'How It Works', nav_merchants: 'Merchants', nav_cta: 'Get Started',
+                hero_line1: 'Your store.', hero_line2_pre: 'Your ', hero_line2_hl: 'chain', hero_line3: 'Your future.',
+                hero_subtitle: 'The first Web3 commerce platform designed for Latin America. No wallets. No gas. Just your business, on your own blockchain.',
+                hero_cta: 'Open your store', hero_secondary: 'How it works',
+                storefront_sign: 'My Store', float_sale: 'Sale completed',
+                problem_label: 'The Problem', problem_title: '300 million consumers.<br>Zero Web3 solutions that work.',
+                problem_subtitle: 'Commerce in Latin America is ready for blockchain. But current tools were built for developers, not merchants.',
+                problem_fees_title: 'Abusive commissions', problem_fees_desc: 'Web2 platforms charge fees that devour the margins of small merchants.',
+                problem_complexity_title: 'Unnecessary complexity', problem_complexity_desc: 'Wallets, seed phrases, gas fees. Every step drives a merchant away from blockchain.',
+                problem_local_title: 'No local context', problem_local_desc: "Existing solutions don't speak the language, don't understand LATAM, and don't solve local problems.",
+                problem_slow_title: 'Slow payments', problem_slow_desc: 'Days to receive payments. Insecure bridges. Wrapped tokens nobody understands.',
+                solution_label: 'The Solution', solution_title: 'Sovereign commerce.<br>Radical simplicity.',
+                solution_subtitle: 'Tienda is a commerce rollup built on Initia. Every store has its own contract. Every transaction is transparent. Every payment is instant.',
+                solution_chain_title: 'Your own chain', solution_chain_desc: 'A rollup dedicated to LATAM commerce. Optimized for speed, cost, and merchant experience. No sharing resources with DeFi degens.',
+                solution_friction_title: 'Zero friction', solution_friction_desc: 'Sign up with your phone. Account abstraction creates your wallet silently. Sponsored transactions. The blockchain disappears.',
+                solution_liquidity_title: 'Native liquidity', solution_liquidity_desc: "Thanks to Initia's enshrined liquidity and native IBC, payments arrive instantly in your preferred currency. No bridges. No waiting.",
+                how_label: 'How It Works', how_title: 'Three steps. Zero blockchain.', how_subtitle: 'If you can post on Instagram, you can open your store on-chain.',
+                step1_title: 'Open your store', step1_desc: 'Sign up with your phone number. Choose a name for your store. In 30 seconds you have a deployed smart contract and a unique URL.',
+                step2_title: 'Add products', step2_desc: 'Take a photo, set a price, and publish. Products are stored on-chain with images on IPFS. Atomic inventory via Move.',
+                step3_title: 'Sell and get paid', step3_desc: 'Share your link. Buyers pay with any token. You receive in your preferred currency. Instant settlement via Initia.',
+                merchants_label: 'For Merchants', merchants_title: 'Your business deserves its own blockchain.', merchants_subtitle: 'Every feature in Tienda was designed with a LATAM merchant in mind.',
+                merchant_f1_title: 'Sovereign store', merchant_f1_desc: 'Your own smart contract. Your rules. Your data. No middlemen.',
+                merchant_f2_title: 'Multi-currency payments', merchant_f2_desc: 'Accept any token. Receive in your preferred currency. Automatically.',
+                merchant_f3_title: 'On-chain loyalty', merchant_f3_desc: 'Transparent and composable rewards programs via Move.',
+                merchant_f4_title: 'Real-time dashboard', merchant_f4_desc: 'Sales, inventory, and customers. All visible. All verifiable.',
+                buyers_label: 'For Buyers', buyers_title: 'Buy local. Pay global.', buyers_subtitle: "A shopping experience so simple you'll forget you're using blockchain.",
+                buyer_f1_title: 'Browse & Discover', buyer_f1_desc: 'Explore local stores with on-chain verified products. Real and immutable reviews.',
+                buyer_f2_title: 'Pay with any token', buyer_f2_desc: 'USDC, INIT, or any token in the Initia ecosystem. Conversion is automatic.',
+                buyer_f3_title: 'Full protection', buyer_f3_desc: 'Transparent transactions. Verifiable history. Disputes resolved on-chain.',
+                buyer_f4_title: 'Portable rewards', buyer_f4_desc: 'Loyalty points that work at any store in the ecosystem. Your rewards, your property.',
+                tech_label: 'Technology', tech_title: 'Built on giants.', tech_subtitle: 'The most advanced infrastructure, invisible to the end user.',
+                cta_label: 'Join Us', cta_title: 'The future of LATAM commerce starts with you.',
+                cta_subtitle: 'Be among the first merchants to have your own blockchain. No cost. No complications. Just opportunity.',
+                cta_btn_primary: 'Open your store for free', cta_btn_secondary: 'Read documentation'
+            },
+            es: {
+                nav_problem: 'Problema', nav_solution: 'Soluci\u00f3n', nav_how: 'C\u00f3mo Funciona', nav_merchants: 'Comerciantes', nav_cta: 'Comenzar',
+                hero_line1: 'Tu tienda.', hero_line2_pre: 'Tu ', hero_line2_hl: 'cadena', hero_line3: 'Tu futuro.',
+                hero_subtitle: 'La primera plataforma de comercio Web3 dise\u00f1ada para Latinoam\u00e9rica. Sin wallets. Sin gas. Solo tu negocio, en tu propia blockchain.',
+                hero_cta: 'Abre tu tienda', hero_secondary: 'C\u00f3mo funciona',
+                storefront_sign: 'Mi Tienda', float_sale: 'Venta completada',
+                problem_label: 'El Problema', problem_title: '300 millones de consumidores.<br>Cero soluciones Web3 que funcionen.',
+                problem_subtitle: 'El comercio en Latinoam\u00e9rica est\u00e1 listo para blockchain. Pero las herramientas actuales fueron construidas para desarrolladores, no para comerciantes.',
+                problem_fees_title: 'Comisiones abusivas', problem_fees_desc: 'Las plataformas Web2 cobran comisiones que devoran los m\u00e1rgenes de los peque\u00f1os comerciantes.',
+                problem_complexity_title: 'Complejidad innecesaria', problem_complexity_desc: 'Wallets, seed phrases, gas fees. Cada paso aleja a un comerciante del blockchain.',
+                problem_local_title: 'Sin contexto local', problem_local_desc: 'Las soluciones existentes no hablan espa\u00f1ol, no entienden LATAM, y no resuelven problemas locales.',
+                problem_slow_title: 'Pagos lentos', problem_slow_desc: 'D\u00edas para recibir pagos. Bridges inseguros. Tokens envueltos que nadie entiende.',
+                solution_label: 'La Soluci\u00f3n', solution_title: 'Comercio soberano.<br>Simplicidad radical.',
+                solution_subtitle: 'Tienda es un rollup de comercio construido en Initia. Cada tienda tiene su propio contrato. Cada transacci\u00f3n es transparente. Cada pago es instant\u00e1neo.',
+                solution_chain_title: 'Tu propia cadena', solution_chain_desc: 'Un rollup dedicado a comercio en LATAM. Optimizado para velocidad, costo y experiencia del comerciante. No compartes recursos con DeFi degens.',
+                solution_friction_title: 'Cero fricci\u00f3n', solution_friction_desc: 'Reg\u00edstrate con tu tel\u00e9fono. Account abstraction crea tu wallet en silencio. Transacciones patrocinadas. El blockchain desaparece.',
+                solution_liquidity_title: 'Liquidez nativa', solution_liquidity_desc: 'Gracias a la liquidez enshrined de Initia y IBC nativo, los pagos llegan al instante en la moneda que prefieras. Sin bridges. Sin esperas.',
+                how_label: 'C\u00f3mo Funciona', how_title: 'Tres pasos. Cero blockchain.', how_subtitle: 'Si puedes publicar en Instagram, puedes abrir tu tienda on-chain.',
+                step1_title: 'Abre tu tienda', step1_desc: 'Reg\u00edstrate con tu n\u00famero de tel\u00e9fono. Elige un nombre para tu tienda. En 30 segundos tienes un contrato inteligente desplegado y una URL \u00fanica.',
+                step2_title: 'Agrega productos', step2_desc: 'Toma una foto, ponle precio, y publica. Los productos se guardan on-chain con im\u00e1genes en IPFS. Inventario at\u00f3mico via Move.',
+                step3_title: 'Vende y cobra', step3_desc: 'Comparte tu link. Los compradores pagan en cualquier token. T\u00fa recibes en la moneda que prefieras. Liquidaci\u00f3n instant\u00e1nea via Initia.',
+                merchants_label: 'Para Comerciantes', merchants_title: 'Tu negocio merece su propia blockchain.', merchants_subtitle: 'Cada funci\u00f3n de Tienda fue dise\u00f1ada con un comerciante de LATAM en mente.',
+                merchant_f1_title: 'Tienda soberana', merchant_f1_desc: 'Tu propio smart contract. Tus reglas. Tus datos. Sin intermediarios.',
+                merchant_f2_title: 'Pagos multi-moneda', merchant_f2_desc: 'Acepta cualquier token. Recibe en tu moneda preferida. Autom\u00e1ticamente.',
+                merchant_f3_title: 'Lealtad on-chain', merchant_f3_desc: 'Programas de recompensas transparentes y componibles via Move.',
+                merchant_f4_title: 'Dashboard en tiempo real', merchant_f4_desc: 'Ventas, inventario y clientes. Todo visible. Todo verificable.',
+                buyers_label: 'Para Compradores', buyers_title: 'Compra local. Paga global.', buyers_subtitle: 'Una experiencia de compra tan simple que olvidar\u00e1s que est\u00e1s usando blockchain.',
+                buyer_f1_title: 'Explora y Descubre', buyer_f1_desc: 'Explora tiendas locales con productos verificados on-chain. Rese\u00f1as reales e inmutables.',
+                buyer_f2_title: 'Paga con cualquier token', buyer_f2_desc: 'USDC, INIT, o cualquier token del ecosistema Initia. La conversi\u00f3n es autom\u00e1tica.',
+                buyer_f3_title: 'Protecci\u00f3n total', buyer_f3_desc: 'Transacciones transparentes. Historial verificable. Disputas resueltas on-chain.',
+                buyer_f4_title: 'Recompensas portables', buyer_f4_desc: 'Puntos de lealtad que funcionan en cualquier tienda del ecosistema. Tus recompensas, tu propiedad.',
+                tech_label: 'Tecnolog\u00eda', tech_title: 'Construido sobre gigantes.', tech_subtitle: 'La infraestructura m\u00e1s avanzada, invisible para el usuario final.',
+                cta_label: '\u00danete', cta_title: 'El futuro del comercio en LATAM empieza contigo.',
+                cta_subtitle: 'S\u00e9 parte de los primeros comerciantes en tener su propia blockchain. Sin costo. Sin complicaciones. Solo oportunidad.',
+                cta_btn_primary: 'Abre tu tienda gratis', cta_btn_secondary: 'Leer documentaci\u00f3n'
+            },
+            zh: {
+                nav_problem: '\u95ee\u9898', nav_solution: '\u89e3\u51b3\u65b9\u6848', nav_how: '\u5982\u4f55\u8fd0\u4f5c', nav_merchants: '\u5546\u5bb6', nav_cta: '\u5f00\u59cb\u4f7f\u7528',
+                hero_line1: '\u4f60\u7684\u5e97\u94fa\u3002', hero_line2_pre: '\u4f60\u7684', hero_line2_hl: '\u94fe', hero_line3: '\u4f60\u7684\u672a\u6765\u3002',
+                hero_subtitle: '\u7b2c\u4e00\u4e2a\u4e13\u4e3a\u62c9\u4e01\u7f8e\u6d32\u8bbe\u8ba1\u7684Web3\u5546\u52a1\u5e73\u53f0\u3002\u65e0\u9700\u94b1\u5305\u3002\u65e0\u9700Gas\u3002\u53ea\u9700\u4f60\u7684\u4e1a\u52a1\uff0c\u5728\u4f60\u81ea\u5df1\u7684\u533a\u5757\u94fe\u4e0a\u3002',
+                hero_cta: '\u5f00\u8bbe\u4f60\u7684\u5e97\u94fa', hero_secondary: '\u4e86\u89e3\u8fd0\u4f5c\u65b9\u5f0f',
+                storefront_sign: '\u6211\u7684\u5e97\u94fa', float_sale: '\u4ea4\u6613\u5b8c\u6210',
+                problem_label: '\u95ee\u9898', problem_title: '3\u4ebf\u6d88\u8d39\u8005\u3002<br>\u96f6\u4e2a\u6709\u6548\u7684Web3\u89e3\u51b3\u65b9\u6848\u3002',
+                problem_subtitle: '\u62c9\u4e01\u7f8e\u6d32\u7684\u5546\u52a1\u5df2\u51c6\u5907\u597d\u8fce\u63a5\u533a\u5757\u94fe\u3002\u4f46\u73b0\u6709\u5de5\u5177\u662f\u4e3a\u5f00\u53d1\u8005\u800c\u975e\u5546\u5bb6\u8bbe\u8ba1\u7684\u3002',
+                problem_fees_title: '\u9ad8\u989d\u4f63\u91d1', problem_fees_desc: 'Web2\u5e73\u53f0\u6536\u53d6\u7684\u8d39\u7528\u541e\u566c\u4e86\u5c0f\u5546\u5bb6\u7684\u5229\u6da6\u3002',
+                problem_complexity_title: '\u4e0d\u5fc5\u8981\u7684\u590d\u6742\u6027', problem_complexity_desc: '\u94b1\u5305\u3001\u52a9\u8bb0\u8bcd\u3001Gas\u8d39\u3002\u6bcf\u4e00\u6b65\u90fd\u5728\u8ba9\u5546\u5bb6\u8fdc\u79bb\u533a\u5757\u94fe\u3002',
+                problem_local_title: '\u7f3a\u4e4f\u672c\u5730\u5316', problem_local_desc: '\u73b0\u6709\u89e3\u51b3\u65b9\u6848\u4e0d\u8bf4\u5f53\u5730\u8bed\u8a00\uff0c\u4e0d\u4e86\u89e3\u62c9\u7f8e\uff0c\u4e5f\u4e0d\u89e3\u51b3\u672c\u5730\u95ee\u9898\u3002',
+                problem_slow_title: '\u652f\u4ed8\u7f13\u6162', problem_slow_desc: '\u6536\u6b3e\u9700\u8981\u6570\u5929\u3002\u4e0d\u5b89\u5168\u7684\u8de8\u94fe\u6865\u3002\u65e0\u4eba\u7406\u89e3\u7684\u5305\u88c5\u4ee3\u5e01\u3002',
+                solution_label: '\u89e3\u51b3\u65b9\u6848', solution_title: '\u4e3b\u6743\u5546\u52a1\u3002<br>\u6781\u81f4\u7b80\u6d01\u3002',
+                solution_subtitle: 'Tienda\u662f\u57fa\u4e8eInitia\u6784\u5efa\u7684\u5546\u52a1Rollup\u3002\u6bcf\u5bb6\u5e97\u94fa\u90fd\u6709\u81ea\u5df1\u7684\u5408\u7ea6\u3002\u6bcf\u7b14\u4ea4\u6613\u90fd\u900f\u660e\u3002\u6bcf\u7b14\u652f\u4ed8\u90fd\u5373\u65f6\u5230\u8d26\u3002',
+                solution_chain_title: '\u4f60\u81ea\u5df1\u7684\u94fe', solution_chain_desc: '\u4e13\u6ce8\u4e8e\u62c9\u7f8e\u5546\u52a1\u7684Rollup\u3002\u4e3a\u901f\u5ea6\u3001\u6210\u672c\u548c\u5546\u5bb6\u4f53\u9a8c\u8fdb\u884c\u4e86\u4f18\u5316\u3002',
+                solution_friction_title: '\u96f6\u6469\u64e6', solution_friction_desc: '\u7528\u624b\u673a\u6ce8\u518c\u3002\u8d26\u6237\u62bd\u8c61\u9759\u9ed8\u521b\u5efa\u4f60\u7684\u94b1\u5305\u3002\u8d5e\u52a9\u4ea4\u6613\u3002\u533a\u5757\u94fe\u4ece\u89c6\u7ebf\u4e2d\u6d88\u5931\u3002',
+                solution_liquidity_title: '\u539f\u751f\u6d41\u52a8\u6027', solution_liquidity_desc: '\u5f97\u76ca\u4e8eInitia\u7684\u5185\u7f6e\u6d41\u52a8\u6027\u548c\u539f\u751fIBC\uff0c\u652f\u4ed8\u4ee5\u4f60\u9996\u9009\u7684\u8d27\u5e01\u5373\u65f6\u5230\u8d26\u3002\u65e0\u8de8\u94fe\u6865\u3002\u65e0\u7b49\u5f85\u3002',
+                how_label: '\u5982\u4f55\u8fd0\u4f5c', how_title: '\u4e09\u4e2a\u6b65\u9aa4\u3002\u96f6\u533a\u5757\u94fe\u3002', how_subtitle: '\u5982\u679c\u4f60\u4f1a\u5728Instagram\u4e0a\u53d1\u5e16\uff0c\u4f60\u5c31\u80fd\u5f00\u4e00\u5bb6\u94fe\u4e0a\u5e97\u94fa\u3002',
+                step1_title: '\u5f00\u8bbe\u4f60\u7684\u5e97\u94fa', step1_desc: '\u7528\u624b\u673a\u53f7\u6ce8\u518c\u3002\u4e3a\u4f60\u7684\u5e97\u94fa\u53d6\u4e2a\u540d\u5b57\u300230\u79d2\u5185\u4f60\u5c31\u62e5\u6709\u4e86\u4e00\u4e2a\u90e8\u7f72\u597d\u7684\u667a\u80fd\u5408\u7ea6\u548c\u4e00\u4e2a\u72ec\u7279\u7684URL\u3002',
+                step2_title: '\u6dfb\u52a0\u4ea7\u54c1', step2_desc: '\u62cd\u7167\u3001\u5b9a\u4ef7\u3001\u53d1\u5e03\u3002\u4ea7\u54c1\u5b58\u50a8\u5728\u94fe\u4e0a\uff0c\u56fe\u7247\u5b58\u50a8\u5728IPFS\u4e0a\u3002\u901a\u8fc7Move\u5b9e\u73b0\u539f\u5b50\u5e93\u5b58\u3002',
+                step3_title: '\u51fa\u552e\u5e76\u6536\u6b3e', step3_desc: '\u5206\u4eab\u4f60\u7684\u94fe\u63a5\u3002\u4e70\u5bb6\u53ef\u7528\u4efb\u4f55\u4ee3\u5e01\u652f\u4ed8\u3002\u4f60\u4ee5\u9996\u9009\u8d27\u5e01\u6536\u6b3e\u3002\u901a\u8fc7Initia\u5373\u65f6\u7ed3\u7b97\u3002',
+                merchants_label: '\u5546\u5bb6\u4e13\u533a', merchants_title: '\u4f60\u7684\u4e1a\u52a1\u503c\u5f97\u62e5\u6709\u81ea\u5df1\u7684\u533a\u5757\u94fe\u3002', merchants_subtitle: 'Tienda\u7684\u6bcf\u4e2a\u529f\u80fd\u90fd\u662f\u4e3a\u62c9\u7f8e\u5546\u5bb6\u8bbe\u8ba1\u7684\u3002',
+                merchant_f1_title: '\u4e3b\u6743\u5e97\u94fa', merchant_f1_desc: '\u4f60\u81ea\u5df1\u7684\u667a\u80fd\u5408\u7ea6\u3002\u4f60\u7684\u89c4\u5219\u3002\u4f60\u7684\u6570\u636e\u3002\u65e0\u4e2d\u95f4\u5546\u3002',
+                merchant_f2_title: '\u591a\u5e01\u79cd\u652f\u4ed8', merchant_f2_desc: '\u63a5\u53d7\u4efb\u4f55\u4ee3\u5e01\u3002\u4ee5\u4f60\u9996\u9009\u7684\u8d27\u5e01\u6536\u6b3e\u3002\u81ea\u52a8\u5b8c\u6210\u3002',
+                merchant_f3_title: '\u94fe\u4e0a\u5fe0\u8bda\u5ea6', merchant_f3_desc: '\u901a\u8fc7Move\u5b9e\u73b0\u900f\u660e\u4e14\u53ef\u7ec4\u5408\u7684\u5956\u52b1\u8ba1\u5212\u3002',
+                merchant_f4_title: '\u5b9e\u65f6\u4eea\u8868\u677f', merchant_f4_desc: '\u9500\u552e\u3001\u5e93\u5b58\u548c\u5ba2\u6237\u3002\u4e00\u5207\u53ef\u89c1\u3002\u4e00\u5207\u53ef\u9a8c\u8bc1\u3002',
+                buyers_label: '\u4e70\u5bb6\u4e13\u533a', buyers_title: '\u672c\u5730\u8d2d\u4e70\u3002\u5168\u7403\u652f\u4ed8\u3002', buyers_subtitle: '\u8d2d\u7269\u4f53\u9a8c\u7b80\u5355\u5230\u4f60\u4f1a\u5fd8\u8bb0\u81ea\u5df1\u5728\u4f7f\u7528\u533a\u5757\u94fe\u3002',
+                buyer_f1_title: '\u6d4f\u89c8\u4e0e\u53d1\u73b0', buyer_f1_desc: '\u63a2\u7d22\u672c\u5730\u5e97\u94fa\uff0c\u4ea7\u54c1\u7ecf\u8fc7\u94fe\u4e0a\u9a8c\u8bc1\u3002\u771f\u5b9e\u4e14\u4e0d\u53ef\u7be1\u6539\u7684\u8bc4\u4ef7\u3002',
+                buyer_f2_title: '\u7528\u4efb\u4f55\u4ee3\u5e01\u652f\u4ed8', buyer_f2_desc: 'USDC\u3001INIT\u6216Initia\u751f\u6001\u7cfb\u7edf\u4e2d\u7684\u4efb\u4f55\u4ee3\u5e01\u3002\u81ea\u52a8\u5151\u6362\u3002',
+                buyer_f3_title: '\u5168\u9762\u4fdd\u62a4', buyer_f3_desc: '\u900f\u660e\u7684\u4ea4\u6613\u3002\u53ef\u9a8c\u8bc1\u7684\u5386\u53f2\u3002\u94fe\u4e0a\u89e3\u51b3\u4e89\u8bae\u3002',
+                buyer_f4_title: '\u53ef\u643a\u5e26\u5956\u52b1', buyer_f4_desc: '\u5fe0\u8bda\u5ea6\u79ef\u5206\u5728\u751f\u6001\u7cfb\u7edf\u4e2d\u7684\u4efb\u4f55\u5e97\u94fa\u90fd\u53ef\u4f7f\u7528\u3002\u4f60\u7684\u5956\u52b1\uff0c\u4f60\u7684\u8d22\u4ea7\u3002',
+                tech_label: '\u6280\u672f', tech_title: '\u7ad9\u5728\u5de8\u4eba\u80a9\u818a\u4e0a\u3002', tech_subtitle: '\u6700\u5148\u8fdb\u7684\u57fa\u7840\u8bbe\u65bd\uff0c\u5bf9\u7ec8\u7aef\u7528\u6237\u4e0d\u53ef\u89c1\u3002',
+                cta_label: '\u52a0\u5165\u6211\u4eec', cta_title: '\u62c9\u7f8e\u5546\u52a1\u7684\u672a\u6765\u4ece\u4f60\u5f00\u59cb\u3002',
+                cta_subtitle: '\u6210\u4e3a\u7b2c\u4e00\u6279\u62e5\u6709\u81ea\u5df1\u533a\u5757\u94fe\u7684\u5546\u5bb6\u3002\u65e0\u8d39\u7528\u3002\u65e0\u590d\u6742\u6027\u3002\u53ea\u6709\u673a\u4f1a\u3002',
+                cta_btn_primary: '\u514d\u8d39\u5f00\u8bbe\u4f60\u7684\u5e97\u94fa', cta_btn_secondary: '\u9605\u8bfb\u6587\u6863'
+            }
+        };
+
+        let currentLang = localStorage.getItem('tienda-lang') || 'en';
+
+        function applyLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('tienda-lang', lang);
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : lang;
+            const strings = i18n[lang];
+            if (!strings) return;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (strings[key]) el.innerHTML = strings[key];
+            });
+            // Update dropdown active states
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.classList.toggle('active', opt.getAttribute('onclick').includes("'" + lang + "'"));
+            });
+            const labels = {en: 'English', es: 'Espa\u00f1ol', zh: '\u4e2d\u6587'};
+            document.getElementById('currentLangLabel').textContent = labels[lang] || lang;
+            const mobileLabel = document.querySelector('.currentLangLabelMobile');
+            if (mobileLabel) mobileLabel.textContent = labels[lang] || lang;
+        }
+
+        function setLanguage(lang) {
+            applyLanguage(lang);
+            document.querySelectorAll('.lang-dropdown').forEach(d => d.classList.remove('open'));
+        }
+
+        function toggleLangDropdown(e) {
+            e.stopPropagation();
+            const dropdown = e.currentTarget.nextElementSibling;
+            document.querySelectorAll('.lang-dropdown').forEach(d => { if (d !== dropdown) d.classList.remove('open'); });
+            dropdown.classList.toggle('open');
+        }
+
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.lang-dropdown').forEach(d => d.classList.remove('open'));
+        });
+
+        // Apply saved language on load
+        if (currentLang !== 'en') applyLanguage(currentLang);
+
         // ---- Scroll Reveal ----
         const revealElements = document.querySelectorAll('.reveal');
 
